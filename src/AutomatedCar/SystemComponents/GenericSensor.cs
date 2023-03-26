@@ -28,11 +28,12 @@
         public double FOV { get => fov; set => fov = value; }
         public double ViewDistance { get => viewDistance; set => viewDistance = value; }
         public IEnumerable<WorldObjectType> WorldObjectTypesFilter { get => worldObjectTypesFilter; set => worldObjectTypesFilter = value; }
+        IReadOnlyPacket Packet { get => packet; set => packet = value; }
 
         protected Vector2 carAnchorPoint;
         protected double fov;
         protected double viewDistance;
         protected IEnumerable<WorldObjectType> worldObjectTypesFilter;
-
+        protected IReadOnlyPacket packet;
     }
 }
