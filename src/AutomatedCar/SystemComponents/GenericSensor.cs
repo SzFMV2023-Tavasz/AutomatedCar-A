@@ -24,16 +24,16 @@
             WorldObjectTypesFilter = worldObjectTypesFilter;
         }
 
-        public Vector2 CarAnchorPoint { get => carAnchorPoint; set => carAnchorPoint = value; }
-        public double FOV { get => fov; set => fov = value; }
-        public double ViewDistance { get => viewDistance; set => viewDistance = value; }
-        public IEnumerable<WorldObjectType> WorldObjectTypesFilter { get => worldObjectTypesFilter; set => worldObjectTypesFilter = value; }
-        IReadOnlyPacket Packet { get => packet; set => packet = value; }
+        public Vector2 CarAnchorPoint { get; set; }
+        public double FOV { get; set; }
+        public double ViewDistance { get; set; }
+        public IEnumerable<WorldObjectType> WorldObjectTypesFilter { get; set; }
+        IReadOnlyPacket Packet { get; set; }
 
-        protected Vector2 carAnchorPoint;
-        protected double fov;
-        protected double viewDistance;
-        protected IEnumerable<WorldObjectType> worldObjectTypesFilter;
-        protected IReadOnlyPacket packet;
+        //protected Vector2 carAnchorPoint;
+        //protected double fov;
+        //protected double viewDistance;
+        //protected IEnumerable<WorldObjectType> worldObjectTypesFilter;
+        //protected IReadOnlyPacket packet;
     }
 }
