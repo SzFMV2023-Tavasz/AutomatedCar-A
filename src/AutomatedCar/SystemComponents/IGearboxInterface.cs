@@ -6,7 +6,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal interface IGearboxInterface
+    public interface IGearboxInterface
     {
+        bool ShiftInProgress { get;}
     }
 }
