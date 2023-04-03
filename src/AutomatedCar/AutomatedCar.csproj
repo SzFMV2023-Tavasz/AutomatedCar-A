@@ -29,6 +29,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.19" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.19" />
     <PackageReference Include="Markdown.Avalonia" Version="0.10.13" />
+    <PackageReference Include="MessageBox.Avalonia-mainthread" Version="2.0.1" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="17.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
