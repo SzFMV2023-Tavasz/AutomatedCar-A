@@ -18,46 +18,6 @@
     public class WorldInitTests
     {
 
-        // Mock implementation of IPlatformThreadingInterface
-        public class MockPlatformThreadingInterface : IPlatformThreadingInterface
-        {
-            public bool CurrentThreadIsLoopThread => throw new NotImplementedException();
-
-            public event Action<DispatcherPriority?> Signaled;
-
-            public void RunLoop(CancellationToken cancellationToken)
-            {
-                // Do nothing
-            }
-
-            public void Signal()
-            {
-                // Do nothing
-            }
-
-            public void Signal(DispatcherPriority priority)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void StartTimer(TimeSpan interval, Action callback)
-            {
-                // Do nothing
-            }
-
-            public IDisposable StartTimer(DispatcherPriority priority, TimeSpan interval, Action tick)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void StopTimer()
-            {
-                // Do nothing
-            }
-        }
-
-        
-
         private World CreateWorldAccordingToKeyWorld(string worldName) 
         {
             // Arrange
