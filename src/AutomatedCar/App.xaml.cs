@@ -50,7 +50,7 @@ namespace AutomatedCar
                     }
 
                     var world = this.CreateWorld(selectedWorld);
-                    
+
                     var mainWindow = new MainWindow { DataContext = new MainWindowViewModel(world) };
 
                     mainWindow.Show();
@@ -114,7 +114,7 @@ namespace AutomatedCar
         private void AddDummyCircleTo(World world)
         {
             var circle = new Circle(200, 200, "circle.png", 20);
-            
+
             circle.Width = 40;
             circle.Height = 40;
             circle.ZIndex = 20;
@@ -126,7 +126,7 @@ namespace AutomatedCar
         private AutomatedCar CreateControlledCar(int x, int y, int rotation, string filename)
         {
             var controlledCar = new Models.AutomatedCar(x, y, filename);
-            
+
             controlledCar.Geometry = this.GetControlledCarBoundaryBox();
             controlledCar.RawGeometries.Add(controlledCar.Geometry);
             controlledCar.Geometries.Add(controlledCar.Geometry);
@@ -146,6 +146,7 @@ namespace AutomatedCar
             world.AddControlledCar(controlledCar);
             world.AddControlledCar(controlledCar2);
         }
+
         private void AddControlledCarsToOval(World world)
         {
             var controlledCar = this.CreateControlledCar(550, 5465, 0, "car_1_white.png");
