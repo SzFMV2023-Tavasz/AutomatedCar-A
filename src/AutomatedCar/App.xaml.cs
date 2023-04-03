@@ -19,12 +19,16 @@ namespace AutomatedCar
         private string TEST_WORLD_KEYWORD = "Test_World";
         private string OVAL_WORLD_KEYWORD = "Oval";
 
-        Dictionary<string, LoadSelectedWorldMethod> worldKeyWorldToActionMap = new Dictionary<string, LoadSelectedWorldMethod>();
+        private Dictionary<string, LoadSelectedWorldMethod> worldKeyWorldToActionMap = new Dictionary<string, LoadSelectedWorldMethod>();
 
-        public override void Initialize()
+        public App()
         {
             this.worldKeyWorldToActionMap.Add(TEST_WORLD_KEYWORD, LoadTestWorldAssets);
             this.worldKeyWorldToActionMap.Add(OVAL_WORLD_KEYWORD, LoadOvalWorldAssets);
+        }
+
+        public override void Initialize()
+        {
             AvaloniaXamlLoader.Load(this);
         }
 
@@ -46,6 +50,7 @@ namespace AutomatedCar
                     }
 
                     var world = this.CreateWorld(selectedWorld);
+                    
                     var mainWindow = new MainWindow { DataContext = new MainWindowViewModel(world) };
 
                     mainWindow.Show();
@@ -61,14 +66,7 @@ namespace AutomatedCar
         {
             var world = World.Instance;
 
-            try
-            {
-                this.worldKeyWorldToActionMap[selectedTrack].Invoke(world);
-            }
-            catch (KeyNotFoundException e)
-            {
-                this.worldKeyWorldToActionMap[OVAL_WORLD_KEYWORD].Invoke(world);
-            }
+            this.worldKeyWorldToActionMap[selectedTrack].Invoke(world);
 
             return world;
         }
