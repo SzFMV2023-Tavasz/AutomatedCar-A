@@ -1,7 +1,6 @@
 namespace AutomatedCar
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.IO;
     using System.Reflection;
     using AutomatedCar.Models;
@@ -15,8 +14,17 @@ namespace AutomatedCar
 
     public class App : Application
     {
+        delegate void LoadSelectedWorldMethod(World world);
+
+        private string TEST_WORLD_KEYWORD = "Test_World";
+        private string OVAL_WORLD_KEYWORD = "Oval";
+
+        Dictionary<string, LoadSelectedWorldMethod> worldKeyWorldToActionMap = new Dictionary<string, LoadSelectedWorldMethod>();
+
         public override void Initialize()
         {
+            this.worldKeyWorldToActionMap.Add(TEST_WORLD_KEYWORD, LoadTestWorldAssets);
+            this.worldKeyWorldToActionMap.Add(OVAL_WORLD_KEYWORD, LoadOvalWorldAssets);
             AvaloniaXamlLoader.Load(this);
         }
 
@@ -24,24 +32,70 @@ namespace AutomatedCar
         {
             if (this.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var world = this.CreateWorld();
-                desktop.MainWindow = new MainWindow { DataContext = new MainWindowViewModel(world) };
+                var vm = new WorldSelectionViewModel();
+                var selectionWindow = new WorldSelectionWindow() { DataContext = vm };
+                selectionWindow.Show();
+
+                vm.WorldSelectedEvent += (sender, args) =>
+                {
+
+                    var selectedWorld = vm.SelectedWorld;
+                    if (selectedWorld == null)
+                    {
+                        return;
+                    }
+
+                    var world = this.CreateWorld(selectedWorld);
+                    var mainWindow = new MainWindow { DataContext = new MainWindowViewModel(world) };
+
+                    mainWindow.Show();
+                    desktop.MainWindow = mainWindow;
+                    selectionWindow.Close();
+                };
             }
 
             base.OnFrameworkInitializationCompleted();
         }
 
-        public World CreateWorld()
+        public World CreateWorld(string selectedTrack)
         {
             var world = World.Instance;
 
-            // this.AddDummyCircleTo(world);
+            try
+            {
+                this.worldKeyWorldToActionMap[selectedTrack].Invoke(world);
+            }
+            catch (KeyNotFoundException e)
+            {
+                this.worldKeyWorldToActionMap[OVAL_WORLD_KEYWORD].Invoke(world);
+            }
+
+            return world;
+        }
+
+        void LoadTestWorldAssets(World world)
+        {
+            this.AddDummyCircleTo(world);
 
             world.PopulateFromJSON($"AutomatedCar.Assets.test_world.json");
 
-            this.AddControlledCarsTo(world);
+            this.AddControlledCarsToTest(world);
 
-            return world;
+            this.AddNPCsToTest(world);
+
+            // add further assets to the TEST world HERE
+        }
+
+        void LoadOvalWorldAssets(World world)
+        {
+
+            world.PopulateFromJSON($"AutomatedCar.Assets.oval.json");
+
+            this.AddControlledCarsToOval(world);
+
+            this.AddNPCsToOval(world);
+
+            // add further assets to the OVAL world HERE
         }
 
         private PolylineGeometry GetControlledCarBoundaryBox()
@@ -86,13 +140,30 @@ namespace AutomatedCar
             return controlledCar;
         }
 
-        private void AddControlledCarsTo(World world)
+        private void AddControlledCarsToTest(World world)
         {
             var controlledCar = this.CreateControlledCar(480, 1425, 0, "car_1_white.png");
             var controlledCar2 = this.CreateControlledCar(4250, 1420, -90, "car_1_red.png");
 
             world.AddControlledCar(controlledCar);
             world.AddControlledCar(controlledCar2);
+        }
+        private void AddControlledCarsToOval(World world)
+        {
+            var controlledCar = this.CreateControlledCar(550, 5465, 0, "car_1_white.png");
+
+            world.AddControlledCar(controlledCar);
+
+        }
+
+        private void AddNPCsToOval(World world)
+        {
+            // create 1 NPC Pedestrian and 1 NPC car here that can be added to the OVAL track
+        }
+
+        private void AddNPCsToTest(World world)
+        {
+            // create 1 NPC Pedestrian and 1 NPC car here that can be added to the TEST track
         }
     }
 }
