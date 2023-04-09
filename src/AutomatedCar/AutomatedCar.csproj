@@ -25,6 +25,9 @@
     <None Remove="Assets\oval.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\NPCpaths\NPC_test_world_path.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.7" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.7" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
