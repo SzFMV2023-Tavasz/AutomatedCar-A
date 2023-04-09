@@ -43,7 +43,6 @@
 
         }
 
-
         [Theory]
         [InlineData("nonexistentKeyworld")]
         public void CreateWorldGetExceptionTest(string worldName)
