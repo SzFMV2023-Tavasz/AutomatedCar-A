@@ -11,6 +11,7 @@ namespace AutomatedCar
     using Avalonia.Markup.Xaml;
     using Avalonia.Media;
     using Newtonsoft.Json.Linq;
+    using static AutomatedCar.Models.World;
 
     public class App : Application
     {
@@ -74,7 +75,7 @@ namespace AutomatedCar
         void LoadTestWorldAssets(World world)
         {
             this.AddDummyCircleTo(world);
-
+            world.SetSelectedWorldTo(WorldType.Test);
             world.PopulateFromJSON($"AutomatedCar.Assets.test_world.json");
 
             this.AddControlledCarsToTest(world);
@@ -88,6 +89,7 @@ namespace AutomatedCar
         {
 
             world.PopulateFromJSON($"AutomatedCar.Assets.oval.json");
+            world.SetSelectedWorldTo(WorldType.Oval);
 
             this.AddControlledCarsToOval(world);
 

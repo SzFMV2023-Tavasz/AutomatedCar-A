@@ -14,12 +14,18 @@
 
     public class World
     {
+        public enum WorldType
+        {
+            Oval, Test
+        }
+
         private int controlledCarPointer = 0;
-        public List<AutomatedCar> controlledCars = new ();
+        public List<AutomatedCar> controlledCars = new();
 
         public static World Instance { get; } = new World();
         public List<WorldObject> WorldObjects { get; set; } = new List<WorldObject>();
 
+        public WorldType SelectedWorld { get; set; }
         public AutomatedCar ControlledCar
         {
             get => this.controlledCars[this.controlledCarPointer];
@@ -60,7 +66,7 @@
             }
             else
             {
-               this.ControlledCarPointer = this.controlledCars.Count - 1;
+                this.ControlledCarPointer = this.controlledCars.Count - 1;
             }
         }
 
@@ -103,7 +109,7 @@
 
                 if (renderTransformOrigins.ContainsKey(rwo.Type))
                 {
-                   rto = renderTransformOrigins[rwo.Type];
+                    rto = renderTransformOrigins[rwo.Type];
                 }
 
                 wo.RenderTransformOrigin = rto;
@@ -184,7 +190,7 @@
                     .GetManifestResourceStream($"AutomatedCar.Assets.{filename}"));
 
             var rotationPoints = JsonConvert.DeserializeObject<List<RotationPoint>>(reader.ReadToEnd());
-            Dictionary<string, (int x, int y)> result = new ();
+            Dictionary<string, (int x, int y)> result = new();
             foreach (RotationPoint rp in rotationPoints)
             {
                 result.Add(rp.Type, (rp.X, rp.Y));
@@ -231,7 +237,7 @@
                     .GetManifestResourceStream($"AutomatedCar.Assets.{filename}"));
 
             var rotationPoints = JsonConvert.DeserializeObject<List<RotationPoint>>(reader.ReadToEnd());
-            Dictionary<string, string> result = new ();
+            Dictionary<string, string> result = new();
             foreach (RotationPoint rp in rotationPoints)
             {
                 var img = new System.Drawing.Bitmap(Assembly.GetExecutingAssembly()
@@ -256,6 +262,11 @@
             }
 
             return result;
+        }
+
+        public void SetSelectedWorldTo(WorldType worldType)
+        {
+            this.SelectedWorld = worldType;
         }
 
         private int DetermineZIndex(string type)
@@ -325,8 +336,8 @@
 
         public GraphicsPath AddGeometry()
         {
-            GraphicsPath geom = new ();
-            List<Point> points = new ();
+            GraphicsPath geom = new();
+            List<Point> points = new();
             points.Add(new Point(50, 50));
             points.Add(new Point(50, 100));
             points.Add(new Point(100, 50));
