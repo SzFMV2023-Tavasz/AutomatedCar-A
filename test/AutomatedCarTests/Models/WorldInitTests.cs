@@ -1,12 +1,10 @@
-﻿namespace AutomatedCarTests.Models
+﻿namespace Tests.Models
 {
     using AutomatedCar;
     using AutomatedCar.Models;
-    using Avalonia;
     using System.Collections.Generic;
     using System.Linq;
     using Xunit;
-    using Avalonia.Controls.Platform;
     using static AutomatedCar.Models.World;
 
     public class WorldInitTests
