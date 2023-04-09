@@ -14,7 +14,6 @@
     using System.Threading;
     using Avalonia.Controls.Platform;
 
-    [Collection("AvaloniaTestFramework")]
     public class WorldInitTests
     {
 
