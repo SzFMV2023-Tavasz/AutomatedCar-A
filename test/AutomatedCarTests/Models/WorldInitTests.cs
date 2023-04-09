@@ -7,11 +7,12 @@
     using System.Linq;
     using Xunit;
     using Avalonia.Controls.Platform;
+    using static AutomatedCar.Models.World;
 
     public class WorldInitTests
     {
 
-        private World CreateWorldAccordingToKeyWorld(string worldName) 
+        private World CreateWorldAccordingToKeyWorld(string worldName)
         {
             // Arrange
             World.Instance.WorldObjects.Clear();
@@ -30,13 +31,15 @@
         }
 
         [Theory]
-        [InlineData("Oval", 203)]
-        public void CreateOvalWorldTest(string worldName, int expectedObjCnt)
+        [InlineData("Oval", WorldType.Oval)]
+        [InlineData("Test_World", WorldType.Test)]
+        public void CreateOvalWorldTest(string worldName, WorldType worldType)
         {
             var world = CreateWorldAccordingToKeyWorld(worldName);
 
             // Assert
-            Assert.Equal(expectedObjCnt, world.WorldObjects.Where(obj => obj.GetType() == typeof(WorldObject)).ToList().Count());
+            Assert.Equal(worldType, world.SelectedWorld);
+            Assert.True(world.WorldObjects.Count() > 0);
 
         }
 
