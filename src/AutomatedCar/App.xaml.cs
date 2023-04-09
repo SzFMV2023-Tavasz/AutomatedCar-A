@@ -15,7 +15,7 @@ namespace AutomatedCar
 
     public class App : Application
     {
-        delegate void LoadSelectedWorldMethod(World world);
+        delegate void LoadSelectedWorldMethod(World world, bool loadOnlyStaticAssets);
 
         private string TEST_WORLD_KEYWORD = "Test_World";
         private string OVAL_WORLD_KEYWORD = "Oval";
@@ -50,7 +50,7 @@ namespace AutomatedCar
                         return;
                     }
 
-                    var world = this.CreateWorld(selectedWorld);
+                    var world = this.CreateWorld(selectedWorld, false);
 
                     var mainWindow = new MainWindow { DataContext = new MainWindowViewModel(world) };
 
@@ -63,39 +63,55 @@ namespace AutomatedCar
             base.OnFrameworkInitializationCompleted();
         }
 
-        public World CreateWorld(string selectedTrack)
+        public World CreateWorld(string selectedTrack, bool loadOnlyStaticAssets)
         {
             var world = World.Instance;
 
-            this.worldKeyWorldToActionMap[selectedTrack].Invoke(world);
+            this.worldKeyWorldToActionMap[selectedTrack].Invoke(world, loadOnlyStaticAssets);
 
             return world;
         }
 
-        void LoadTestWorldAssets(World world)
+        void LoadTestWorldAssets(World world, bool loadOnlyStaticAssets)
         {
             this.AddDummyCircleTo(world);
             world.SetSelectedWorldTo(WorldType.Test);
             world.PopulateFromJSON($"AutomatedCar.Assets.test_world.json");
 
-            this.AddControlledCarsToTest(world);
 
-            this.AddNPCsToTest(world);
+            if (!loadOnlyStaticAssets) 
+            {
+                this.AddControlledCarsToTest(world);
+                this.AddNPCsToTest(world);
 
-            // add further assets to the TEST world HERE
+                // add further assets to the TEST world HERE
+            }
         }
 
-        void LoadOvalWorldAssets(World world)
+        void LoadOvalWorldAssets(World world, bool loadOnlyStaticAssets)
         {
 
             world.PopulateFromJSON($"AutomatedCar.Assets.oval.json");
             world.SetSelectedWorldTo(WorldType.Oval);
 
-            this.AddControlledCarsToOval(world);
 
-            this.AddNPCsToOval(world);
+            if (!loadOnlyStaticAssets) 
+            {
+                this.AddControlledCarsToOval(world);
+                this.AddNPCsToOval(world);
 
-            // add further assets to the OVAL world HERE
+                // add further assets to the OVAL world HERE
+            }
+        }
+
+        private void AddNPCsToOval(World world)
+        {
+            // create 1 NPC Pedestrian and 1 NPC car here that can be added to the OVAL track
+        }
+
+        private void AddNPCsToTest(World world)
+        {
+            // create 1 NPC Pedestrian and 1 NPC car here that can be added to the TEST track
         }
 
         private PolylineGeometry GetControlledCarBoundaryBox()
@@ -157,14 +173,5 @@ namespace AutomatedCar
 
         }
 
-        private void AddNPCsToOval(World world)
-        {
-            // create 1 NPC Pedestrian and 1 NPC car here that can be added to the OVAL track
-        }
-
-        private void AddNPCsToTest(World world)
-        {
-            // create 1 NPC Pedestrian and 1 NPC car here that can be added to the TEST track
-        }
     }
 }

@@ -12,30 +12,25 @@
     public class WorldInitTests
     {
 
-        private World CreateWorldAccordingToKeyWorld(string worldName)
+        private World CreateWorldAccordingToKeyWorld(string worldName, bool loadOnlyStaticAssets)
         {
             // Arrange
             World.Instance.WorldObjects.Clear();
 
             var app = new App();
-            var threadingInterface = new InternalPlatformThreadingInterface();
-
-            AvaloniaLocator.CurrentMutable
-                .Bind<Avalonia.Platform.IPlatformThreadingInterface>()
-                .ToConstant(threadingInterface);
-
+            
 
             // Act
-            var world = app.CreateWorld(worldName);
+            var world = app.CreateWorld(worldName, loadOnlyStaticAssets);
             return world;
         }
 
         [Theory]
-        [InlineData("Oval", WorldType.Oval)]
-        [InlineData("Test_World", WorldType.Test)]
-        public void CreateOvalWorldTest(string worldName, WorldType worldType)
+        [InlineData("Oval",true, WorldType.Oval)]
+        [InlineData("Test_World",true, WorldType.Test)]
+        public void CreateOvalWorldTest(string worldName,bool loadOnlyStaticAssets, WorldType worldType)
         {
-            var world = CreateWorldAccordingToKeyWorld(worldName);
+            var world = CreateWorldAccordingToKeyWorld(worldName, loadOnlyStaticAssets);
 
             // Assert
             Assert.Equal(worldType, world.SelectedWorld);
@@ -44,11 +39,11 @@
         }
 
         [Theory]
-        [InlineData("nonexistentKeyworld")]
-        public void CreateWorldGetExceptionTest(string worldName)
+        [InlineData("nonexistentKeyworld", true)]
+        public void CreateWorldGetExceptionTest(string worldName, bool loadOnlyStaticAssets)
         {
             // Assert
-            Assert.Throws<KeyNotFoundException>(() => CreateWorldAccordingToKeyWorld(worldName));
+            Assert.Throws<KeyNotFoundException>(() => CreateWorldAccordingToKeyWorld(worldName, loadOnlyStaticAssets));
         }
 
     }
