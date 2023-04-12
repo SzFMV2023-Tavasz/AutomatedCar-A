@@ -1,12 +1,12 @@
 ﻿namespace AutomatedCar.NPC
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using AutomatedCar.Helpers;
 
-    internal interface INPC
+    public interface INPC
     {
+        List<PathPoint> PathPoints { get; set; }
+
+        void Move();
     }
 }
