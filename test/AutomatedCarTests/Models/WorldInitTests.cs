@@ -4,9 +4,10 @@
     using AutomatedCar.Models;
     using System.Collections.Generic;
     using System.Linq;
-    using Xunit;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using static AutomatedCar.Models.World;
 
+    [TestClass]
     public class WorldInitTests
     {
 
@@ -23,25 +24,26 @@
             return world;
         }
 
-        [Theory]
-        [InlineData("Oval",true, WorldType.Oval)]
-        [InlineData("Test_World",true, WorldType.Test)]
+
+        [TestMethod]
+        [DataRow("Oval",true, WorldType.Oval)]
+        [DataRow("Test_World",true, WorldType.Test)]
         public void CreateOvalWorldTest(string worldName,bool loadOnlyStaticAssets, WorldType worldType)
         {
             var world = CreateWorldAccordingToKeyWorld(worldName, loadOnlyStaticAssets);
 
             // Assert
-            Assert.Equal(worldType, world.SelectedWorld);
-            Assert.True(world.WorldObjects.Count() > 0);
+            Assert.AreEqual(worldType, world.SelectedWorld);
+            Assert.IsTrue(world.WorldObjects.Count() > 0);
 
         }
 
-        [Theory]
-        [InlineData("nonexistentKeyworld", true)]
+        [TestMethod]
+        [DataRow("nonexistentKeyworld", true)]
         public void CreateWorldGetExceptionTest(string worldName, bool loadOnlyStaticAssets)
         {
             // Assert
-            Assert.Throws<KeyNotFoundException>(() => CreateWorldAccordingToKeyWorld(worldName, loadOnlyStaticAssets));
+            Assert.ThrowsException<KeyNotFoundException>(() => CreateWorldAccordingToKeyWorld(worldName, loadOnlyStaticAssets));
         }
 
     }
