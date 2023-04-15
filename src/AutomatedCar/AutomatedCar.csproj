@@ -17,10 +17,12 @@
 		<EmbeddedResource Include="Assets\**;Resources\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<AvaloniaResource Remove="Assets\NPCpaths\NPC_oval_world_path.json" />
 		<AvaloniaResource Remove="Assets\oval.csv" />
 		<AvaloniaResource Remove="Assets\oval.json" />
 	</ItemGroup>
 	<ItemGroup>
+		<None Remove="Assets\NPCpaths\NPC_oval_world_path.json" />
 		<None Remove="Assets\oval.csv" />
 		<None Remove="Assets\oval.json" />
 	</ItemGroup>
