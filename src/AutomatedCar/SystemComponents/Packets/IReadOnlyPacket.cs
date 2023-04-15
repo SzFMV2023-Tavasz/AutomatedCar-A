@@ -1,4 +1,4 @@
-﻿namespace AutomatedCar.SystemComponents
+﻿namespace AutomatedCar.SystemComponents.Packets
 {
     using AutomatedCar.Models;
     using System;
@@ -7,8 +7,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public interface IReadOnlyPacket
+    public interface IReadOnlyPacket<T>
     {
-        IReadOnlyCollection<WorldObject> WorldObjectsDetected { get; }
+        IReadOnlyCollection<T> WorldObjectsDetected { get; set; }
     }
 }
