@@ -15,8 +15,16 @@
         private byte innerGear;
 
 
-        public bool ShiftInProgress { get;  }
+        public bool ShiftInProgress {
+            get => this.shiftInProgress;
+            set => this.RaiseAndSetIfChanged(ref this.shiftInProgress, value);
+        }
 
-        public byte InnerGear { get; }
+        public byte InnerGear {
+
+            get => this.innerGear;
+            set => this.RaiseAndSetIfChanged(ref this.innerGear, value);
+
+        }
     }
 }
