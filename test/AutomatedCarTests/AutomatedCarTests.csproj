@@ -7,7 +7,9 @@
 
 		<RootNamespace>Tests</RootNamespace>
 	</PropertyGroup>
-
+	<ItemGroup>
+		 <Content Include="Assets\NPCpaths\NPC_test_world_path.json" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
 		<PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
