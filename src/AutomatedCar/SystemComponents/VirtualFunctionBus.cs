@@ -1,5 +1,6 @@
 namespace AutomatedCar.SystemComponents
 {
+    using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Packets;
     using System.Collections.Generic;
 
@@ -8,6 +9,8 @@ namespace AutomatedCar.SystemComponents
         private List<SystemComponent> components = new List<SystemComponent>();
 
         public IReadOnlyDummyPacket DummyPacket { get; set; }
+
+        public IReadOnlyPacket<DetectedObjectInfo> RadarPacket { get; set; }
 
         public void RegisterComponent(SystemComponent component)
         {
