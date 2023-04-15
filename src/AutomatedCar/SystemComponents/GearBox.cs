@@ -23,7 +23,6 @@
             virtualFunctionBus.GearboxPacket = this.gearBoxPacket;
             this.gearBoxPacket.ShiftInProgress = false;
             this.gearBoxPacket.InnerGear = 1;
-
         }
 
 
@@ -36,21 +35,36 @@
 
             if (this.characteristicsPacket.RPM > 2500 && this.gearBoxPacket.InnerGear < 5)
             {
-                this.aTimer.Start();
-                while (this.aTimer.Enabled)
-                {
-                    this.gearBoxPacket.ShiftInProgress = true;
-                }
-
                 Shift(1);
-
-                this.gearBoxPacket.ShiftInProgress = false;
+            }
+            else if (this.characteristicsPacket.RPM < 1400 && this.gearBoxPacket.InnerGear > 1)
+            {
+                Shift(-1);
             }
         }
 
-        private void Shift(byte upOrDown)
+
+        /// <summary>
+        /// 1 means up, -1 means down
+        /// </summary>
+        private void Shift(int upOrDown)
         {
-            this.gearBoxPacket.InnerGear += upOrDown;
+            this.aTimer.Start();
+            while (this.aTimer.Enabled)
+            {
+                this.gearBoxPacket.ShiftInProgress = true;
+            }
+
+            if (upOrDown == 1)
+            {
+                this.gearBoxPacket.InnerGear++;
+            }
+            else
+            {
+                this.gearBoxPacket.InnerGear--;
+            }
+            this.gearBoxPacket.ShiftInProgress = false;
+
         }
     }
 }
