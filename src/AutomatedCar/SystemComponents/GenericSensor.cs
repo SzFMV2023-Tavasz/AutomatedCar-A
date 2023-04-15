@@ -54,7 +54,7 @@
         /// <summary>
         /// This is where it write the detected objects
         /// </summary>
-        IReadOnlyPacket<DetectedObjectInfo> Packet { get; set; }
+        protected IReadOnlyPacket<DetectedObjectInfo> Packet { get; set; }
         /// <summary>
         /// For reference which car owns this sensor.
         /// </summary>

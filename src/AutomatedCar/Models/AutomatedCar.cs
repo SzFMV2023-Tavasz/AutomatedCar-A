@@ -1,6 +1,8 @@
 namespace AutomatedCar.Models
 {
+    using Avalonia.Data;
     using Avalonia.Media;
+    using System.Collections.Generic;
     using SystemComponents;
 
     public class AutomatedCar : Car
@@ -12,7 +14,20 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.ZIndex = 10;
+            this.RadarSensor = new RadarSensor(this, this.virtualFunctionBus, new Avalonia.Point(54,0), 60, 50, new List<WorldObjectType>() {
+                WorldObjectType.Boundary,
+                WorldObjectType.Building,
+                WorldObjectType.Car,
+                WorldObjectType.Crosswalk,
+                WorldObjectType.Other,
+                WorldObjectType.ParkingSpace,
+                WorldObjectType.Pedestrian,
+                WorldObjectType.Road,
+                WorldObjectType.RoadSign,
+                WorldObjectType.Tree, });
         }
+
+        public RadarSensor RadarSensor { get;  }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
 
