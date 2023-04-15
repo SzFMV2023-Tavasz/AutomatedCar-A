@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ReactiveUI;
+using System;
 namespace AutomatedCar.SystemComponents.Packets
 {
-    public class CharacteristicsPacket
+    
+    public class CharacteristicsPacket: ReactiveObject
     {
-        public CharacteristicsPacket()
-        {
-        }
+        private int rPM;
+        public int RPM { get => this.rPM; set => this.RaiseAndSetIfChanged(ref this.rPM, value); }
     }
 }
 
