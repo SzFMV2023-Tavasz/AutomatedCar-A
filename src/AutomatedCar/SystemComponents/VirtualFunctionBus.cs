@@ -9,6 +9,8 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyDummyPacket DummyPacket { get; set; }
 
+        public IGearboxInterface GearboxPacket { get; set; }
+
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);

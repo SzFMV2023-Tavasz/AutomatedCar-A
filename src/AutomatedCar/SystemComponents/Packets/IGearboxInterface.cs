@@ -10,7 +10,6 @@
     {
         bool ShiftInProgress { get; }
 
-        byte InnerGear { get; }
-        
+        byte InnerGear { get; }       
     }
 }
