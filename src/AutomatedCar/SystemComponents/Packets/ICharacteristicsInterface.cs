@@ -1,7 +1,7 @@
 ﻿using System;
 namespace AutomatedCar.SystemComponents.Packets
 {
-    public interface ICharasteristicInterface
+    public interface ICharacteristicsInterface
     {
         public int RPM { get; }
     }
