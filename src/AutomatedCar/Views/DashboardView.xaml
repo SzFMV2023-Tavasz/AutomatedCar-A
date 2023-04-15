@@ -77,9 +77,6 @@
                                 </ListBox>
                                 
                                 <TextBlock Grid.Row="4" Grid.Column="1">Detected Objects - Camera:</TextBlock>
-                                
-                                <!-- TEMPLATE A Camera által érzékelt objektumoknak. Nyugodtan buzeráld, ha vmi nem jó.
-                                
                                 <ListBox Grid.Row="5" Grid.Column="1" Items="{Binding Car.VirtualFunctionBus.CameraPacket.WorldObjectsDetected}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
@@ -89,7 +86,7 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-                                -->
+                                
                             </Grid>
                         </StackPanel>
                     </DataTemplate>
