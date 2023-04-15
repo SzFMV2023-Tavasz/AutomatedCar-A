@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
+    using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Packets;
     using System;
     using System.Collections.Generic;
@@ -10,33 +11,46 @@
     public class GearBox :SystemComponent
     {
 
-        GearBoxPacket gearBoxPacket = new GearBoxPacket();
+        private GearBoxPacket gearBoxPacket = new GearBoxPacket();
+        private ICharacteristicsInterface characteristicsPacket;
 
-        int _RPM;
-
-        System.Timers.Timer aTimer = new System.Timers.Timer();
-        
-        //aTimer.Interval = 5000;
-        //aTimer.Enabled = true;
+        System.Timers.Timer aTimer = new System.Timers.Timer(2000);
 
 
 
-        public GearBox(VirtualFunctionBus virtualFunctionBus, int timerInterval) : base(virtualFunctionBus)
+        public GearBox(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
-            virtualFunctionBus.GearboxPacket=gearBoxPacket;
-            this._RPM = virtualFunctionBus.CharacteristicsPacket.RPM;
-            aTimer.Interval= timerInterval;
-            
+            virtualFunctionBus.GearboxPacket = this.gearBoxPacket;
+            this.gearBoxPacket.ShiftInProgress = false;
+            this.gearBoxPacket.InnerGear = 1;
+
         }
 
+
+        /// <summary>
+        /// TODO
+        /// </summary>
         public override void Process()
         {
-            //ToDo
+            this.characteristicsPacket = World.Instance.ControlledCar.VirtualFunctionBus.CharacteristicsPacket;
+
+            if (this.characteristicsPacket.RPM > 2500 && this.gearBoxPacket.InnerGear < 5)
+            {
+                this.aTimer.Start();
+                while (this.aTimer.Enabled)
+                {
+                    this.gearBoxPacket.ShiftInProgress = true;
+                }
+
+                Shift(1);
+
+                this.gearBoxPacket.ShiftInProgress = false;
+            }
         }
 
-        private void Shift()
+        private void Shift(byte upOrDown)
         {
-
+            this.gearBoxPacket.InnerGear += upOrDown;
         }
     }
 }
