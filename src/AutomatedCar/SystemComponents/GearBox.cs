@@ -14,7 +14,7 @@
         public GearBoxPacket gearBoxPacket = new GearBoxPacket();
         private ICharacteristicsInterface characteristicsPacket;
 
-        System.Timers.Timer aTimer = new System.Timers.Timer(2000);
+        //System.Timers.Timer aTimer = new System.Timers.Timer(2000);
 
 
 
@@ -47,14 +47,16 @@
         /// <summary>
         /// 1 means up, -1 means down
         /// </summary>
-        public void Shift(int upOrDown)
+        public async void Shift(int upOrDown)
         {
-            this.aTimer.Start();
-            while (this.aTimer.Enabled)
-            {
-                this.gearBoxPacket.ShiftInProgress = true;
-            }
-
+            //this.aTimer.Start();
+            //this.aTimer.
+            //while (this.aTimer.Enabled)
+            //{
+            //    this.gearBoxPacket.ShiftInProgress = true;
+            //}
+            this.gearBoxPacket.ShiftInProgress = true;
+            ;
             if (upOrDown == 1)
             {
                 this.gearBoxPacket.InnerGear++;
@@ -64,7 +66,7 @@
                 this.gearBoxPacket.InnerGear--;
             }
             this.gearBoxPacket.ShiftInProgress = false;
-
+            await Task.Delay(1000);
         }
     }
 }
