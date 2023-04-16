@@ -10,7 +10,8 @@
 
     public class RadarSensor : GenericSensor
     {
-        public RadarSensor(SensorSettings sensorSettings) : base(sensorSettings)
+        public RadarSensor(SensorSettings sensorSettings) 
+            : base(sensorSettings)
         {
             sensorSettings.FunctionBus.RadarPacket = this.Packet;
         }

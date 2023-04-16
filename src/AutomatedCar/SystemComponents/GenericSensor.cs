@@ -4,6 +4,7 @@
     using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
     using Avalonia.Media;
+    using JetBrains.Annotations;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -17,12 +18,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericSensor"/> class.
         /// </summary>
-        /// <param name="car">Reference for the car who own this</param>
-        /// <param name="virtualFunctionBus">Reference for the VirtualFunctionBus</param>
-        /// <param name="carAnchorPoint">The point where its been placed on the car.</param>
-        /// <param name="fOV">The sensor's field of view</param>
-        /// <param name="viewDistance">The sensor's view distance</param>
-        /// <param name="worldObjectTypesFilter">Filter for detecting</param>
+        /// <param name="sensorSettings">This contains all the information thats needed for sensor constructing.</param>
+        
         public GenericSensor(SensorSettings sensorSettings)
                         : base(sensorSettings.FunctionBus)
         {
@@ -76,11 +73,25 @@
 
         public List<Point> GenerateSensorTriangle()
         {
+            const int pixelToMeter = 50;
+            double x0, y0, x1, y1, x2, y2;
+             
+            double outerPointDistance = ViewDistance / Math.Cos(this.DegToRad(this.FOV / 2));
+            
+            x0 = this.CarAnchorPoint.X + this.Car.X - this.Car.Geometry.Bounds.TopLeft.X;
+            y0 = this.CarAnchorPoint.Y + this.Car.Y - this.Car.Geometry.Bounds.TopLeft.Y;
+            x1 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((-this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.X;
+            y1 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((-this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.Y;
+            x2 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.X;
+            y2 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.Y;
+
+
+
             return new List<Point>()
             {
-                new Point(0 + this.Car.X,0 + this.Car.Y),
-                new Point((92.37f * 50 * Math.Sin(this.DegToRad((-this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.X, (92.37f * 50 * Math.Cos(this.DegToRad((-this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.Y),
-                new Point((92.37f * 50 * Math.Sin(this.DegToRad((this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.X, (92.37f * 50 * Math.Cos(this.DegToRad((this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.Y),
+                new Point(x0, y0),
+                new Point(x1, y1),
+                new Point(x2, y2),
             };
         }
 
@@ -114,7 +125,7 @@
             DetectedObjectInfo newInfo = new DetectedObjectInfo()
             {
                 DetectedObject = worldObject,
-                Distance = this.CalculateDistance(transformedPoint, this.CarAnchorPoint),
+                Distance = this.CalculateDistance(transformedPoint, this.CarAnchorPoint + new Point(this.Car.X, this.Car.Y)),
             };
             if (!detectedObjects.Contains(newInfo))
             {
@@ -130,10 +141,10 @@
                 }
             }
         }
-
-        private float CalculateDistance(Point transformedPoint, Point carAnchorPoint)
+        // More debug needed
+        private float CalculateDistance(Point transformedPointInWorld, Point carAnchorPointInWorld)
         {
-            var vector = new Vector2((float)(transformedPoint.X - carAnchorPoint.X), (float)(transformedPoint.Y - carAnchorPoint.Y));
+            var vector = new Vector2((float)(transformedPointInWorld.X - carAnchorPointInWorld.X), (float)(transformedPointInWorld.Y - carAnchorPointInWorld.Y));
 
             var length = vector.Length();
 

@@ -10,7 +10,8 @@
 
     public class CameraSensor:GenericSensor
     {
-        public CameraSensor(SensorSettings sensorSettings) : base(sensorSettings)
+        public CameraSensor(SensorSettings sensorSettings) 
+            : base(sensorSettings)
         {
             sensorSettings.FunctionBus.CameraPacket = this.Packet;
         }
