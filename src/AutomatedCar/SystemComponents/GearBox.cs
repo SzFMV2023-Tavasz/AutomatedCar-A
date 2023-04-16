@@ -14,10 +14,6 @@
         public GearBoxPacket gearBoxPacket = new GearBoxPacket();
         private ICharacteristicsInterface characteristicsPacket;
 
-        //System.Timers.Timer aTimer = new System.Timers.Timer(2000);
-
-
-
         public GearBox(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
             virtualFunctionBus.GearboxPacket = this.gearBoxPacket;
@@ -25,10 +21,6 @@
             this.gearBoxPacket.InnerGear = 1;
         }
 
-
-        /// <summary>
-        /// TODO
-        /// </summary>
         public override void Process()
         {
             this.characteristicsPacket = World.Instance.ControlledCar.VirtualFunctionBus.CharacteristicsPacket;
@@ -49,14 +41,7 @@
         /// </summary>
         public async void Shift(int upOrDown)
         {
-            //this.aTimer.Start();
-            //this.aTimer.
-            //while (this.aTimer.Enabled)
-            //{
-            //    this.gearBoxPacket.ShiftInProgress = true;
-            //}
             this.gearBoxPacket.ShiftInProgress = true;
-            ;
             if (upOrDown == 1)
             {
                 this.gearBoxPacket.InnerGear++;
