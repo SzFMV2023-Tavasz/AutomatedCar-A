@@ -20,5 +20,15 @@
             byte expectedGear = 2;
             Assert.AreEqual(expectedGear,actualGear);
         }
+        [TestMethod]
+        public void ShiftDownTest()
+        {
+            GearBox gb = new GearBox(new VirtualFunctionBus());
+            gb.gearBoxPacket.InnerGear = 2;
+            gb.Shift(-1);
+            byte actualGear = gb.gearBoxPacket.InnerGear;
+            byte expectedGear = 1;
+            Assert.AreEqual(expectedGear, actualGear);
+        }
     }
 }
