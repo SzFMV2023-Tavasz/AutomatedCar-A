@@ -12,7 +12,9 @@
 
     public class CollisionSensor : SystemComponent
     {
-        
+        public delegate void Collided(DetectedObjectInfo detectedO);
+        public event Collided CollidedWNPCEvent;
+        public event Collided CollidedWBuildingsEvent;
         public AutomatedCar car {get; }
         private IReadOnlyPacket<DetectedObjectInfo> Packet {get; }
         private List<WorldObjectType> WorldObjectTypesFilter = new List<WorldObjectType>() { WorldObjectType.Building,WorldObjectType.Car,WorldObjectType.Pedestrian,WorldObjectType.RoadSign,WorldObjectType.Tree, WorldObjectType.Other};
@@ -52,10 +54,20 @@
 
                         if (detected)
                         {
-                            Packet.WorldObjectsDetected = new List<DetectedObjectInfo>() { new DetectedObjectInfo() {
-                                DetectedObject= worldObject,Distance =0
-                            } };
-
+                            var seged = new DetectedObjectInfo()
+                            {
+                                DetectedObject = worldObject,
+                                Distance = 0
+                            };
+                            Packet.WorldObjectsDetected = new List<DetectedObjectInfo>() { seged };
+                            if (worldObject.WorldObjectType == WorldObjectType.Pedestrian)
+                            {
+                                CollidedWNPCEvent?.Invoke(seged);
+                            }
+                            if (worldObject.WorldObjectType == WorldObjectType.Building)
+                            {
+                                CollidedWBuildingsEvent?.Invoke(seged);
+                            }
                             return;
                         }
 
