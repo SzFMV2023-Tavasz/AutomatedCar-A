@@ -80,10 +80,10 @@
             
             x0 = this.CarAnchorPoint.X + this.Car.X - this.Car.Geometry.Bounds.TopLeft.X;
             y0 = this.CarAnchorPoint.Y + this.Car.Y - this.Car.Geometry.Bounds.TopLeft.Y;
-            x1 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((-this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.X;
-            y1 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((-this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.Y;
-            x2 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.X;
-            y2 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.Y;
+            x1 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
+            y1 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
+            x2 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
+            y2 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
 
 
 
