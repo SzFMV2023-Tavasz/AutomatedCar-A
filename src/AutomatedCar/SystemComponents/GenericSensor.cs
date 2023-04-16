@@ -99,7 +99,7 @@
         {
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(triangle, false);
-            foreach (var worldObject in World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType)))
+            foreach (var worldObject in World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType)&&!obj.Equals(this.Car)))
             {
                 if (worldObject.Geometries.Count > 0)
                 {
@@ -116,7 +116,7 @@
                     }
                 }
             }
-
+            detectedObjects = detectedObjects?.OrderBy(x=>x.Distance).ToList();
             return detectedObjects.AsReadOnly();
         }
 
