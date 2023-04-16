@@ -18,16 +18,17 @@ namespace AutomatedCar.Models
                 WorldObjectType.Boundary,
                 WorldObjectType.Building,
                 WorldObjectType.Car,
-                WorldObjectType.Crosswalk,
                 WorldObjectType.Other,
-                WorldObjectType.ParkingSpace,
                 WorldObjectType.Pedestrian,
-                WorldObjectType.Road,
-                WorldObjectType.RoadSign,
                 WorldObjectType.Tree, });
+            this.CameraSensor = new CameraSensor(this, this.virtualFunctionBus, new Avalonia.Point(54, 74), 60, 80, new List<WorldObjectType>()
+            {
+                WorldObjectType.Boundary,WorldObjectType.Crosswalk,WorldObjectType.Road,WorldObjectType.RoadSign,WorldObjectType.ParkingSpace,
+            });
         }
 
         public RadarSensor RadarSensor { get;  }
+        public CameraSensor CameraSensor { get; }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
 
