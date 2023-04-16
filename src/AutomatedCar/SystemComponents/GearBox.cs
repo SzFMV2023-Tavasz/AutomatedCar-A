@@ -11,7 +11,7 @@
     public class GearBox : SystemComponent
     {
 
-        private GearBoxPacket gearBoxPacket = new GearBoxPacket();
+        public GearBoxPacket gearBoxPacket = new GearBoxPacket();
         private ICharacteristicsInterface characteristicsPacket;
 
         System.Timers.Timer aTimer = new System.Timers.Timer(2000);
@@ -47,7 +47,7 @@
         /// <summary>
         /// 1 means up, -1 means down
         /// </summary>
-        private void Shift(int upOrDown)
+        public void Shift(int upOrDown)
         {
             this.aTimer.Start();
             while (this.aTimer.Enabled)
