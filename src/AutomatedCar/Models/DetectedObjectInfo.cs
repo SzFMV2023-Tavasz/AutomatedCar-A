@@ -22,5 +22,10 @@
         {
             return this.DetectedObject.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return DetectedObject.Filename;
+        }
     }
 }

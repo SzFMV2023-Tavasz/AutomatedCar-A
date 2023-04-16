@@ -45,11 +45,13 @@ namespace AutomatedCar.Models
             };
             this.RadarSensor = new RadarSensor(radarSettings);
             this.CameraSensor = new CameraSensor(cameraSettings);
+            this.CollSensor = new CollisionSensor(virtualFunctionBus,this);
         }
 
         public RadarSensor RadarSensor { get;  }
 
         public CameraSensor CameraSensor { get; }
+        public CollisionSensor CollSensor { get; }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
 

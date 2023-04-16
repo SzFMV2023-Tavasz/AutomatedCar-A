@@ -12,6 +12,7 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyPacket<DetectedObjectInfo> RadarPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> CameraPacket { get; set; }
+        public IReadOnlyPacket<DetectedObjectInfo> CollisionPacket { get; set; }
 
         public void RegisterComponent(SystemComponent component)
         {

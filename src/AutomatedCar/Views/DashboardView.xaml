@@ -64,9 +64,11 @@
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Filename}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="0">Rotation:</TextBlock>
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Rotation}"/>
+								<TextBlock Grid.Row="4" Grid.Column="0">Collision:</TextBlock>
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.CollisionPacket.WorldObjectsDetected[0]}"/>
 
-                                <TextBlock Grid.Row="4" Grid.Column="0">Detected Objects - Radar:</TextBlock>
-                                <ListBox Grid.Row="5" Grid.Column="0" Items="{Binding Car.VirtualFunctionBus.RadarPacket.WorldObjectsDetected}">
+                                <TextBlock Grid.Row="5" Grid.Column="0">Detected Objects - Radar:</TextBlock>
+                                <ListBox Grid.Row="6" Grid.Column="0" Items="{Binding Car.VirtualFunctionBus.RadarPacket.WorldObjectsDetected}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
 
@@ -76,8 +78,8 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                                 
-                                <TextBlock Grid.Row="4" Grid.Column="1">Detected Objects - Camera:</TextBlock>
-                                <ListBox Grid.Row="5" Grid.Column="1" Items="{Binding Car.VirtualFunctionBus.CameraPacket.WorldObjectsDetected}">
+                                <TextBlock Grid.Row="5" Grid.Column="1">Detected Objects - Camera:</TextBlock>
+                                <ListBox Grid.Row="6" Grid.Column="1" Items="{Binding Car.VirtualFunctionBus.CameraPacket.WorldObjectsDetected}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
 
