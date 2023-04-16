@@ -8,6 +8,8 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Net.Sockets;
+    using System.Numerics;
 
     public abstract class GenericSensor : SystemComponent
     {
@@ -92,26 +94,50 @@
                 {
                     foreach (var point in worldObject.Geometries[0].Points)
                     {
+                        // Every boundary boxes at the origo, so needs to be transformed at its position
                         Point transformedPoint = new Point(point.X + worldObject.X, point.Y + worldObject.Y);
                         bool detected = sensor.FillContains(transformedPoint);
 
                         if (detected)
                         {
-                            DetectedObjectInfo newInfo = new DetectedObjectInfo()
-                            {
-                                DetectedObject = worldObject,
-                                Distance = 0,
-                            };
-                            if (!detectedObjects.Contains(newInfo))
-                            {
-                                detectedObjects.Add(newInfo);
-                            }
+                            this.ProcessInformation(worldObject, transformedPoint, detectedObjects);
                         }
                     }
                 }
             }
 
             return detectedObjects.AsReadOnly();
+        }
+
+        private void ProcessInformation(WorldObject worldObject, Point transformedPoint, List<DetectedObjectInfo> detectedObjects)
+        {
+            DetectedObjectInfo newInfo = new DetectedObjectInfo()
+            {
+                DetectedObject = worldObject,
+                Distance = this.CalculateDistance(transformedPoint, this.CarAnchorPoint),
+            };
+            if (!detectedObjects.Contains(newInfo))
+            {
+                detectedObjects.Add(newInfo);
+            }
+            else
+            {
+                var info = detectedObjects.Find(x => x.Equals(newInfo));
+                if (info.Distance > newInfo.Distance)
+                {
+                    detectedObjects.Remove(info);
+                    detectedObjects.Add(newInfo);
+                }
+            }
+        }
+
+        private float CalculateDistance(Point transformedPoint, Point carAnchorPoint)
+        {
+            var vector = new Vector2((float)(transformedPoint.X - carAnchorPoint.X), (float)(transformedPoint.Y - carAnchorPoint.Y));
+
+            var length = vector.Length();
+
+            return length;
         }
 
         private double DegToRad(double degrees)
