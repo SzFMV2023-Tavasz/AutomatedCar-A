@@ -8,7 +8,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class GearBox :SystemComponent
+    public class GearBox : SystemComponent
     {
 
         private GearBoxPacket gearBoxPacket = new GearBoxPacket();
