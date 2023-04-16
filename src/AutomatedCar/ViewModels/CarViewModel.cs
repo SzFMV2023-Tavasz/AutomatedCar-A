@@ -10,6 +10,9 @@
     public class CarViewModel : WorldObjectViewModel
     {
         public AutomatedCar Car { get; set; }
+        public DetectedObjectInfo Camera { get => Car.VirtualFunctionBus.CameraPacket.WorldObjectsDetected?.OrderBy(x=>x.Distance).FirstOrDefault(); }
+        public DetectedObjectInfo Radar { get => Car.VirtualFunctionBus.RadarPacket.WorldObjectsDetected?.Aggregate((min, next) => next.Distance < min.Distance ? next : min); }
+
         public CarViewModel(AutomatedCar car) : base(car)
         {
             this.Car = car;
