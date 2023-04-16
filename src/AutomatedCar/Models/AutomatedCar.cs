@@ -14,20 +14,41 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.ZIndex = 10;
-            this.RadarSensor = new RadarSensor(this, this.virtualFunctionBus, new Avalonia.Point(54,0), 60, 50, new List<WorldObjectType>() {
-                WorldObjectType.Boundary,
-                WorldObjectType.Building,
-                WorldObjectType.Car,
-                WorldObjectType.Other,
-                WorldObjectType.Pedestrian,
-                WorldObjectType.Tree, });
-            this.CameraSensor = new CameraSensor(this, this.virtualFunctionBus, new Avalonia.Point(54, 74), 60, 80, new List<WorldObjectType>()
+            SensorSettings radarSettings = new SensorSettings()
             {
-                WorldObjectType.Boundary,WorldObjectType.Crosswalk,WorldObjectType.Road,WorldObjectType.RoadSign,WorldObjectType.ParkingSpace,
-            });
+                Car = this,
+                FunctionBus = this.virtualFunctionBus,
+                CarAnchorPoint = new Avalonia.Point(54, 0),
+                FieldOfView = 60,
+                ViewDistance = 200,
+                WorldObjectFilter = new List<WorldObjectType>() {
+                    WorldObjectType.Boundary,
+                    WorldObjectType.Building,
+                    WorldObjectType.Car,
+                    WorldObjectType.Other,
+                    WorldObjectType.Pedestrian,
+                    WorldObjectType.Tree, },
+            };
+            SensorSettings cameraSettings = new SensorSettings()
+            {
+                Car = this,
+                FunctionBus = this.virtualFunctionBus,
+                CarAnchorPoint = new Avalonia.Point(54, 74),
+                FieldOfView = 60,
+                ViewDistance = 80,
+                WorldObjectFilter = new List<WorldObjectType>() {
+                    WorldObjectType.Boundary,
+                    WorldObjectType.Crosswalk,
+                    WorldObjectType.Road,
+                    WorldObjectType.RoadSign,
+                    WorldObjectType.ParkingSpace, },
+            };
+            this.RadarSensor = new RadarSensor(radarSettings);
+            this.CameraSensor = new CameraSensor(cameraSettings);
         }
 
         public RadarSensor RadarSensor { get;  }
+
         public CameraSensor CameraSensor { get; }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }

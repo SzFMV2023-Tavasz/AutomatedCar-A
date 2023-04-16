@@ -9,11 +9,11 @@
     using System.Diagnostics;
     using System.Linq;
 
-    public class GenericSensor : SystemComponent
+    public abstract class GenericSensor : SystemComponent
     {
 
         /// <summary>
-        /// This is the default constructor for a generic purpose sensor.
+        /// Initializes a new instance of the <see cref="GenericSensor"/> class.
         /// </summary>
         /// <param name="car">Reference for the car who own this</param>
         /// <param name="virtualFunctionBus">Reference for the VirtualFunctionBus</param>
@@ -21,42 +21,44 @@
         /// <param name="fOV">The sensor's field of view</param>
         /// <param name="viewDistance">The sensor's view distance</param>
         /// <param name="worldObjectTypesFilter">Filter for detecting</param>
-        public GenericSensor(AutomatedCar car, VirtualFunctionBus virtualFunctionBus,
-                    Point carAnchorPoint,
-                    double fOV, double viewDistance,
-                    IEnumerable<WorldObjectType> worldObjectTypesFilter)
-                        : base(virtualFunctionBus)
+        public GenericSensor(SensorSettings sensorSettings)
+                        : base(sensorSettings.FunctionBus)
         {
-            Car = car;
-            CarAnchorPoint = carAnchorPoint;
-            FOV = fOV;
-            ViewDistance = viewDistance;
-            WorldObjectTypesFilter = worldObjectTypesFilter;
-            Packet = new ReadOnlyPacket();
-
+            this.Car = sensorSettings.Car;
+            this.CarAnchorPoint = sensorSettings.CarAnchorPoint;
+            this.FOV = sensorSettings.FieldOfView;
+            this.ViewDistance = sensorSettings.ViewDistance;
+            this.WorldObjectTypesFilter = sensorSettings.WorldObjectFilter;
+            this.Packet = new ReadOnlyPacket();
         }
+
         /// <summary>
-        /// Where the sensor is placed.
+        /// Gets or sets Where the sensor is placed.
         /// </summary>
         public Point CarAnchorPoint { get; set; }
+
         /// <summary>
-        /// The sensor's Field of View.
+        /// Gets or sets The sensor's Field of View.
         /// </summary>
         public double FOV { get; set; }
+
         /// <summary>
-        /// The Sensor's ViewDistance.
+        /// Gets or sets The Sensor's ViewDistance.
         /// </summary>
         public double ViewDistance { get; set; }
+
         /// <summary>
-        /// A filter for the simulation. This tells the sensor what kind of objects this object can detect.
+        /// Gets or sets A filter for the simulation. This tells the sensor what kind of objects this object can detect.
         /// </summary>
         public IEnumerable<WorldObjectType> WorldObjectTypesFilter { get; set; }
+
         /// <summary>
-        /// This is where it write the detected objects
+        /// Gets or sets This is where it write the detected objects
         /// </summary>
         protected IReadOnlyPacket<DetectedObjectInfo> Packet { get; set; }
+
         /// <summary>
-        /// For reference which car owns this sensor.
+        /// Gets the reference which car owns this sensor.
         /// </summary>
         protected AutomatedCar Car { get; }
 
@@ -65,22 +67,7 @@
         {
             List<Point> triangle = this.GenerateSensorTriangle();
 
-            // For debug purposes
-            if (World.Instance.ControlledCar == this.Car)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    Debug.WriteLine(string.Format("{0} => {1}, {2}", i, triangle[i].X, triangle[i].Y));
-                }
-            }
-
             var detectedObjList = this.DetectInSensorZone(triangle);
-
-            // For debug purposes
-            if (World.Instance.ControlledCar == this.Car)
-            {
-                this.DebugToConsole(detectedObjList);
-            }
 
             this.Packet.WorldObjectsDetected = detectedObjList;
         }
@@ -89,9 +76,9 @@
         {
             return new List<Point>()
             {
-                new Point(0 + Car.X,0 + Car.Y),
-                new Point(92.37f *50* Math.Sin(DegToRad(-this.FOV/2 + this.Car.Rotation+ 180)) + Car.X, 92.37f *50* Math.Cos(DegToRad(-this.FOV/2 + this.Car.Rotation+180)) + Car.Y),
-                new Point(92.37f * 50 * Math.Sin(DegToRad(this.FOV/2 + this.Car.Rotation+ 180)) + Car.X, 92.37f *50* Math.Cos(DegToRad(this.FOV/2 + this.Car.Rotation+180)) + Car.Y),
+                new Point(0 + this.Car.X,0 + this.Car.Y),
+                new Point((92.37f * 50 * Math.Sin(this.DegToRad((-this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.X, (92.37f * 50 * Math.Cos(this.DegToRad((-this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.Y),
+                new Point((92.37f * 50 * Math.Sin(this.DegToRad((this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.X, (92.37f * 50 * Math.Cos(this.DegToRad((this.FOV / 2) + this.Car.Rotation + 180))) + this.Car.Y),
             };
         }
 
@@ -127,20 +114,11 @@
             return detectedObjects.AsReadOnly();
         }
 
-
         private double DegToRad(double degrees)
         {
             double radians = (Math.PI / 180) * degrees;
 
             return radians;
-        }
-        private void DebugToConsole(IReadOnlyCollection<DetectedObjectInfo> detected)
-        {
-            Debug.WriteLine(string.Format("==={0}===", DateTime.Now.Ticks));
-            foreach (var obj in detected)
-            {
-                Debug.WriteLine(string.Format("{0} -> ({1}, {2})", obj.DetectedObject.Filename, obj.DetectedObject.X, obj.DetectedObject.Y));
-            }
         }
     }
 }

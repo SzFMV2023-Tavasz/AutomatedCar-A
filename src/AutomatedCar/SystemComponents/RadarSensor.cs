@@ -10,9 +10,9 @@
 
     public class RadarSensor : GenericSensor
     {
-        public RadarSensor(AutomatedCar car, VirtualFunctionBus virtualFunctionBus, Point carAnchorPoint, double fOV, double viewDistance, IEnumerable<WorldObjectType> worldObjectTypesFilter) : base(car, virtualFunctionBus, carAnchorPoint, fOV, viewDistance, worldObjectTypesFilter)
+        public RadarSensor(SensorSettings sensorSettings) : base(sensorSettings)
         {
-            virtualFunctionBus.RadarPacket = this.Packet;
+            sensorSettings.FunctionBus.RadarPacket = this.Packet;
         }
     }
 }

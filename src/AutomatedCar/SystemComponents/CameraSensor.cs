@@ -10,10 +10,9 @@
 
     public class CameraSensor:GenericSensor
     {
-        public CameraSensor(AutomatedCar car, VirtualFunctionBus virtualFunctionBus, Point carAnchorPoint, double fOV, double viewDistance, 
-            IEnumerable<WorldObjectType> worldObjectTypesFilter) : base(car, virtualFunctionBus, carAnchorPoint, fOV, viewDistance, worldObjectTypesFilter)
+        public CameraSensor(SensorSettings sensorSettings) : base(sensorSettings)
         {
-            virtualFunctionBus.CameraPacket = this.Packet;
+            sensorSettings.FunctionBus.CameraPacket = this.Packet;
         }
     }
 }
