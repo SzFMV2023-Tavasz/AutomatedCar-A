@@ -11,6 +11,7 @@
     using Helpers;
     using Visualization;
     using Avalonia.Media;
+    using global::AutomatedCar.NPC;
 
     public class World
     {
@@ -23,9 +24,14 @@
         public List<AutomatedCar> controlledCars = new();
 
         public static World Instance { get; } = new World();
+
         public List<WorldObject> WorldObjects { get; set; } = new List<WorldObject>();
 
+
+        public NPCManager npcManager = new NPCManager();
+
         public WorldType SelectedWorld { get; set; }
+
         public AutomatedCar ControlledCar
         {
             get => this.controlledCars[this.controlledCarPointer];
