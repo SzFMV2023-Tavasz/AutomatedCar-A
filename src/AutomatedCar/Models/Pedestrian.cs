@@ -4,11 +4,12 @@
     using System.Collections.Generic;
     using global::AutomatedCar.NPC;
 
-    public class Pedestrian : INPC
+    public class Pedestrian : WorldObject, INPC
     {
         private NPCManager nPCManager;
 
-        public Pedestrian(NPCManager nPCManager)
+        public Pedestrian(int x, int y, string filename, NPCManager nPCManager)
+            : base(x, y, filename)
         {
             this.nPCManager = nPCManager;
             nPCManager.AddNPC(this);
