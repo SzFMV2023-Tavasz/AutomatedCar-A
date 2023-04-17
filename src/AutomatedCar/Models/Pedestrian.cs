@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Avalonia.Media;
     using global::AutomatedCar.NPC;
 
     public class Pedestrian : WorldObject, INPC
@@ -14,6 +15,7 @@
             this.nPCManager = nPCManager;
             nPCManager.AddNPC(this);
         }
+        public PolylineGeometry Geometry { get; set; }
 
         public List<Helpers.PathPoint> PathPoints { get; set; } = new List<Helpers.PathPoint>();
 
