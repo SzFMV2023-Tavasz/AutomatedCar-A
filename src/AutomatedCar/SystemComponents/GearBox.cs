@@ -28,16 +28,19 @@
             if (this.characteristicsPacket.RPM > 2500 && this.gearBoxPacket.InnerGear < 5)
             {
                 Shift(1);
+                this.gearBoxPacket.ShiftInProgress = false;
             }
             else if (this.characteristicsPacket.RPM < 1400 && this.gearBoxPacket.InnerGear > 1)
             {
                 Shift(-1);
+                this.gearBoxPacket.ShiftInProgress = false;
             }
         }
 
 
         /// <summary>
         /// 1 means up, -1 means down
+        /// wait 1 second, and than 
         /// </summary>
         public async void Shift(int upOrDown)
         {
@@ -50,7 +53,6 @@
             {
                 this.gearBoxPacket.InnerGear--;
             }
-            this.gearBoxPacket.ShiftInProgress = false;
             await Task.Delay(1000);
         }
     }
