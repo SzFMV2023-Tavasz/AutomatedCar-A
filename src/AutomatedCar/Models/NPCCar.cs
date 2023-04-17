@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using global::AutomatedCar.NPC;
 
     public class NPCCar : Car, INPC
@@ -28,13 +26,12 @@
         {
             if (!(ActPoint == PathPoints.Count() - 1 && !Repeating))
             {
-
                 int NextPoint = ActPoint + 1;
                 if (!(NextPoint < PathPoints.Count())) { NextPoint = 0; }
                 int difX = PathPoints[NextPoint].X - this.X;
                 int difY = PathPoints[NextPoint].Y - this.Y;
                 double distance = Math.Sqrt(difX * difX + difY * difY);
-                if (distance <= this.Speed)
+                if ((int)Math.Floor(distance) <= this.Speed)
                 {
                     this.X = PathPoints[NextPoint].X;
                     this.Y = PathPoints[NextPoint].Y;
