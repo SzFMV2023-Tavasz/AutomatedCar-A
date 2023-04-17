@@ -10,7 +10,6 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyDummyPacket DummyPacket { get; set; }
 
-        public IGearboxInterface GearboxPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> RadarPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> CameraPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> CollisionPacket { get; set; }
