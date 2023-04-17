@@ -3,13 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Numerics;
     using System.Text;
     using System.Threading.Tasks;
 
-    public interface IGearboxInterface
+    public interface IDrivechain
     {
-        bool ShiftInProgress { get; }
+        public int Speed { get; }
 
-        byte InnerGear { get; }       
+        public Vector2 MotionVector { get; }
     }
 }

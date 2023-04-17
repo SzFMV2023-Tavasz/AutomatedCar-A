@@ -12,6 +12,8 @@ namespace AutomatedCar.SystemComponents
 
         public IGearboxInterface GearboxPacket { get; set; }
 
+        public IGearboxInterface GearboxPacket { get; set; }
+
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);
