@@ -7,10 +7,13 @@ namespace AutomatedCar.Models
     {
         private VirtualFunctionBus virtualFunctionBus;
 
+        private GearBox gearBox;
+
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
+            this.gearBox = new GearBox(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
