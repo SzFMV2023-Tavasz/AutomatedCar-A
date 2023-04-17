@@ -169,7 +169,7 @@ namespace AutomatedCar
         {
             var npcCar = new NPCCar(x, y, filename, world.npcManager);
 
-            npcCar.Geometry = this.GetControlledCarBoundaryBox();
+            npcCar.Geometry = this.GetNPCCarBoundaryBox();
             npcCar.RawGeometries.Add(npcCar.Geometry);
             npcCar.Geometries.Add(npcCar.Geometry);
             npcCar.RotationPoint = new System.Drawing.Point(54, 120);
