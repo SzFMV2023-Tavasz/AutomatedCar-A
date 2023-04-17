@@ -3,6 +3,7 @@ namespace AutomatedCar
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
+    using AutomatedCar.Helpers;
     using AutomatedCar.Models;
     using AutomatedCar.NPC;
     using AutomatedCar.ViewModels;
@@ -108,30 +109,17 @@ namespace AutomatedCar
         private void AddNPCsToOval(World world)
         {
             // create 1 NPC car here that can be added to the OVAL track
-            var car1 = this.CreateNpcCar(545, 4860, 0, "car_3_black.png", world);
+            var car1 = this.CreateNPCCar(545, 4860, 0, "car_3_black.png", world, this.GetPathPointsFrom("NPC_oval_world_path.json", "car"));
             world.AddObject(car1);
             
             
         }
-        private NPCCar CreateNpcCar(int x, int y, int rotation, string filename, World world)
-        {
-            var car1 = new NPCCar(x, y, filename, world.npcManager);
-            
-            car1.Geometry = this.GetNPCCarBoundaryBox();
-            car1.RawGeometries.Add(car1.Geometry);
-            car1.Geometries.Add(car1.Geometry);
-            car1.RotationPoint = new System.Drawing.Point(54, 120);
-            car1.Rotation = rotation;
 
-            
-
-            return car1;
-        }
         private void AddNPCsToTest(World world)
         {
             // create 1 NPC Pedestrian and 1 NPC car here that can be added to the TEST track
-            var car1 = this.CreateNpcCar(4240, 1520, 270, "car_3_black.png", world);
-            var pedestrian1 = this.CreateNPCPedestrian(1950, 630, 270, "man.png", world);
+            var car1 = this.CreateNPCCar(4240, 1520, 270, "car_3_black.png", world, this.GetPathPointsFrom("NPC_test_world_path.json", "car"));
+            var pedestrian1 = this.CreateNPCPedestrian(1950, 630, 270, "man.png", world, this.GetPathPointsFrom("NPC_test_world_path.json", "pedestrian"));
             world.AddObject(car1);
             world.AddObject(pedestrian1);
         }
@@ -177,7 +165,7 @@ namespace AutomatedCar
 
             world.AddObject(circle);
         }
-        private NPCCar CreateNPCCar(int x, int y, int rotation, string filename, World world)
+        private NPCCar CreateNPCCar(int x, int y, int rotation, string filename, World world, List<PathPoint> pathPoints)
         {
             var npcCar = new NPCCar(x, y, filename, world.npcManager);
 
@@ -187,11 +175,11 @@ namespace AutomatedCar
             npcCar.RotationPoint = new System.Drawing.Point(54, 120);
             npcCar.Rotation = rotation;
 
-
+            npcCar.PathPoints = pathPoints;
             return npcCar;
         }
 
-        private Pedestrian CreateNPCPedestrian(int x, int y, int rotation, string filename, World world)
+        private Pedestrian CreateNPCPedestrian(int x, int y, int rotation, string filename, World world, List<PathPoint> pathPoints)
         {
             var pedestrian = new Pedestrian(x, y, filename, world.npcManager);
 
@@ -201,6 +189,7 @@ namespace AutomatedCar
             pedestrian.RotationPoint = new System.Drawing.Point(54, 120);
             pedestrian.Rotation = rotation;
 
+            pedestrian.PathPoints = pathPoints;
 
             return pedestrian;
         }
@@ -250,6 +239,29 @@ namespace AutomatedCar
             world.AddControlledCar(controlledCar);
 
         }
+        public List<PathPoint> GetPathPointsFrom(string filePath, string type)
+        {
+            // Gives back a pathPoint list related to a specific NPC type
+            // type: "car" or "pedestrian", anything else throws an exception
 
+            List<PathPoint> pathPoints = new List<PathPoint>();
+
+            string fullPath = $"AutomatedCar.Assets.NPCpaths." + filePath;
+            StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream(fullPath));
+            string json_text = reader.ReadToEnd();
+            dynamic pathPointList = JObject.Parse(json_text);
+
+            foreach (var point in pathPointList[type])
+            {
+                pathPoints.Add(new PathPoint(
+                    point["x"].ToObject<int>(),
+                    point["y"].ToObject<int>(),
+                    point["rotation"].ToObject<double>(),
+                    point["speed"].ToObject<int>()));
+            }
+
+            return pathPoints;
+        }
     }
 }
