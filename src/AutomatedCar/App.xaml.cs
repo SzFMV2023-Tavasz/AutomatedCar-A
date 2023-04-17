@@ -3,6 +3,7 @@ namespace AutomatedCar
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
+    using AutomatedCar.Helpers;
     using AutomatedCar.Models;
     using AutomatedCar.ViewModels;
     using AutomatedCar.Views;
@@ -79,7 +80,7 @@ namespace AutomatedCar
             world.PopulateFromJSON($"AutomatedCar.Assets.test_world.json");
 
 
-            if (!loadOnlyStaticAssets) 
+            if (!loadOnlyStaticAssets)
             {
                 this.AddControlledCarsToTest(world);
                 this.AddNPCsToTest(world);
@@ -95,12 +96,13 @@ namespace AutomatedCar
             world.SetSelectedWorldTo(WorldType.Oval);
 
 
-            if (!loadOnlyStaticAssets) 
+            if (!loadOnlyStaticAssets)
             {
                 this.AddControlledCarsToOval(world);
                 this.AddNPCsToOval(world);
 
                 // add further assets to the OVAL world HERE
+
             }
         }
 
@@ -112,6 +114,31 @@ namespace AutomatedCar
         private void AddNPCsToTest(World world)
         {
             // create 1 NPC Pedestrian and 1 NPC car here that can be added to the TEST track
+        }
+
+        public List<PathPoint> GetPathPointsFrom(string filePath, string type)
+        {
+            // Gives back a pathPoint list related to a specific NPC type
+            // type: "car" or "pedestrian", anything else throws an exception
+
+            List<PathPoint> pathPoints = new List<PathPoint>();
+
+            string fullPath = $"AutomatedCar.Assets.NPCpaths." + filePath;
+            StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream(fullPath));
+            string json_text = reader.ReadToEnd();
+            dynamic pathPointList = JObject.Parse(json_text);
+
+            foreach (var point in pathPointList[type])
+            {
+                pathPoints.Add(new PathPoint(
+                    point["x"].ToObject<int>(),
+                    point["y"].ToObject<int>(),
+                    point["rotation"].ToObject<double>(),
+                    point["speed"].ToObject<int>()));
+            }
+
+            return pathPoints;
         }
 
         private PolylineGeometry GetControlledCarBoundaryBox()
