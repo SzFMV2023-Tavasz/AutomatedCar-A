@@ -3,8 +3,8 @@ namespace AutomatedCar
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
-    using AutomatedCar.Helpers;
     using AutomatedCar.Models;
+    using AutomatedCar.NPC;
     using AutomatedCar.ViewModels;
     using AutomatedCar.Views;
     using Avalonia;
@@ -80,7 +80,7 @@ namespace AutomatedCar
             world.PopulateFromJSON($"AutomatedCar.Assets.test_world.json");
 
 
-            if (!loadOnlyStaticAssets)
+            if (!loadOnlyStaticAssets) 
             {
                 this.AddControlledCarsToTest(world);
                 this.AddNPCsToTest(world);
@@ -96,49 +96,59 @@ namespace AutomatedCar
             world.SetSelectedWorldTo(WorldType.Oval);
 
 
-            if (!loadOnlyStaticAssets)
+            if (!loadOnlyStaticAssets) 
             {
                 this.AddControlledCarsToOval(world);
                 this.AddNPCsToOval(world);
 
                 // add further assets to the OVAL world HERE
-
             }
         }
 
         private void AddNPCsToOval(World world)
         {
-            // create 1 NPC Pedestrian and 1 NPC car here that can be added to the OVAL track
+            // create 1 NPC car here that can be added to the OVAL track
+            var car1 = this.CreateNpcCar(545, 4860, 0, "car_3_black.png", world);
+            world.AddObject(car1);
+            
+            
         }
+        private NPCCar CreateNpcCar(int x, int y, int rotation, string filename, World world)
+        {
+            var car1 = new NPCCar(x, y, filename, world.npcManager);
+            
+            car1.Geometry = this.GetNPCCarBoundaryBox();
+            car1.RawGeometries.Add(car1.Geometry);
+            car1.Geometries.Add(car1.Geometry);
+            car1.RotationPoint = new System.Drawing.Point(54, 120);
+            car1.Rotation = rotation;
 
+            
+
+            return car1;
+        }
         private void AddNPCsToTest(World world)
         {
             // create 1 NPC Pedestrian and 1 NPC car here that can be added to the TEST track
+            var car1 = this.CreateNpcCar(4240, 1520, 270, "car_3_black.png", world);
+            var pedestrian1 = this.CreateNPCPedestrian(1950, 630, 270, "man.png", world);
+            world.AddObject(car1);
+            world.AddObject(pedestrian1);
         }
-
-        public List<PathPoint> GetPathPointsFrom(string filePath, string type)
+        private PolylineGeometry GetNPCCarBoundaryBox()
         {
-            // Gives back a pathPoint list related to a specific NPC type
-            // type: "car" or "pedestrian", anything else throws an exception
-
-            List<PathPoint> pathPoints = new List<PathPoint>();
-
-            string fullPath = $"AutomatedCar.Assets.NPCpaths." + filePath;
             StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream(fullPath));
+    .GetManifestResourceStream($"AutomatedCar.Assets.worldobject_polygons.json"));
             string json_text = reader.ReadToEnd();
-            dynamic pathPointList = JObject.Parse(json_text);
-
-            foreach (var point in pathPointList[type])
+            dynamic stuff = JObject.Parse(json_text);
+            var points = new List<Point>();
+            foreach (var i in stuff["objects"][6]["polys"][0]["points"])
             {
-                pathPoints.Add(new PathPoint(
-                    point["x"].ToObject<int>(),
-                    point["y"].ToObject<int>(),
-                    point["rotation"].ToObject<double>(),
-                    point["speed"].ToObject<int>()));
+                points.Add(new Point(i[0].ToObject<int>(), i[1].ToObject<int>()));
             }
 
-            return pathPoints;
+            return new PolylineGeometry(points, false);
+
         }
 
         private PolylineGeometry GetControlledCarBoundaryBox()
@@ -167,7 +177,48 @@ namespace AutomatedCar
 
             world.AddObject(circle);
         }
+        private NPCCar CreateNPCCar(int x, int y, int rotation, string filename, World world)
+        {
+            var npcCar = new NPCCar(x, y, filename, world.npcManager);
 
+            npcCar.Geometry = this.GetControlledCarBoundaryBox();
+            npcCar.RawGeometries.Add(npcCar.Geometry);
+            npcCar.Geometries.Add(npcCar.Geometry);
+            npcCar.RotationPoint = new System.Drawing.Point(54, 120);
+            npcCar.Rotation = rotation;
+
+
+            return npcCar;
+        }
+
+        private Pedestrian CreateNPCPedestrian(int x, int y, int rotation, string filename, World world)
+        {
+            var pedestrian = new Pedestrian(x, y, filename, world.npcManager);
+
+            pedestrian.Geometry = this.GetControlledNPCPedestrianBoundaryBox();
+            pedestrian.RawGeometries.Add(pedestrian.Geometry);
+            pedestrian.Geometries.Add(pedestrian.Geometry);
+            pedestrian.RotationPoint = new System.Drawing.Point(54, 120);
+            pedestrian.Rotation = rotation;
+
+
+            return pedestrian;
+        }
+
+        private PolylineGeometry GetControlledNPCPedestrianBoundaryBox()
+        {
+            StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly()
+    .GetManifestResourceStream($"AutomatedCar.Assets.worldobject_polygons.json"));
+            string json_text = reader.ReadToEnd();
+            dynamic stuff = JObject.Parse(json_text);
+            var points = new List<Point>();
+            foreach (var i in stuff["objects"][30]["polys"][0]["points"])
+            {
+                points.Add(new Point(i[0].ToObject<int>(), i[1].ToObject<int>()));
+            }
+
+            return new PolylineGeometry(points, false);
+        }
         private AutomatedCar CreateControlledCar(int x, int y, int rotation, string filename)
         {
             var controlledCar = new Models.AutomatedCar(x, y, filename);
