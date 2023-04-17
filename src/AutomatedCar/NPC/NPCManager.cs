@@ -13,6 +13,7 @@
         public NPCManager()
         {
             this.npcList = new List<INPC>();
+            this.Start();
         }
 
         public void AddNPC(INPC npc)
