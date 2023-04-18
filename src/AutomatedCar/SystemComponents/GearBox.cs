@@ -14,7 +14,6 @@
         public GearBoxPacket gearBoxPacket = new GearBoxPacket();
         private ICharacteristicsInterface characteristicsPacket;
         private IDrivechain drivechainPacket;
-        public OuterGear ActualGear { get; set; }
 
         public GearBox(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
@@ -60,16 +59,16 @@
         }
         public void OuterGearShiftUp()
         {
-            if (ActualGear != OuterGear.d && drivechainPacket.Speed == 0)
+            if (this.gearBoxPacket.ActualGear != OuterGear.d && this.drivechainPacket.Speed == 0)
             {
-                ActualGear++;
+                this.gearBoxPacket.ActualGear++;
             }
         }
         public void OuterGearShiftDown()
         {
-            if (ActualGear != OuterGear.p && drivechainPacket.Speed == 0)
+            if (this.gearBoxPacket.ActualGear != OuterGear.p && this.drivechainPacket.Speed == 0)
             {
-                ActualGear--;
+                this.gearBoxPacket.ActualGear--;
             }
         }
     }
