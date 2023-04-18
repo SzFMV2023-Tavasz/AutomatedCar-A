@@ -146,7 +146,7 @@ namespace AutomatedCar
             string json_text = reader.ReadToEnd();
             dynamic stuff = JObject.Parse(json_text);
             var points = new List<Point>();
-            foreach (var i in stuff["objects"][30]["polys"][0]["points"])
+            foreach (var i in stuff["objects"][0]["polys"][0]["points"])
             {
                 points.Add(new Point(i[0].ToObject<int>(), i[1].ToObject<int>()));
             }
@@ -169,7 +169,7 @@ namespace AutomatedCar
         {
             var npcCar = new NPCCar(x, y, filename, world.npcManager);
 
-            npcCar.Geometry = this.GetControlledCarBoundaryBox();
+            npcCar.Geometry = this.GetNPCCarBoundaryBox();
             npcCar.RawGeometries.Add(npcCar.Geometry);
             npcCar.Geometries.Add(npcCar.Geometry);
             npcCar.RotationPoint = new System.Drawing.Point(54, 120);
@@ -215,7 +215,7 @@ namespace AutomatedCar
             controlledCar.Geometry = this.GetControlledCarBoundaryBox();
             controlledCar.RawGeometries.Add(controlledCar.Geometry);
             controlledCar.Geometries.Add(controlledCar.Geometry);
-            controlledCar.RotationPoint = new System.Drawing.Point(10, 10);
+            controlledCar.RotationPoint = new System.Drawing.Point(54, 120);
             controlledCar.Rotation = rotation;
 
             controlledCar.Start();
@@ -225,7 +225,7 @@ namespace AutomatedCar
 
         private void AddControlledCarsToTest(World world)
         {
-            var controlledCar = this.CreateControlledCar(480, 1425, 0, "man.png");
+            var controlledCar = this.CreateControlledCar(480, 1425, 0, "car_1_white.png");
             var controlledCar2 = this.CreateControlledCar(4250, 1420, -90, "car_1_red.png");
 
             world.AddControlledCar(controlledCar);
