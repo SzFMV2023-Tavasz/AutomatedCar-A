@@ -7,6 +7,10 @@
     {
         List<PathPoint> PathPoints { get; set; }
 
+        int ActPoint { get; set; }
+
+        bool Repeating { get; set; }
+
         void Move();
     }
 }

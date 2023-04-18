@@ -1,7 +1,6 @@
 ﻿namespace Tests.Models
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using AutomatedCar;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

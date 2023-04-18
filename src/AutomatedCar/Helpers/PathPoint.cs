@@ -22,6 +22,5 @@
         public double Rotation { get => this.rotation; }
 
         public int Speed { get => this.speed; }
-
     }
 }
