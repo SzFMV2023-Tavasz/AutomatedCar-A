@@ -20,6 +20,7 @@
             virtualFunctionBus.GearboxPacket = this.gearBoxPacket;
             this.gearBoxPacket.ShiftInProgress = false;
             this.gearBoxPacket.InnerGear = 1;
+            this.gearBoxPacket.ActualGear = OuterGear.p;
         }
 
         public override void Process()
