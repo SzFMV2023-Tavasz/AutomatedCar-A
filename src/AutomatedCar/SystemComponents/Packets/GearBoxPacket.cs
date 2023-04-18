@@ -11,7 +11,6 @@
     {
 
         private bool shiftInProgress;
-
         private byte innerGear;
         private OuterGear actualGear;
 
