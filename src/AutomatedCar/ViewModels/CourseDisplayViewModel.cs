@@ -82,6 +82,16 @@ namespace AutomatedCar.ViewModels
             this.DebugStatus.Camera = !this.DebugStatus.Camera;
         }
 
+        public void ShiftUp()
+        {
+            World.Instance.ControlledCar.GearBox.OuterGearShiftUp();
+        }
+
+        public void ShiftDown()
+        {
+            World.Instance.ControlledCar.GearBox.OuterGearShiftDown();
+        }
+
         public void ToggleRadar()
         {
             // World.Instance.DebugStatus.Radar = !World.Instance.DebugStatus.Radar;
