@@ -13,6 +13,8 @@
         private const double WheelCircumference = 24 * Math.PI; // 24-inch wheel size converted to circumference
         private const double BrakeDeceleration = 9; // Deceleration rate 9m/s^2
 
+        private double tick; // Inner tick variable
+
         public Characteristics(VirtualFunctionBus virtualFunctionBus, IGearboxInterface gearbox, IBrakePedalInterface brakePedal, IGasPedalInterface gasPedal)
             : base(virtualFunctionBus)
         {
@@ -21,16 +23,19 @@
             this.brakePedal = brakePedal;
             this.gasPedal = gasPedal;
             virtualFunctionBus.CharacteristicsPacket = this.characteristicsPacket;
+            tick = 0;
         }
 
-        public override void Process(double timeDelta)
+        public override void Process()
         {
+            tick += 1.0 / 60; // Increment tick by 1/60 (assuming this method is called every 1/60th of a second)
+
             double gearFactor = GetGearFactor(gearbox.InnerGear);
-            double acceleration = CalculateAcceleration(gasPedal.GasPedalState, gearFactor, timeDelta);
-            double deceleration = CalculateDeceleration(brakePedal.BrakePedalState, timeDelta);
+            double acceleration = CalculateAcceleration(gasPedal.GasPedalState, gearFactor, tick);
+            double deceleration = CalculateDeceleration(brakePedal.BrakePedalState, tick);
 
             double netAcceleration = acceleration - deceleration;
-            characteristicsPacket.Speed = CalculateSpeed(characteristicsPacket.Speed, netAcceleration, timeDelta);
+            characteristicsPacket.Speed = CalculateSpeed(characteristicsPacket.Speed, netAcceleration, tick);
             characteristicsPacket.RPM = CalculateRPM(characteristicsPacket.Speed);
         }
 
