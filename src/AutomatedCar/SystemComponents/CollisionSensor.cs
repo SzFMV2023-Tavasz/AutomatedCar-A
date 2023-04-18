@@ -75,9 +75,8 @@
                     }
                 }
             }
-            
-
-            
         }
+
+        private static double DegToRad(double degree) => (Math.PI / 180) * degree;
     }
 }
