@@ -118,7 +118,7 @@ namespace AutomatedCar
         private void AddNPCsToTest(World world)
         {
             // create 1 NPC Pedestrian and 1 NPC car here that can be added to the TEST track
-            var car1 = this.CreateNPCCar(4240, 1520, 270, "car_3_black.png", world, WorldType.Test, this.GetPathPointsFrom("NPC_test_world_path.json", "car"));
+            var car1 = this.CreateNPCCar(3620, 1700, 180, "car_3_black.png", world, WorldType.Test, this.GetPathPointsFrom("NPC_test_world_path.json", "car"));
             var pedestrian1 = this.CreateNPCPedestrian(1950, 630, 270, "man.png", world, this.GetPathPointsFrom("NPC_test_world_path.json", "pedestrian"));
             world.AddObject(car1);
             world.AddObject(pedestrian1);
