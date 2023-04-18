@@ -9,7 +9,7 @@
     public interface IGearboxInterface
     {
         bool ShiftInProgress { get; }
-
-        byte InnerGear { get; }       
+        byte InnerGear { get; }
+        byte OuterGear { get; }
     }
 }
