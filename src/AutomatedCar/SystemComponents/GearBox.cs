@@ -13,6 +13,7 @@
 
         public GearBoxPacket gearBoxPacket = new GearBoxPacket();
         private ICharacteristicsInterface characteristicsPacket;
+        public OuterGear ActualGear { get; set; }
 
         public GearBox(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
@@ -54,6 +55,20 @@
                 this.gearBoxPacket.InnerGear--;
             }
             await Task.Delay(1000);
+        }
+        public void OuterGearShiftUp()
+        {
+            if (ActualGear!=OuterGear.d)
+            {
+                ActualGear++;
+            }
+        }
+        public void OuterGearShiftDown()
+        {
+            if (ActualGear != OuterGear.p)
+            {
+                ActualGear--;
+            }
         }
     }
 }
