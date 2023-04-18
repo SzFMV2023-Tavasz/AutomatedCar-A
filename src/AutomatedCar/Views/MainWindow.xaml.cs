@@ -92,6 +92,16 @@ namespace AutomatedCar.Views
                 Keyboard.Keys.Remove(Key.F5);
             }
 
+            if (Keyboard.IsKeyDown(Key.Q))
+            {
+                viewModel.CourseDisplay.ShiftUp();
+            }
+
+            if (Keyboard.IsKeyDown(Key.A))
+            {
+                viewModel.CourseDisplay.ShiftDown();
+            }
+
             var scrollViewer = this.Get<CourseDisplayView>("courseDisplay").Get<ScrollViewer>("scrollViewer");
             viewModel.CourseDisplay.FocusCar(scrollViewer);
         }

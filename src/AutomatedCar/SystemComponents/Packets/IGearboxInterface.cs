@@ -20,5 +20,6 @@
         /// enum: P, R, N, D
         /// </summary>
         OuterGear ActualGear { get; }
+
     }
 }
