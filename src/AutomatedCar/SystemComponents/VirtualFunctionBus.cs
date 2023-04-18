@@ -12,8 +12,7 @@ namespace AutomatedCar.SystemComponents
         public ICharacteristicsInterface CharacteristicsPacket { get; set; }
 
         public IGearboxInterface GearboxPacket { get; set; }
-
-        public IGearboxInterface GearboxPacket { get; set; }
+        public IDrivechain DrivechainPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> RadarPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> CameraPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> CollisionPacket { get; set; }
