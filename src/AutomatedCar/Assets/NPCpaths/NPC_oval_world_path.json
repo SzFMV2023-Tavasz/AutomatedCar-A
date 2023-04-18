@@ -300,6 +300,13 @@
       "speed": 2,
       "rotation": 360,
       "nextPoint": 0
+    },
+    {
+      "x": 555,
+      "y": 5950,
+      "speed": 2,
+      "rotation": 0,
+      "nextPoint": 0
     }
   ]
 }

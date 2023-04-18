@@ -81,7 +81,7 @@ namespace AutomatedCar
             world.PopulateFromJSON($"AutomatedCar.Assets.test_world.json");
 
 
-            if (!loadOnlyStaticAssets) 
+            if (!loadOnlyStaticAssets)
             {
                 this.AddControlledCarsToTest(world);
                 this.AddNPCsToTest(world);
@@ -97,7 +97,7 @@ namespace AutomatedCar
             world.SetSelectedWorldTo(WorldType.Oval);
 
 
-            if (!loadOnlyStaticAssets) 
+            if (!loadOnlyStaticAssets)
             {
                 this.AddControlledCarsToOval(world);
                 this.AddNPCsToOval(world);
@@ -109,7 +109,7 @@ namespace AutomatedCar
         private void AddNPCsToOval(World world)
         {
             // create 1 NPC car here that can be added to the OVAL track
-            var car1 = this.CreateNPCCar(545, 4860, 0, "car_3_black.png", world, this.GetPathPointsFrom("NPC_oval_world_path.json", "car"));
+            var car1 = this.CreateNPCCar(545, 4860, 0, "car_3_black.png", world, WorldType.Oval, this.GetPathPointsFrom("NPC_oval_world_path.json", "car"));
             world.AddObject(car1);
 
             world.npcManager.Start();
@@ -118,7 +118,7 @@ namespace AutomatedCar
         private void AddNPCsToTest(World world)
         {
             // create 1 NPC Pedestrian and 1 NPC car here that can be added to the TEST track
-            var car1 = this.CreateNPCCar(4240, 1520, 270, "car_3_black.png", world, this.GetPathPointsFrom("NPC_test_world_path.json", "car"));
+            var car1 = this.CreateNPCCar(4240, 1520, 270, "car_3_black.png", world, WorldType.Test, this.GetPathPointsFrom("NPC_test_world_path.json", "car"));
             var pedestrian1 = this.CreateNPCPedestrian(1950, 630, 270, "man.png", world, this.GetPathPointsFrom("NPC_test_world_path.json", "pedestrian"));
             world.AddObject(car1);
             world.AddObject(pedestrian1);
@@ -167,9 +167,9 @@ namespace AutomatedCar
 
             world.AddObject(circle);
         }
-        private NPCCar CreateNPCCar(int x, int y, int rotation, string filename, World world, List<PathPoint> pathPoints)
+        private NPCCar CreateNPCCar(int x, int y, int rotation, string filename, World world, WorldType type, List<PathPoint> pathPoints)
         {
-            var npcCar = new NPCCar(x, y, filename, world.npcManager);
+            var npcCar = new NPCCar(x, y, filename, type, world.npcManager);
 
             npcCar.Geometry = this.GetNPCCarBoundaryBox();
             npcCar.RawGeometries.Add(npcCar.Geometry);
@@ -188,7 +188,7 @@ namespace AutomatedCar
             pedestrian.Geometry = this.GetControlledNPCPedestrianBoundaryBox();
             pedestrian.RawGeometries.Add(pedestrian.Geometry);
             pedestrian.Geometries.Add(pedestrian.Geometry);
-            pedestrian.RotationPoint = new System.Drawing.Point(37,30);
+            pedestrian.RotationPoint = new System.Drawing.Point(37, 30);
             pedestrian.Rotation = rotation;
 
             pedestrian.PathPoints = pathPoints;
