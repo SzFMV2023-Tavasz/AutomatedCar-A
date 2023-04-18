@@ -42,8 +42,8 @@
             }
             PolylineGeometry CarLines = new PolylineGeometry(CarPoints, false);
 
-            var collidibleWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.car));
-            foreach (var worldObject in collidibleWorldObjects)
+            var collidableWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.car));
+            foreach (var worldObject in collidableWorldObjects)
             {
                 if (worldObject.Geometries.Count > 0)
                 {
