@@ -13,6 +13,7 @@
 
         public GearBoxPacket gearBoxPacket = new GearBoxPacket();
         private ICharacteristicsInterface characteristicsPacket;
+        private IDrivechain drivechainPacket;
         public OuterGear ActualGear { get; set; }
 
         public GearBox(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
@@ -25,6 +26,7 @@
         public override void Process()
         {
             this.characteristicsPacket = World.Instance.ControlledCar.VirtualFunctionBus.CharacteristicsPacket;
+            this.drivechainPacket = World.Instance.ControlledCar.VirtualFunctionBus.DrivechainPacket;
 
             if (this.characteristicsPacket.RPM > 2500 && this.gearBoxPacket.InnerGear < 5)
             {
@@ -58,14 +60,14 @@
         }
         public void OuterGearShiftUp()
         {
-            if (ActualGear!=OuterGear.d)
+            if (ActualGear != OuterGear.d && drivechainPacket.Speed == 0)
             {
                 ActualGear++;
             }
         }
         public void OuterGearShiftDown()
         {
-            if (ActualGear != OuterGear.p)
+            if (ActualGear != OuterGear.p && drivechainPacket.Speed == 0)
             {
                 ActualGear--;
             }
