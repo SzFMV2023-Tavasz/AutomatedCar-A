@@ -77,6 +77,8 @@
             }
         }
 
+        private static double GetEuclidianDistance(Point point, Point rotationPoint) => Math.Sqrt(Math.Pow(point.X - rotationPoint.X, 2) + Math.Pow(point.Y - rotationPoint.Y, 2));
+
         private static double DegToRad(double degree) => (Math.PI / 180) * degree;
 
         private static double GetAngle(Point point, Point rotationPoint) => Math.Atan2(rotationPoint.Y - point.Y, point.X - rotationPoint.X);
