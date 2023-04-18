@@ -57,6 +57,7 @@ namespace AutomatedCar.Models
         public CollisionSensor CollSensor { get; }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
+        public GearBox GearBox { get => this.gearBox; }
 
         public int Revolution { get; set; }
 
