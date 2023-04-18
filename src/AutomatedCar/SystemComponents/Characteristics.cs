@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
+    using AutomatedCar.SystemComponents.Packets;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -7,10 +8,12 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// The characteristics class.
+    /// The characteristics class, which calculates the RPM and the speed based on the car's characteristic.
     /// </summary>
     public class Characteristics : SystemComponent
     {
+        private ICharacteristicsInterface characteristicsPacket;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Characteristics"/> class.
         /// </summary>
@@ -18,7 +21,8 @@
         public Characteristics(VirtualFunctionBus virtualFunctionBus)
             : base(virtualFunctionBus)
         {
-
+            this.characteristicsPacket = new CharacteristicsPacket();
+            virtualFunctionBus.CharacteristicsPacket = this.characteristicsPacket;
         }
 
         /// <summary>
