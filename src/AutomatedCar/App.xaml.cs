@@ -111,8 +111,8 @@ namespace AutomatedCar
             // create 1 NPC car here that can be added to the OVAL track
             var car1 = this.CreateNPCCar(545, 4860, 0, "car_3_black.png", world, this.GetPathPointsFrom("NPC_oval_world_path.json", "car"));
             world.AddObject(car1);
-            
-            
+
+            world.npcManager.Start();
         }
 
         private void AddNPCsToTest(World world)
@@ -122,6 +122,8 @@ namespace AutomatedCar
             var pedestrian1 = this.CreateNPCPedestrian(1950, 630, 270, "man.png", world, this.GetPathPointsFrom("NPC_test_world_path.json", "pedestrian"));
             world.AddObject(car1);
             world.AddObject(pedestrian1);
+
+            world.npcManager.Start();
         }
         private PolylineGeometry GetNPCCarBoundaryBox()
         {
