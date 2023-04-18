@@ -7,15 +7,18 @@
     using System.Threading.Tasks;
     using Avalonia.Media;
     using global::AutomatedCar.NPC;
+    using static global::AutomatedCar.Models.World;
 
     public class NPCCar : Car, INPC
     {
         private NPCManager nPCManager;
 
-        public NPCCar(int x, int y, string filename, NPCManager nPCManager)
+        public WorldType WorldType { get; set; }
+        public NPCCar(int x, int y, string filename, WorldType type, NPCManager nPCManager)
             : base(x, y, filename)
         {
             this.nPCManager = nPCManager;
+            this.WorldType = type;
             nPCManager.AddNPC(this);
         }
         public PolylineGeometry Geometry { get; set; }
@@ -28,6 +31,11 @@
 
         public void Move()
         {
+            if (WorldType == WorldType.Oval && ActPoint == PathPoints.Count()-1)
+            {
+                this.Repeating = false;// Stop if completed all the pathpoints
+                return;
+            }
             if (!(ActPoint == PathPoints.Count() - 1 && !Repeating))
             {
                 int NextPoint = ActPoint + 1;
