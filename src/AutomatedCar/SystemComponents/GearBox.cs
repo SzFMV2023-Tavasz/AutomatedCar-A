@@ -10,7 +10,6 @@
 
     public class GearBox : SystemComponent
     {
-
         public GearBoxPacket gearBoxPacket = new GearBoxPacket();
         private ICharacteristicsInterface characteristicsPacket;
 
@@ -25,16 +24,16 @@
         {
             this.characteristicsPacket = World.Instance.ControlledCar.VirtualFunctionBus.CharacteristicsPacket;
 
-            if (this.characteristicsPacket.RPM > 2500 && this.gearBoxPacket.InnerGear < 5)
-            {
-                Shift(1);
-                this.gearBoxPacket.ShiftInProgress = false;
-            }
-            else if (this.characteristicsPacket.RPM < 1400 && this.gearBoxPacket.InnerGear > 1)
-            {
-                Shift(-1);
-                this.gearBoxPacket.ShiftInProgress = false;
-            }
+            //if (this.characteristicsPacket.RPM > 2500 && this.gearBoxPacket.InnerGear < 5)
+            //{
+            //    Shift(1);
+            //    this.gearBoxPacket.ShiftInProgress = false;
+            //}
+            //else if (this.characteristicsPacket.RPM < 1400 && this.gearBoxPacket.InnerGear > 1)
+            //{
+            //    Shift(-1);
+            //    this.gearBoxPacket.ShiftInProgress = false;
+            //}
         }
 
 

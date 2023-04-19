@@ -1,27 +1,60 @@
 namespace AutomatedCar.Models
 {
     using Avalonia.Media;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
     using SystemComponents;
 
-    public class AutomatedCar : Car
+    public class AutomatedCar : Car, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private VirtualFunctionBus virtualFunctionBus;
-
         private GearBox gearBox;
+        private Drivechain drivechain;
 
-        public AutomatedCar(int x, int y, string filename)
+        private int velo;
+        private int revo;
+
+        public AutomatedCar(float x, float y, string filename)
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.gearBox = new GearBox(this.virtualFunctionBus);
+            this.drivechain = new Drivechain(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => this.PropertyChanged?.Invoke(this, new(propertyName));
 
-        public int Revolution { get; set; }
+        public int Revolution
+        {
+            get
+            {
+                return this.revo;
+            }
 
-        public int Velocity { get; set; }
+            set
+            {
+                this.revo = value;
+                this.NotifyPropertyChanged(nameof(this.Revolution));
+            }
+        }
+
+        public int Velocity
+        {
+            get
+            {
+                return this.velo;
+            }
+
+            set
+            {
+                this.velo = value;
+                this.NotifyPropertyChanged(nameof(this.Velocity));
+            }
+        }
 
         public PolylineGeometry Geometry { get; set; }
 
