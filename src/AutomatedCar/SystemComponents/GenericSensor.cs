@@ -20,7 +20,7 @@
         /// Initializes a new instance of the <see cref="GenericSensor"/> class.
         /// </summary>
         /// <param name="sensorSettings">This contains all the information thats needed for sensor constructing.</param>
-        
+
         public GenericSensor(SensorSettings sensorSettings)
                         : base(sensorSettings.FunctionBus)
         {
@@ -76,17 +76,15 @@
         {
             const int pixelToMeter = 50;
             double x0, y0, x1, y1, x2, y2;
-             
+
             double outerPointDistance = ViewDistance / Math.Cos(GeometryUtils.DegToRad(this.FOV / 2));
-            
+
             x0 = this.CarAnchorPoint.X + this.Car.X - this.Car.Geometry.Bounds.TopLeft.X;
             y0 = this.CarAnchorPoint.Y + this.Car.Y - this.Car.Geometry.Bounds.TopLeft.Y;
             x1 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
             y1 = (outerPointDistance * pixelToMeter * Math.Cos(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
             x2 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
             y2 = (outerPointDistance * pixelToMeter * Math.Cos(GeometryUtils.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
-
-
 
             return new List<Point>()
             {
@@ -100,14 +98,14 @@
         {
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(triangle, false);
-            foreach (var worldObject in World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType)&&!obj.Equals(this.Car)))
+            foreach (var worldObject in World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.Car)))
             {
                 if (worldObject.Geometries.Count > 0)
                 {
                     foreach (var point in worldObject.Geometries[0].Points)
                     {
                         // Every boundary boxes at the origo, so needs to be transformed at its position
-                        Point transformedPoint = new Point(point.X + worldObject.X, point.Y + worldObject.Y);
+                        Point transformedPoint = GeometryUtils.TransformPoint(point, worldObject);
                         bool detected = sensor.FillContains(transformedPoint);
 
                         if (detected)
@@ -117,7 +115,8 @@
                     }
                 }
             }
-            detectedObjects = detectedObjects?.OrderBy(x=>x.Distance).ToList();
+
+            detectedObjects = detectedObjects?.OrderBy(x => x.Distance).ToList();
             return detectedObjects.AsReadOnly();
         }
 
