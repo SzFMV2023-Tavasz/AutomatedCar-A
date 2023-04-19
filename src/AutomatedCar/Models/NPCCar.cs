@@ -48,7 +48,7 @@
                     this.X = PathPoints[NextPoint].X;
                     this.Y = PathPoints[NextPoint].Y;
                     this.Speed = PathPoints[NextPoint].Speed;
-                    // this.Rotation = PathPoints[NextPoint].Rotation;
+                    //this.Rotation = PathPoints[NextPoint].Rotation;
                     this.ActPoint = NextPoint;
                 }
                 else
@@ -80,6 +80,11 @@
 
             // Calculate the rotation difference and rotation per tick
             double rotationDifference = nextRotation - this.Rotation;
+
+            if (rotationDifference < 0) 
+            {
+                rotationDifference = 1;
+            }
             double rotationPerTick = Math.Abs(rotationDifference * this.Speed / 60);
 
             // Rotate the object towards the next point

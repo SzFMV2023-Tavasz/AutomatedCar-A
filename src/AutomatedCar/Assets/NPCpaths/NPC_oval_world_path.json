@@ -3,7 +3,7 @@
     {
       "x": 545,
       "y": 4860,
-      "speed": 10,
+      "speed": 15,
       "rotation": 0
     },
     {
@@ -48,7 +48,7 @@
       "speed": 10,
       "rotation": 50
     },
-   
+
     {
       "x": 1800,
       "y": 1400,
@@ -61,14 +61,14 @@
       "speed": 10,
       "rotation": 70
     },
-  
+
     {
       "x": 2700,
       "y": 940,
       "speed": 10,
       "rotation": 80
     },
-  
+
     {
       "x": 3310,
       "y": 745,
@@ -78,13 +78,13 @@
     {
       "x": 3510,
       "y": 745,
-      "speed": 10,
+      "speed": 15,
       "rotation": 90
     },
     {
       "x": 21370,
       "y": 745,
-      "speed": 10,
+      "speed": 15,
       "rotation": 90
     },
     {
@@ -204,30 +204,36 @@
     {
       "x": 3400,
       "y": 14240,
-      "speed": 10,
-      "rotation": 280
+      "speed": 15,
+      "rotation": 270
     },
     {
       "x": 3100,
       "y": 14200,
       "speed": 10,
-      "rotation": 290
+      "rotation": 280
     },
     {
       "x": 2500,
       "y": 14000,
       "speed": 10,
-      "rotation": 300
+      "rotation": 290
     },
     {
       "x": 1900,
       "y": 13650,
       "speed": 10,
-      "rotation": 310
+      "rotation": 300
     },
     {
       "x": 1600,
       "y": 13400,
+      "speed": 10,
+      "rotation": 310
+    },
+    {
+      "x": 1400,
+      "y": 13100,
       "speed": 10,
       "rotation": 320
     },
@@ -258,7 +264,7 @@
     {
       "x": 555,
       "y": 5950,
-      "speed": 10,
+      "speed": 15,
       "rotation": 0
     }
   ]
