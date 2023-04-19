@@ -56,19 +56,19 @@
 
                         if (detected)
                         {
-                            var seged = new DetectedObjectInfo()
+                            var detectedObject = new DetectedObjectInfo()
                             {
                                 DetectedObject = worldObject,
                                 Distance = 0
                             };
-                            Packet.WorldObjectsDetected = new List<DetectedObjectInfo>() { seged };
+                            Packet.WorldObjectsDetected = new List<DetectedObjectInfo>() { detectedObject };
                             if (worldObject.WorldObjectType == WorldObjectType.Pedestrian)
                             {
-                                CollidedWNPCEvent?.Invoke(seged);
+                                CollidedWNPCEvent?.Invoke(detectedObject);
                             }
                             if (worldObject.WorldObjectType == WorldObjectType.Building)
                             {
-                                CollidedWBuildingsEvent?.Invoke(seged);
+                                CollidedWBuildingsEvent?.Invoke(detectedObject);
                             }
                             return;
                         }
