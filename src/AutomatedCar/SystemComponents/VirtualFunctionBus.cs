@@ -11,6 +11,7 @@ namespace AutomatedCar.SystemComponents
         public IPedalInterface GasPedalPacket { get; set; }
 
         public ICharacteristicsInterface CharacteristicsPacket { get; set; }
+        public IPedalInterface BrakePedalPacket { get; set; }
 
         public IGearboxInterface GearboxPacket { get; set; }
         public IDrivechain DrivechainPacket { get; set; }
