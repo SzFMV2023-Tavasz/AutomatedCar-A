@@ -46,9 +46,9 @@
             var collidableWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.car));
             foreach (var worldObject in collidableWorldObjects)
             {
-                if (worldObject.Geometries.Count > 0)
+                foreach (var geometry in worldObject.Geometries)
                 {
-                    foreach (var point in worldObject.Geometries[0].Points)
+                    foreach (var point in geometry.Points)
                     {
                         Point transformedPoint = TransformPoint(point, worldObject);
 
@@ -72,7 +72,6 @@
                             }
                             return;
                         }
-
                     }
                 }
             }
