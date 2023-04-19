@@ -13,10 +13,7 @@
         private byte lastInnerGear;
         private double lastGearRatio;
 
-        private BrakePedalPacket brakePedalPacket;
-        private GasPedalPacket gasPedalPacket;
-
-        public Characteristics(VirtualFunctionBus virtualFunctionBus, BrakePedalPacket brakePedalPacket, GasPedalPacket gasPedalPacket)
+        public Characteristics(VirtualFunctionBus virtualFunctionBus)
             : base(virtualFunctionBus)
         {
             this.characteristicsPacket = new CharacteristicsPacket();
@@ -25,17 +22,14 @@
             this.lastGearRatio = this.GetGearRatio();
             this.characteristicsPacket.Speed = 0;
             this.characteristicsPacket.RPM = 0;
-
-            this.brakePedalPacket = brakePedalPacket;
-            this.gasPedalPacket = gasPedalPacket;
         }
 
         public override void Process()
         {
             double currentGearRatio = this.GetGearRatio();
             double currentSpeed = this.characteristicsPacket.Speed;
-            byte gasPedalState = gasPedalPacket.PedalPosition;
-            byte brakePedalState = brakePedalPacket.PedalPosition;
+            byte gasPedalState = virtualFunctionBus.GasPedalPacket.PedalPosition;
+            byte brakePedalState = virtualFunctionBus.BreakPedalPacket.PedalPosition;
 
             this.characteristicsPacket.RPM = CalculateRPM(currentGearRatio) +
                 CalculateRPMDifference(gasPedalState, brakePedalState, currentGearRatio);
