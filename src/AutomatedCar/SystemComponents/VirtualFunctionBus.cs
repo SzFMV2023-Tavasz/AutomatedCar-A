@@ -8,18 +8,11 @@ namespace AutomatedCar.SystemComponents
         private List<SystemComponent> components = new List<SystemComponent>();
 
         public IReadOnlyDummyPacket DummyPacket { get; set; }
+
         public ICharacteristicsInterface CharacteristicsPacket { get; set; }
 
         public IGearboxInterface GearboxPacket { get; set; }
-<<<<<<< HEAD
-
-        public IGearboxInterface GearboxPacket { get; set; }
-=======
         public IDrivechain DrivechainPacket { get; set; }
-        public IReadOnlyPacket<DetectedObjectInfo> RadarPacket { get; set; }
-        public IReadOnlyPacket<DetectedObjectInfo> CameraPacket { get; set; }
-        public IReadOnlyPacket<DetectedObjectInfo> CollisionPacket { get; set; }
->>>>>>> aafa008 (drivechain packet added to vfb)
 
         public void RegisterComponent(SystemComponent component)
         {
