@@ -75,12 +75,11 @@
         public List<Point> GenerateSensorTriangle()
         {
             const int pixelToMeter = 50;
-            double x0, y0, x1, y1, x2, y2;
+            double x1, y1, x2, y2;
 
             double outerPointDistance = ViewDistance / Math.Cos(GeometryUtils.DegToRad(this.FOV / 2));
 
-            x0 = this.CarAnchorPoint.X + this.Car.X - this.Car.Geometry.Bounds.TopLeft.X;
-            y0 = this.CarAnchorPoint.Y + this.Car.Y - this.Car.Geometry.Bounds.TopLeft.Y;
+            Point transformedAnchorPoint = GeometryUtils.TransformPoint(this.CarAnchorPoint, this.Car);
             x1 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
             y1 = (outerPointDistance * pixelToMeter * Math.Cos(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
             x2 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
@@ -88,7 +87,7 @@
 
             return new List<Point>()
             {
-                new Point(x0, y0),
+                transformedAnchorPoint,
                 new Point(x1, y1),
                 new Point(x2, y2),
             };
