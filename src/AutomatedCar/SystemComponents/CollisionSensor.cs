@@ -36,14 +36,9 @@
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             List<Point> CarPoints = new List<Point>();
 
-            Point rotationPoint = new Avalonia.Point(car.RotationPoint.X, car.RotationPoint.Y);
             foreach (var point in car.Geometry.Points)
             {
-                double distance = GetEuclidianDistance(point, rotationPoint);
-                double phi = GetAngle(point, rotationPoint) + DegToRad(-car.Rotation);
-                Point transformedPoint = new Point(
-                    (Math.Cos(phi) * distance) + car.X,
-                    (-Math.Sin(phi) * distance) + car.Y);
+                Point transformedPoint = TransformPoint(point, car);
                 CarPoints.Add(transformedPoint);
             }
             PolylineGeometry CarLines = new PolylineGeometry(CarPoints, false);
@@ -51,17 +46,11 @@
             var collidableWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.car));
             foreach (var worldObject in collidableWorldObjects)
             {
-                Point worldObjectRotationPoint = new Avalonia.Point(worldObject.RotationPoint.X, worldObject.RotationPoint.Y);
                 if (worldObject.Geometries.Count > 0)
                 {
                     foreach (var point in worldObject.Geometries[0].Points)
                     {
-                        // Every boundary boxes at the origo, so needs to be transformed at its position
-                        double distance = GetEuclidianDistance(point, worldObjectRotationPoint);
-                        double phi = GetAngle(point, worldObjectRotationPoint) + DegToRad(-worldObject.Rotation);
-                        Point transformedPoint = new Point(
-                            (Math.Cos(phi) * distance) + worldObject.X,
-                            (-Math.Sin(phi) * distance) + worldObject.Y);
+                        Point transformedPoint = TransformPoint(point, worldObject);
 
                         bool detected = CarLines.FillContains(transformedPoint);
 
@@ -87,6 +76,20 @@
                     }
                 }
             }
+        }
+
+        // Transforms a point by rotating it around the rotationpoint and offsetting it to the position of its container worldObject
+        private static Point TransformPoint(Point point, WorldObject worldObject)
+        {
+            // this weird rotationPoint construction is necessary because of the Drawing.Point -> Avalonia.Point conversion
+            Point rotationPoint = new Avalonia.Point(worldObject.RotationPoint.X, worldObject.RotationPoint.Y);
+            double distance = GetEuclidianDistance(point, rotationPoint);
+            double phi = GetAngle(point, rotationPoint) + DegToRad(-worldObject.Rotation);
+            Point transformedPoint = new Point(
+                (Math.Cos(phi) * distance) + worldObject.X,
+                (-Math.Sin(phi) * distance) + worldObject.Y);
+
+            return transformedPoint;
         }
 
         private static double GetEuclidianDistance(Point point, Point rotationPoint) => Math.Sqrt(Math.Pow(point.X - rotationPoint.X, 2) + Math.Pow(point.Y - rotationPoint.Y, 2));
