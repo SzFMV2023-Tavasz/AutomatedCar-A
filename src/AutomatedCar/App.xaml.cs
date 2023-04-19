@@ -110,6 +110,7 @@ namespace AutomatedCar
         {
             // create 1 NPC car here that can be added to the OVAL track
             var car1 = this.CreateNPCCar(545, 4860, 0, "car_3_black.png", world, WorldType.Oval, this.GetPathPointsFrom("NPC_oval_world_path.json", "car"));
+            car1.Repeating = false;
             world.AddObject(car1);
 
             world.npcManager.Start();

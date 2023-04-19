@@ -258,13 +258,31 @@
     {
       "x": 555,
       "y": 11135,
+      "speed": 15,
+      "rotation": 0
+    },
+    {
+      "x": 555,
+      "y": 6050,
       "speed": 10,
       "rotation": 0
     },
     {
       "x": 555,
+      "y": 6000,
+      "speed": 6,
+      "rotation": 0
+    },
+    {
+      "x": 555,
+      "y": 5975,
+      "speed": 2,
+      "rotation": 0
+    },
+    {
+      "x": 555,
       "y": 5950,
-      "speed": 15,
+      "speed": 0,
       "rotation": 0
     }
   ]
