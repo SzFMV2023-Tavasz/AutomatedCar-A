@@ -97,11 +97,12 @@
         {
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(triangle, false);
-            foreach (var worldObject in World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.Car)))
+            var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.Car));
+            foreach (var worldObject in filteredWorldObjects)
             {
-                if (worldObject.Geometries.Count > 0)
+                foreach (var geometry in worldObject.Geometries)
                 {
-                    foreach (var point in worldObject.Geometries[0].Points)
+                    foreach (var point in geometry.Points)
                     {
                         // Every boundary boxes at the origo, so needs to be transformed at its position
                         Point transformedPoint = GeometryUtils.TransformPoint(point, worldObject);
