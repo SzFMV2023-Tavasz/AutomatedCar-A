@@ -31,11 +31,6 @@
 
         public void Move()
         {
-            if (WorldType == WorldType.Oval && ActPoint == PathPoints.Count()-1)
-            {
-                this.Repeating = false;// Stop if completed all the pathpoints
-                return;
-            }
             if (!(ActPoint == PathPoints.Count() - 1 && !Repeating))
             {
                 int NextPoint = ActPoint + 1;
