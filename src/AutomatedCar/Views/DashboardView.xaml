@@ -65,7 +65,7 @@
                                 <TextBlock Grid.Row="5" Grid.Column="0">Distance Y:</TextBlock>
                                 <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
                                 <TextBlock Grid.Row="6" Grid.Column="0">Speed:</TextBlock>
-                                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.CharacteristicsPacket.Speed"/>
+                                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.CharacteristicsPacket.Speed}"/>
                                 <TextBlock Grid.Row="7" Grid.Column="0">Distance Y:</TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.CharacteristicsPacket.RPM}"/>
                               
