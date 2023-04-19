@@ -7,21 +7,21 @@
     {
         private ICharacteristicsInterface characteristicsPacket;
         private IGearboxInterface gearbox;
-        private IBrakePedalInterface brakePedal;
-        private IGasPedalInterface gasPedal;
+        private BrakePedalPacket brakePedalPacket;
+        private GasPedalPacket gasPedalPacket;
 
         private const double WheelCircumference = 24 * Math.PI; // 24-inch wheel size converted to circumference
         private const double BrakeDeceleration = 9; // Deceleration rate 9m/s^2
 
         private double tick; // Inner tick variable
 
-        public Characteristics(VirtualFunctionBus virtualFunctionBus, IGearboxInterface gearbox, IBrakePedalInterface brakePedal, IGasPedalInterface gasPedal)
-            : base(virtualFunctionBus)
+        public Characteristics(VirtualFunctionBus virtualFunctionBus, IGearboxInterface gearbox, BrakePedalPacket brakePedalPacket, GasPedalPacket gasPedalPacket)
+             : base(virtualFunctionBus)
         {
             this.characteristicsPacket = new CharacteristicsPacket();
             this.gearbox = gearbox;
-            this.brakePedal = brakePedal;
-            this.gasPedal = gasPedal;
+            this.brakePedalPacket = brakePedalPacket;
+            this.gasPedalPacket = gasPedalPacket;
             virtualFunctionBus.CharacteristicsPacket = this.characteristicsPacket;
             tick = 0;
         }
@@ -31,8 +31,8 @@
             tick += 1.0 / 60; // Increment tick by 1/60 (assuming this method is called every 1/60th of a second)
 
             double gearFactor = GetGearFactor(gearbox.InnerGear);
-            double acceleration = CalculateAcceleration(gasPedal.GasPedalState, gearFactor, tick);
-            double deceleration = CalculateDeceleration(brakePedal.BrakePedalState, tick);
+            double acceleration = CalculateAcceleration(gasPedalPacket.GasPedalState, gearFactor, tick);
+            double deceleration = CalculateDeceleration(brakePedalPacket.BrakePedalState, tick);
 
             double netAcceleration = acceleration - deceleration;
             characteristicsPacket.Speed = CalculateSpeed(characteristicsPacket.Speed, netAcceleration, tick);
