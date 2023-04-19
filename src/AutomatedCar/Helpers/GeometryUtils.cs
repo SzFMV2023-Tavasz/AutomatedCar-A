@@ -26,6 +26,16 @@
 
         public static double GetEuclidianDistance(Point point, Point rotationPoint) => Math.Sqrt(Math.Pow(point.X - rotationPoint.X, 2) + Math.Pow(point.Y - rotationPoint.Y, 2));
 
+        // ALT way, might reconsider later, also float might be sufficient, double is used primarily for consistency with Avalonia Points double coordinates
+        /*private float CalculateDistance(Point transformedPointInWorld, Point carAnchorPointInWorld)
+        {
+            var vector = new Vector2((float)(transformedPointInWorld.X - carAnchorPointInWorld.X), (float)(transformedPointInWorld.Y - carAnchorPointInWorld.Y));
+
+            var length = vector.Length();
+
+            return length;
+        }*/
+
         public static double DegToRad(double degree) => (Math.PI / 180) * degree;
 
         public static double GetAngle(Point point, Point rotationPoint) => Math.Atan2(rotationPoint.Y - point.Y, point.X - rotationPoint.X);

@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
+    using AutomatedCar.Helpers;
     using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
@@ -76,14 +77,14 @@
             const int pixelToMeter = 50;
             double x0, y0, x1, y1, x2, y2;
              
-            double outerPointDistance = ViewDistance / Math.Cos(this.DegToRad(this.FOV / 2));
+            double outerPointDistance = ViewDistance / Math.Cos(GeometryUtils.DegToRad(this.FOV / 2));
             
             x0 = this.CarAnchorPoint.X + this.Car.X - this.Car.Geometry.Bounds.TopLeft.X;
             y0 = this.CarAnchorPoint.Y + this.Car.Y - this.Car.Geometry.Bounds.TopLeft.Y;
-            x1 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
-            y1 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
-            x2 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
-            y2 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
+            x1 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
+            y1 = (outerPointDistance * pixelToMeter * Math.Cos(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
+            x2 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
+            y2 = (outerPointDistance * pixelToMeter * Math.Cos(GeometryUtils.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
 
 
 
@@ -125,7 +126,7 @@
             DetectedObjectInfo newInfo = new DetectedObjectInfo()
             {
                 DetectedObject = worldObject,
-                Distance = this.CalculateDistance(transformedPoint, this.CarAnchorPoint + new Point(this.Car.X, this.Car.Y)),
+                Distance = (float)GeometryUtils.GetEuclidianDistance(transformedPoint, this.CarAnchorPoint + new Point(this.Car.X, this.Car.Y)),
             };
             if (!detectedObjects.Contains(newInfo))
             {
@@ -141,21 +142,7 @@
                 }
             }
         }
+
         // More debug needed
-        private float CalculateDistance(Point transformedPointInWorld, Point carAnchorPointInWorld)
-        {
-            var vector = new Vector2((float)(transformedPointInWorld.X - carAnchorPointInWorld.X), (float)(transformedPointInWorld.Y - carAnchorPointInWorld.Y));
-
-            var length = vector.Length();
-
-            return length;
-        }
-
-        private double DegToRad(double degrees)
-        {
-            double radians = (Math.PI / 180) * degrees;
-
-            return radians;
-        }
     }
 }
