@@ -28,8 +28,8 @@
             double newX = sqrt * cos;
             double newY = sqrt * sin;
 
-            this.X = (float)newX;
-            this.Y = (float)newY;
+            this.X = (float)Math.Round(newX, 15);
+            this.Y = (float)Math.Round(newY, 15);
         }
 
         public double Magnitude
