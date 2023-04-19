@@ -48,8 +48,8 @@
                     this.X = PathPoints[NextPoint].X;
                     this.Y = PathPoints[NextPoint].Y;
                     this.Speed = PathPoints[NextPoint].Speed;
-                    this.Rotation = PathPoints[NextPoint].Rotation;
-                    ActPoint = NextPoint;
+                    // this.Rotation = PathPoints[NextPoint].Rotation;
+                    this.ActPoint = NextPoint;
                 }
                 else
                 {
@@ -57,8 +57,33 @@
                     double distancePerSpeedRatio = distance / this.Speed;
                     this.X += (int)Math.Round(difX / distancePerSpeedRatio);
                     this.Y += (int)Math.Round(difY / distancePerSpeedRatio);
+                    this.RotateTowardsNextPoint();
                 }
             }
+        }
+
+        private void RotateTowardsNextPoint()
+        {
+            // Check if there is a next point in the path
+            if (this.ActPoint + 1 >= this.PathPoints.Count) return;
+
+            // Get the rotation of the next point in the path
+            var nextPoint = this.PathPoints[this.ActPoint + 1];
+            double nextRotation = nextPoint.Rotation;
+
+            // Adjust the next rotation if necessary
+            // There is a bug, if the next rotation is 0 the rotationdifference is going to be negative so the car will always rotate left.
+            if (nextRotation == 0 && this.Rotation >= 270)
+            {
+                nextRotation = 359;
+            }
+
+            // Calculate the rotation difference and rotation per tick
+            double rotationDifference = nextRotation - this.Rotation;
+            double rotationPerTick = Math.Abs(rotationDifference * this.Speed / 60);
+
+            // Rotate the object towards the next point
+            this.Rotation += (rotationDifference < 0) ? -rotationPerTick : rotationPerTick;
         }
     }
 }
