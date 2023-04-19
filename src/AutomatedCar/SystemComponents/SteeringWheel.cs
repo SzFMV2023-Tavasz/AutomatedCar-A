@@ -62,21 +62,15 @@
 
         private Vector2D Rotate(Vector2D vector, float angle)
         {
-            double theta = this.DegreeToRadian(angle);
-            double cos = Math.Cos(theta);
-            double sin = Math.Sin(theta);
+            Vector2D newVector = new Vector2D(vector.X, vector.Y);
+            newVector.Rotate(angle);
 
-            float newX = (float)(vector.X * cos + vector.Y * sin);
-            float newY = (float)(vector.X * sin + vector.Y * cos);
-
-            Vector2D newVector = new Vector2D(newX, newY);
-
-            if(maxLeftVector != null && newVector.Magnitude < maxLeftVector.Magnitude)
+            if (maxLeftVector != null && newVector.Y < maxLeftVector.Y)
             {
                 return maxLeftVector;
             }
 
-            if(maxRightVector != null && newVector.Magnitude > maxRightVector.Magnitude)
+            if(maxRightVector != null && newVector.Y > maxRightVector.Y)
             {
                 return maxRightVector;
             }
@@ -84,19 +78,14 @@
             return newVector;
         }
 
-        private double DegreeToRadian(double angle)
-        {
-            return (Math.PI / 1) * angle;
-        }
-
         private void SetServoDirection()
         {
-            if (this.steeringWheelPacket.DirectionVector.Magnitude < maxLeftVector.Magnitude)
+            if (this.steeringWheelPacket.DirectionVector.Y < baseVector.Y)
             {
                 this.steeringWheelDirection = SteeringWheelDirectionEnum.TurnRight;
             }
 
-            if (this.steeringWheelPacket.DirectionVector.Magnitude > maxRightVector.Magnitude)
+            if (this.steeringWheelPacket.DirectionVector.Y > baseVector.Y)
             {
                 this.steeringWheelDirection = SteeringWheelDirectionEnum.TurnLeft;
             }
