@@ -33,10 +33,10 @@
 
             this.characteristicsPacket.RPM = CalculateRPM(currentGearRatio) +
                 CalculateRPMDifference(gasPedalState, brakePedalState, currentGearRatio);
-            this.characteristicsPacket.Speed = CalculateSpeed(currentGearRatio);
+            this.characteristicsPacket.Speed = (float)CalculateSpeed(currentGearRatio);
         }
 
-        private double GetGearRatio()
+        public double GetGearRatio()
         {
             byte currentInnerGear = this.virtualFunctionBus.GearboxPacket.InnerGear;
             switch (currentInnerGear)
@@ -56,18 +56,18 @@
             }
         }
 
-        private int CalculateRPMDifference(int gasPedalState, int breakPedalState, double currentGearRatio)
+        public int CalculateRPMDifference(int gasPedalState, int breakPedalState, double currentGearRatio)
         {
             return (int)Math.Sqrt((gasPedalState - breakPedalState - NaturalDecelerationRate) * currentGearRatio) * 5;
         }
 
-        private int CalculateRPM(double currentGearRatio)
+        public int CalculateRPM(double currentGearRatio)
         {
             double currentSpeed = this.characteristicsPacket.Speed / KmphToMphRatio; // Speed need to be in mph in the calculation
             return (int)(Math.Round(currentSpeed * currentGearRatio * 336) / TireDiameter);
         }
 
-        private double CalculateSpeed(double currentGearRatio)
+        public double CalculateSpeed(double currentGearRatio)
         {
             double currentRPM = this.characteristicsPacket.RPM;
             return ((TireDiameter * currentRPM) / (currentGearRatio * 366)) * KmphToMphRatio;
