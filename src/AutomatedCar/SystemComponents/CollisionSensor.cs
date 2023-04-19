@@ -9,6 +9,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using AutomatedCar.Helpers;
 
     public class CollisionSensor : SystemComponent
     {
@@ -38,7 +39,7 @@
 
             foreach (var point in car.Geometry.Points)
             {
-                Point transformedPoint = TransformPoint(point, car);
+                Point transformedPoint = GeometryUtils.TransformPoint(point, car);
                 CarPoints.Add(transformedPoint);
             }
             PolylineGeometry CarLines = new PolylineGeometry(CarPoints, false);
@@ -50,7 +51,7 @@
                 {
                     foreach (var point in geometry.Points)
                     {
-                        Point transformedPoint = TransformPoint(point, worldObject);
+                        Point transformedPoint = GeometryUtils.TransformPoint(point, worldObject);
 
                         bool detected = CarLines.FillContains(transformedPoint);
 
@@ -76,25 +77,5 @@
                 }
             }
         }
-
-        // Transforms a point by rotating it around the rotationpoint and offsetting it to the position of its container worldObject
-        private static Point TransformPoint(Point point, WorldObject worldObject)
-        {
-            // this weird rotationPoint construction is necessary because of the Drawing.Point -> Avalonia.Point conversion
-            Point rotationPoint = new Avalonia.Point(worldObject.RotationPoint.X, worldObject.RotationPoint.Y);
-            double distance = GetEuclidianDistance(point, rotationPoint);
-            double phi = GetAngle(point, rotationPoint) + DegToRad(-worldObject.Rotation);
-            Point transformedPoint = new Point(
-                (Math.Cos(phi) * distance) + worldObject.X,
-                (-Math.Sin(phi) * distance) + worldObject.Y);
-
-            return transformedPoint;
-        }
-
-        private static double GetEuclidianDistance(Point point, Point rotationPoint) => Math.Sqrt(Math.Pow(point.X - rotationPoint.X, 2) + Math.Pow(point.Y - rotationPoint.Y, 2));
-
-        private static double DegToRad(double degree) => (Math.PI / 180) * degree;
-
-        private static double GetAngle(Point point, Point rotationPoint) => Math.Atan2(rotationPoint.Y - point.Y, point.X - rotationPoint.X);
     }
 }
