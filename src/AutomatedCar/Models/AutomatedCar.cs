@@ -19,6 +19,8 @@ namespace AutomatedCar.Models
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
 
+        public GearBox GearBox { get => this.gearBox; }
+
         public int Revolution { get; set; }
 
         public int Velocity { get; set; }
