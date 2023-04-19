@@ -19,12 +19,17 @@
         private Vector2D maxLeftVector;
         private Vector2D maxRightVector;
         private float maxAngle = 60.0f;
+        private float turnAngle = 10f;
+        private int ownDefaultTickCounter = 30;
+        private int ownCurrentTick = 0;
+
         public SteeringWheel(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
             virtualFunctionBus.SteeringWheelPacket = this.steeringWheelPacket;
             this.steeringWheelPacket.DirectionVector = this.baseVector;
-            this.maxLeftVector = this.Rotate(this.baseVector, this.maxAngle * -1);
-            this.maxRightVector = this.Rotate(this.baseVector, this.maxAngle);
+            this.maxLeftVector = this.Rotate(this.baseVector, this.maxAngle);
+            this.maxRightVector = this.Rotate(this.baseVector, this.maxAngle * -1);
+            this.ownCurrentTick = this.ownDefaultTickCounter;
         }
 
         public void TurnWheel(SteeringWheelDirectionEnum direction)
@@ -34,9 +39,15 @@
 
         public override void Process()
         {
+            if (!this.OwnTick())
+            {
+                return;
+            }
+
             Vector2D currentVector = this.steeringWheelPacket.DirectionVector;
-            
-            if(this.steeringWheelDirection == SteeringWheelDirectionEnum.Hold && currentVector == baseVector)
+
+            double vectorMagnitudeDiff = Math.Round((currentVector - baseVector).Magnitude, 10);
+            if (this.steeringWheelDirection == SteeringWheelDirectionEnum.Hold && vectorMagnitudeDiff == 0)
             {
                 return;
             }
@@ -47,17 +58,15 @@
             
             if(this.steeringWheelDirection == SteeringWheelDirectionEnum.TurnLeft)
             {
-                this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, -0.1f);
+                this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle);
             }
 
             if(this.steeringWheelDirection == SteeringWheelDirectionEnum.TurnRight)
             {
-                this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, 0.1f);
+                this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle * -1);
             }
 
             this.ResetSettings();
-
-            System.Diagnostics.Debug.WriteLine("X: {0}, Y:{0}", this.steeringWheelPacket.DirectionVector.X, this.steeringWheelPacket.DirectionVector.Y);
         }
 
         private Vector2D Rotate(Vector2D vector, float angle)
@@ -65,12 +74,12 @@
             Vector2D newVector = new Vector2D(vector.X, vector.Y);
             newVector.Rotate(angle);
 
-            if (maxLeftVector != null && newVector.Y < maxLeftVector.Y)
+            if (maxLeftVector != null && newVector.X < maxLeftVector.X)
             {
                 return maxLeftVector;
             }
 
-            if(maxRightVector != null && newVector.Y > maxRightVector.Y)
+            if(maxRightVector != null && newVector.X > maxRightVector.X)
             {
                 return maxRightVector;
             }
@@ -80,12 +89,12 @@
 
         private void SetServoDirection()
         {
-            if (this.steeringWheelPacket.DirectionVector.Y < baseVector.Y)
+            if (this.steeringWheelPacket.DirectionVector.X < baseVector.X)
             {
                 this.steeringWheelDirection = SteeringWheelDirectionEnum.TurnRight;
             }
 
-            if (this.steeringWheelPacket.DirectionVector.Y > baseVector.Y)
+            if (this.steeringWheelPacket.DirectionVector.X > baseVector.X)
             {
                 this.steeringWheelDirection = SteeringWheelDirectionEnum.TurnLeft;
             }
@@ -94,6 +103,19 @@
         private void ResetSettings()
         {
             this.steeringWheelDirection = SteeringWheelDirectionEnum.Hold;
+        }
+
+        private bool OwnTick()
+        {
+            this.ownCurrentTick--;
+
+            if(this.ownCurrentTick <= 0)
+            {
+                this.ownCurrentTick = this.ownDefaultTickCounter;
+                return true;
+            }
+
+            return false;
         }
     }
 }
