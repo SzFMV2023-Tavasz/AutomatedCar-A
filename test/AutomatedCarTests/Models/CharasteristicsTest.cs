@@ -1,6 +1,7 @@
 ﻿namespace Tests.Models
 {
     using AutomatedCar.SystemComponents;
+    using AutomatedCarTests.SystemComponents;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using System.Collections.Generic;
@@ -18,10 +19,10 @@
         [DataRow(4, 1.03)]
         [DataRow(5, 1)]
         [DataRow(10, 1)]
-        public void TestGetGearRatio(int gear, double result)
+        public void TestGetGearRatio(byte gear, double result)
         {
             VirtualFunctionBus vfb = new VirtualFunctionBus();
-            vfb.GearboxPacket.InnerGear = gear;
+            (vfb.GearboxPacket as TestGearBoxPacket).InnerGear = gear;
             Characteristics c = new Characteristics(vfb);
             var currentGearRatio = c.GetGearRatio();
             Assert.AreEqual(currentGearRatio, result);

@@ -9,6 +9,15 @@ namespace AutomatedCarTests.SystemComponents
     using NUnit.Framework;
     using AutomatedCar.SystemComponents.Packets;
 
+    public class TestGearBoxPacket : GearBoxPacket
+    {
+        public void SetInnerGear(byte innerGear)
+        {
+            this.InnerGear = innerGear;
+        }
+    }
+
+    [TestFixture]
     public class CharacteristicsTests
     {
         private VirtualFunctionBus virtualFunctionBus;
@@ -17,7 +26,7 @@ namespace AutomatedCarTests.SystemComponents
         public void Setup()
         {
             virtualFunctionBus = new VirtualFunctionBus();
-            virtualFunctionBus.GearboxPacket = new GearBoxPacket();
+            virtualFunctionBus.GearboxPacket = new TestGearBoxPacket();
             virtualFunctionBus.GasPedalPacket = new GasPedalPacket();
             virtualFunctionBus.BrakePedalPacket = new BrakePedalPacket();
         }
@@ -66,7 +75,7 @@ namespace AutomatedCarTests.SystemComponents
         [Test]
         public void Characteristics_GearChanged_GearRatioChanges()
         {
-            virtualFunctionBus.GearboxPacket.InnerGear = 3;
+            (virtualFunctionBus.GearboxPacket as TestGearBoxPacket).InnerGear = 3;
 
             var characteristics = new Characteristics(virtualFunctionBus);
             double gearRatio = characteristics.GetGearRatio();
@@ -77,7 +86,7 @@ namespace AutomatedCarTests.SystemComponents
         [Test]
         public void Characteristics_InvalidGear_DefaultGearRatio()
         {
-            virtualFunctionBus.GearboxPacket.InnerGear = 7;
+            (virtualFunctionBus.GearboxPacket as TestGearBoxPacket).InnerGear = 7;
 
             var characteristics = new Characteristics(virtualFunctionBus);
             double gearRatio = characteristics.GetGearRatio();

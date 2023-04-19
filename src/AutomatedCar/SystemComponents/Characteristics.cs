@@ -9,7 +9,7 @@
         private const double NaturalDecelerationRate = 10;
         private const double KmphToMphRatio = 1.609344; // The conversion ratio between kilometer/h and mile/h
 
-        private CharacteristicsPacket characteristicsPacket;
+        public CharacteristicsPacket characteristicsPacket;
         private byte lastInnerGear;
         private double lastGearRatio;
 
@@ -29,7 +29,7 @@
             double currentGearRatio = this.GetGearRatio();
             double currentSpeed = this.characteristicsPacket.Speed;
             byte gasPedalState = virtualFunctionBus.GasPedalPacket.PedalPosition;
-            byte brakePedalState = virtualFunctionBus.BreakPedalPacket.PedalPosition;
+            byte brakePedalState = virtualFunctionBus.BrakePedalPacket.PedalPosition;
 
             this.characteristicsPacket.RPM = CalculateRPM(currentGearRatio) +
                 CalculateRPMDifference(gasPedalState, brakePedalState, currentGearRatio);
