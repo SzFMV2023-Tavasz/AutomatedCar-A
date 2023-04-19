@@ -44,6 +44,7 @@ namespace AutomatedCar.ViewModels
 
         public void KeyUp()
         {
+            World.Instance.ControlledCar.GasPedal.PressGasPedal();
             World.Instance.ControlledCar.Y -= 5;
         }
 

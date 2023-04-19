@@ -6,6 +6,7 @@ namespace AutomatedCar.Models
     public class AutomatedCar : Car
     {
         private VirtualFunctionBus virtualFunctionBus;
+        public GasPedal GasPedal;
 
         private GearBox gearBox;
 
@@ -14,6 +15,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.gearBox = new GearBox(this.virtualFunctionBus);
+            this.GasPedal = new GasPedal(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
