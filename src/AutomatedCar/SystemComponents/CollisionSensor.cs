@@ -36,21 +36,33 @@
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             List<Point> CarPoints = new List<Point>();
 
+            Point rotationPoint = new Avalonia.Point(car.RotationPoint.X, car.RotationPoint.Y);
             foreach (var point in car.Geometry.Points)
             {
-                CarPoints.Add(new Point(point.X+car.X-car.Geometry.Bounds.Center.X,point.Y+car.Y - car.Geometry.Bounds.Center.Y));
+                double distance = GetEuclidianDistance(point, rotationPoint);
+                double phi = GetAngle(point, rotationPoint) + DegToRad(-car.Rotation);
+                Point transformedPoint = new Point(
+                    (Math.Cos(phi) * distance) + car.X,
+                    (-Math.Sin(phi) * distance) + car.Y);
+                CarPoints.Add(transformedPoint);
             }
             PolylineGeometry CarLines = new PolylineGeometry(CarPoints, false);
 
             var collidableWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.car));
             foreach (var worldObject in collidableWorldObjects)
             {
+                Point worldObjectRotationPoint = new Avalonia.Point(worldObject.RotationPoint.X, worldObject.RotationPoint.Y);
                 if (worldObject.Geometries.Count > 0)
                 {
                     foreach (var point in worldObject.Geometries[0].Points)
                     {
                         // Every boundary boxes at the origo, so needs to be transformed at its position
-                        Point transformedPoint = new Point(point.X + worldObject.X, point.Y + worldObject.Y);
+                        double distance = GetEuclidianDistance(point, worldObjectRotationPoint);
+                        double phi = GetAngle(point, worldObjectRotationPoint) + DegToRad(-worldObject.Rotation);
+                        Point transformedPoint = new Point(
+                            (Math.Cos(phi) * distance) + worldObject.X,
+                            (-Math.Sin(phi) * distance) + worldObject.Y);
+
                         bool detected = CarLines.FillContains(transformedPoint);
 
                         if (detected)
