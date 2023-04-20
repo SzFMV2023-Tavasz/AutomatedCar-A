@@ -6,18 +6,28 @@ namespace AutomatedCar.Models
     public class AutomatedCar : Car
     {
         private VirtualFunctionBus virtualFunctionBus;
+        public GasPedal GasPedal;
 
         private GearBox gearBox;
+
+        public SteeringWheel steeringWheel;
+
+        public BrakePedal BrakePedal;
 
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.gearBox = new GearBox(this.virtualFunctionBus);
+            this.steeringWheel = new SteeringWheel(this.virtualFunctionBus);
+            this.BrakePedal = new BrakePedal(this.virtualFunctionBus);
+            this.GasPedal = new GasPedal(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
+
+        public GearBox GearBox { get => this.gearBox; }
 
         public int Revolution { get; set; }
 
