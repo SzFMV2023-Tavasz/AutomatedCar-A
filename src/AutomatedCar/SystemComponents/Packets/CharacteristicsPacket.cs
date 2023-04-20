@@ -2,7 +2,7 @@
 using System;
 namespace AutomatedCar.SystemComponents.Packets
 {
-    public class CharacteristicsPacket: ReactiveObject, ICharacteristicsInterface
+    public class CharacteristicsPacket : ReactiveObject, ICharacteristicsInterface
     {
         private int rPM = 1200;
         private float speed;

@@ -14,7 +14,7 @@ namespace AutomatedCar.ViewModels
     public class CourseDisplayViewModel : ViewModelBase
     {
         public ObservableCollection<WorldObjectViewModel> WorldObjects { get; } = new ObservableCollection<WorldObjectViewModel>();
-      
+
         private Avalonia.Vector offset;
 
         public CourseDisplayViewModel(World world)
@@ -44,22 +44,26 @@ namespace AutomatedCar.ViewModels
 
         public void KeyUp()
         {
+            World.Instance.ControlledCar.GasPedal.PressGasPedal();
             World.Instance.ControlledCar.Y -= 5;
         }
 
         public void KeyDown()
         {
+            World.Instance.ControlledCar.BrakePedal.PressGasPedal();
             World.Instance.ControlledCar.Y += 5;
         }
 
         public void KeyLeft()
         {
             World.Instance.ControlledCar.X -= 5;
+            World.Instance.ControlledCar.steeringWheel.TurnWheel(Helpers.SteeringWheelDirectionEnum.TurnLeft);
         }
 
         public void KeyRight()
         {
             World.Instance.ControlledCar.X += 5;
+            World.Instance.ControlledCar.steeringWheel.TurnWheel(Helpers.SteeringWheelDirectionEnum.TurnRight);
         }
 
         public void PageUp()
@@ -80,6 +84,16 @@ namespace AutomatedCar.ViewModels
         public void ToggleCamera()
         {
             this.DebugStatus.Camera = !this.DebugStatus.Camera;
+        }
+
+        public void ShiftUp()
+        {
+            World.Instance.ControlledCar.GearBox.OuterGearShiftUp();
+        }
+
+        public void ShiftDown()
+        {
+            World.Instance.ControlledCar.GearBox.OuterGearShiftDown();
         }
 
         public void ToggleRadar()

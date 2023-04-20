@@ -7,12 +7,19 @@ namespace AutomatedCar.Models
 
     public class AutomatedCar : Car, INotifyPropertyChanged
     {
+        private VirtualFunctionBus virtualFunctionBus;
+        public GasPedal GasPedal;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private VirtualFunctionBus virtualFunctionBus;
         private GearBox gearBox;
         private Drivechain drivechain;
 
+        public SteeringWheel steeringWheel;
+
+        public BrakePedal BrakePedal;
+
+        public AutomatedCar(int x, int y, string filename)
         private int velo;
         private int revo;
 
@@ -21,6 +28,9 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.gearBox = new GearBox(this.virtualFunctionBus);
+            this.steeringWheel = new SteeringWheel(this.virtualFunctionBus);
+            this.BrakePedal = new BrakePedal(this.virtualFunctionBus);
+            this.GasPedal = new GasPedal(this.virtualFunctionBus);
             this.drivechain = new Drivechain(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
@@ -35,6 +45,9 @@ namespace AutomatedCar.Models
                 return this.revo;
             }
 
+        public GearBox GearBox { get => this.gearBox; }
+
+        public int Revolution { get; set; }
             set
             {
                 this.revo = value;

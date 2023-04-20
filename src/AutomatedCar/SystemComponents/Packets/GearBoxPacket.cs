@@ -11,20 +11,27 @@
     {
 
         private bool shiftInProgress;
-
         private byte innerGear;
+        private OuterGear actualGear;
 
 
-        public bool ShiftInProgress {
+        public bool ShiftInProgress
+        {
             get => this.shiftInProgress;
             set => this.RaiseAndSetIfChanged(ref this.shiftInProgress, value);
         }
 
-        public byte InnerGear {
+        public byte InnerGear
+        {
 
             get => this.innerGear;
             set => this.RaiseAndSetIfChanged(ref this.innerGear, value);
+        }
 
+        public OuterGear ActualGear
+        {
+            get => this.actualGear;
+            set => this.RaiseAndSetIfChanged(ref this.actualGear, value);
         }
     }
 }
