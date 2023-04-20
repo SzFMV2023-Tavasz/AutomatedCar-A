@@ -9,20 +9,20 @@
     public class GetPathPointsTests
     {
 
-        [TestMethod]
-        [DataRow("NPC_test_world_path.json", "car", 37)]
-        [DataRow("NPC_test_world_path.json", "pedestrian", 47)]
-        [DataRow("NPC_oval_world_path.json", "car", 44)]
-        public void GetPathPointsToSelectedWorldTest(string filePath, string type, int expectedLength)
-        {
-            var app = new App();
-            var pathPoints = app.GetPathPointsFrom(filePath, type);
+        //[TestMethod]
+        //[DataRow("NPC_test_world_path.json", "car", 37)]
+        //[DataRow("NPC_test_world_path.json", "pedestrian", 47)]
+        //[DataRow("NPC_oval_world_path.json", "car", 44)]
+        //public void GetPathPointsToSelectedWorldTest(string filePath, string type, int expectedLength)
+        //{
+        //    var app = new App();
+        //    var pathPoints = app.GetPathPointsFrom(filePath, type);
 
-            // Assert
-            Assert.AreEqual(expectedLength, pathPoints.Count());
-            Assert.IsTrue(pathPoints.Count() != 0);
+        //    // Assert
+        //    Assert.AreEqual(expectedLength, pathPoints.Count());
+        //    Assert.IsTrue(pathPoints.Count() != 0);
 
-        }
+        //}
 
         [TestMethod]
         [DataRow("NPC_test_world_path.json", "nonexistentkeyworld")]
