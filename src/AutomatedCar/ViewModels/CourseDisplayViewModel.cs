@@ -9,6 +9,7 @@ namespace AutomatedCar.ViewModels
     using Avalonia.Controls;
     using Models;
     using System;
+    using System.Diagnostics;
     using Visualization;
 
     public class CourseDisplayViewModel : ViewModelBase
@@ -45,35 +46,35 @@ namespace AutomatedCar.ViewModels
         public void KeyUp()
         {
             World.Instance.ControlledCar.GasPedal.PressGasPedal();
-            World.Instance.ControlledCar.Y -= 5;
+            //World.Instance.ControlledCar.Y -= 5;
         }
 
         public void KeyDown()
         {
             World.Instance.ControlledCar.BrakePedal.PressGasPedal();
-            World.Instance.ControlledCar.Y += 5;
+            //World.Instance.ControlledCar.Y += 5;
         }
 
         public void KeyLeft()
         {
-            World.Instance.ControlledCar.X -= 5;
+            //World.Instance.ControlledCar.X -= 5;
             World.Instance.ControlledCar.steeringWheel.TurnWheel(Helpers.SteeringWheelDirectionEnum.TurnLeft);
         }
 
         public void KeyRight()
         {
-            World.Instance.ControlledCar.X += 5;
+            //World.Instance.ControlledCar.X += 5;
             World.Instance.ControlledCar.steeringWheel.TurnWheel(Helpers.SteeringWheelDirectionEnum.TurnRight);
         }
 
         public void PageUp()
         {
-            World.Instance.ControlledCar.Rotation += 5;
+            //World.Instance.ControlledCar.Rotation += 5;
         }
 
         public void PageDown()
         {
-            World.Instance.ControlledCar.Rotation -= 5;
+           // World.Instance.ControlledCar.Rotation -= 5;
         }
 
         public void ToggleDebug()

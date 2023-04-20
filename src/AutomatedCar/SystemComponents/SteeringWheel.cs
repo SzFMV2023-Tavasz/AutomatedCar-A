@@ -5,6 +5,7 @@
     using AutomatedCar.SystemComponents.Packets;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Net.Http.Headers;
     using System.Text;
@@ -18,9 +19,9 @@
         private Vector2D baseVector = new Vector2D(0, 1);
         private Vector2D maxLeftVector;
         private Vector2D maxRightVector;
-        private float maxAngle = 60.0f;
-        private float turnAngle = 10f;
-        private int ownDefaultTickCounter = 30;
+        private float maxAngle = 89.9f;
+        private float turnAngle = 2f;
+        private int ownDefaultTickCounter = 1;
         private int ownCurrentTick = 0;
 
         public SteeringWheel(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
@@ -53,7 +54,7 @@
             }
             else if(steeringWheelDirection == SteeringWheelDirectionEnum.Hold)
             {
-                this.SetServoDirection();
+                //this.SetServoDirection();
             }
             
             if(this.steeringWheelDirection == SteeringWheelDirectionEnum.TurnLeft)

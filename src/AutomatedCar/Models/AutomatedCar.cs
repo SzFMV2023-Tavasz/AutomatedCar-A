@@ -1,18 +1,27 @@
+using AutomatedCar.SystemComponents;
+
 namespace AutomatedCar.Models
 {
     using Avalonia.Media;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
     using SystemComponents;
 
-    public class AutomatedCar : Car
+    public class AutomatedCar : Car, INotifyPropertyChanged
     {
         private VirtualFunctionBus virtualFunctionBus;
         public GasPedal GasPedal;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private GearBox gearBox;
+        private Drivechain drivechain;
 
         public SteeringWheel steeringWheel;
 
         public BrakePedal BrakePedal;
+
+        private int velo;
+        private int revo;
 
         public Characteristics characteristics;
 
@@ -24,17 +33,42 @@ namespace AutomatedCar.Models
             this.steeringWheel = new SteeringWheel(this.virtualFunctionBus);
             this.BrakePedal = new BrakePedal(this.virtualFunctionBus);
             this.GasPedal = new GasPedal(this.virtualFunctionBus);
+            this.drivechain = new Drivechain(this.virtualFunctionBus);
             this.ZIndex = 10;
             this.characteristics = new Characteristics(this.virtualFunctionBus);
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => this.PropertyChanged?.Invoke(this, new(propertyName));
 
+        public int Revolution
+        {
+            get
+            {
+                return this.revo;
+            }
+
+            set
+            {
+                this.revo = value;
+                this.NotifyPropertyChanged(nameof(this.Revolution));
+            }
+        }
+
+        public int Velocity
+        {
+            get
+            {
+                return this.velo;
+            }
+
+            set
+            {
+                this.velo = value;
+                this.NotifyPropertyChanged(nameof(this.Velocity));
+            }
+        }
         public GearBox GearBox { get => this.gearBox; }
-
-        public int Revolution { get; set; }
-
-        public int Velocity { get; set; }
 
         public PolylineGeometry Geometry { get; set; }
 

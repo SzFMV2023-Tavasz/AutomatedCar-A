@@ -10,7 +10,6 @@
 
     public class GearBox : SystemComponent
     {
-
         public GearBoxPacket gearBoxPacket = new GearBoxPacket();
         private ICharacteristicsInterface characteristicsPacket;
         private IDrivechain drivechainPacket;
@@ -26,7 +25,8 @@
         public override void Process()
         {
             this.characteristicsPacket = World.Instance.ControlledCar.VirtualFunctionBus.CharacteristicsPacket;
-            this.drivechainPacket = World.Instance.ControlledCar.VirtualFunctionBus.DrivechainPacket;
+            this.drivechainPacket = World.Instance.ControlledCar.VirtualFunctionBus.drivechainPacket;
+
 
             if (this.characteristicsPacket.RPM > 1500 && this.gearBoxPacket.InnerGear < 3)
             {
