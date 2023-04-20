@@ -33,9 +33,10 @@ namespace AutomatedCar.Models
             this.steeringWheel = new SteeringWheel(this.virtualFunctionBus);
             this.BrakePedal = new BrakePedal(this.virtualFunctionBus);
             this.GasPedal = new GasPedal(this.virtualFunctionBus);
+            this.characteristics = new Characteristics(this.virtualFunctionBus);
             this.drivechain = new Drivechain(this.virtualFunctionBus);
             this.ZIndex = 10;
-            this.characteristics = new Characteristics(this.virtualFunctionBus);
+            this.Rotation = 90;
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
