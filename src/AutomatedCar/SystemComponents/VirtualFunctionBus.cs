@@ -1,5 +1,6 @@
 namespace AutomatedCar.SystemComponents
 {
+    using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Packets;
     using System.Collections.Generic;
 
@@ -14,9 +15,14 @@ namespace AutomatedCar.SystemComponents
         public IPedalInterface GasPedalPacket { get; set; }
 
         public IGearboxInterface GearboxPacket { get; set; }
+
         public ISteeringWheel SteeringWheelPacket { get; set; }
 
         public IDrivechain drivechainPacket { get; set; }
+        
+        public IReadOnlyPacket<DetectedObjectInfo> RadarPacket { get; set; }
+        public IReadOnlyPacket<DetectedObjectInfo> CameraPacket { get; set; }
+        public IReadOnlyPacket<DetectedObjectInfo> CollisionPacket { get; set; }
 
         public void RegisterComponent(SystemComponent component)
         {

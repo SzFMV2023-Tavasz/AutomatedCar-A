@@ -17,6 +17,10 @@
         </Style>
         <Style Selector="ContentControl#Dashboard TextBlock">
             <Setter Property="Foreground" Value="#EEEEEE"/>
+            <Setter Property="Background" Value="#424242"/>
+        </Style>
+        <Style Selector="ContentControl#Dashboard ListBox">
+            <Setter Property="Padding" Value=" 0"/>
         </Style>
     </UserControl.Styles>
 
@@ -51,7 +55,7 @@
                                 Source="resm:AutomatedCar.Assets.steering-wheel.png?assembly=AutomatedCar"
                                 RenderTransformOrigin="{Binding RotationPoint, Converter={x:Static visualization:RenderTransformOriginTransformer.Instance}}">
                             </Image>
-                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                                 <TextBlock Grid.Row="0" Grid.Column="0">X:</TextBlock>
                                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding X}"/>
                                 <TextBlock Grid.Row="1" Grid.Column="0">Y:</TextBlock>
@@ -60,6 +64,36 @@
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Filename}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="0">Rotation:</TextBlock>
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Rotation}"/>
+								                <TextBlock Grid.Row="4" Grid.Column="0">Collision:</TextBlock>
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.CollisionPacket.WorldObjectsDetected[0]}"/>
+
+								<TextBlock Grid.Row="5" Grid.Column="0">Camera closest:</TextBlock>
+								<TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.CameraPacket.WorldObjectsDetected[0]}"/>
+
+								<TextBlock Grid.Row="6" Grid.Column="0">Radar closest:</TextBlock>
+								<TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.RadarPacket.WorldObjectsDetected[0]}"/>
+
+                                <TextBlock Grid.Row="7" Grid.Column="0">Detected Objects - Radar:</TextBlock>
+                                <ListBox Grid.Row="8" Grid.Column="0" Items="{Binding Car.VirtualFunctionBus.RadarPacket.WorldObjectsDetected}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <TextBlock Text="{Binding DetectedObject.Filename}"/>
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                
+                                <TextBlock Grid.Row="7" Grid.Column="1">Detected Objects - Camera:</TextBlock>
+                                <ListBox Grid.Row="8" Grid.Column="1" Items="{Binding Car.VirtualFunctionBus.CameraPacket.WorldObjectsDetected}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <TextBlock Text="{Binding DetectedObject.Filename}"/>
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                             </Grid>
                         </StackPanel>
                     </DataTemplate>
