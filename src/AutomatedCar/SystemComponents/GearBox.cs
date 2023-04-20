@@ -25,7 +25,7 @@
         public override void Process()
         {
             this.characteristicsPacket = World.Instance.ControlledCar.VirtualFunctionBus.CharacteristicsPacket;
-            this.drivechainPacket = World.Instance.ControlledCar.VirtualFunctionBus.DrivechainPacket;
+            this.drivechainPacket = World.Instance.ControlledCar.VirtualFunctionBus.drivechainPacket;
 
             //if (this.characteristicsPacket.RPM > 2500 && this.gearBoxPacket.InnerGear < 5)
             //{

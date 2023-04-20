@@ -1,3 +1,5 @@
+using AutomatedCar.SystemComponents;
+
 namespace AutomatedCar.Models
 {
     using Avalonia.Media;
@@ -11,7 +13,6 @@ namespace AutomatedCar.Models
         public GasPedal GasPedal;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private VirtualFunctionBus virtualFunctionBus;
         private GearBox gearBox;
         private Drivechain drivechain;
 
@@ -19,7 +20,6 @@ namespace AutomatedCar.Models
 
         public BrakePedal BrakePedal;
 
-        public AutomatedCar(int x, int y, string filename)
         private int velo;
         private int revo;
 
@@ -45,9 +45,6 @@ namespace AutomatedCar.Models
                 return this.revo;
             }
 
-        public GearBox GearBox { get => this.gearBox; }
-
-        public int Revolution { get; set; }
             set
             {
                 this.revo = value;
@@ -68,6 +65,7 @@ namespace AutomatedCar.Models
                 this.NotifyPropertyChanged(nameof(this.Velocity));
             }
         }
+        public GearBox GearBox { get => this.gearBox; }
 
         public PolylineGeometry Geometry { get; set; }
 

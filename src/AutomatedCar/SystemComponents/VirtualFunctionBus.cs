@@ -11,10 +11,13 @@ namespace AutomatedCar.SystemComponents
 
         public ICharacteristicsInterface CharacteristicsPacket { get; set; }
         public IPedalInterface BrakePedalPacket { get; set; }
+        public IPedalInterface GasPedalPacket { get; set; }
+
+        public IGearboxInterface GearboxPacket { get; set; }
+        public ISteeringWheel SteeringWheelPacket { get; set; }
 
         public IDrivechain drivechainPacket { get; set; }
 
-        public ISteeringWheel SteeringWheelPacket {get; set;}
 
         public void RegisterComponent(SystemComponent component)
         {
