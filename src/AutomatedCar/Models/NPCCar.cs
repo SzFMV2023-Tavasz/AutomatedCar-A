@@ -35,8 +35,8 @@
             {
                 int NextPoint = ActPoint + 1;
                 if (!(NextPoint < PathPoints.Count())) { NextPoint = 0; }
-                int difX = PathPoints[NextPoint].X - this.X;
-                int difY = PathPoints[NextPoint].Y - this.Y;
+                int difX = (int)(PathPoints[NextPoint].X - this.X);
+                int difY = (int)(PathPoints[NextPoint].Y - this.Y);
                 double distance = Math.Sqrt(difX * difX + difY * difY);
                 if ((int)Math.Floor(distance) <= this.Speed)
                 {
