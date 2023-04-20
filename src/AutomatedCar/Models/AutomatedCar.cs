@@ -14,6 +14,8 @@ namespace AutomatedCar.Models
 
         public BrakePedal BrakePedal;
 
+        public Characteristics characteristics;
+
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
@@ -23,6 +25,7 @@ namespace AutomatedCar.Models
             this.BrakePedal = new BrakePedal(this.virtualFunctionBus);
             this.GasPedal = new GasPedal(this.virtualFunctionBus);
             this.ZIndex = 10;
+            this.characteristics = new Characteristics(this.virtualFunctionBus);
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
