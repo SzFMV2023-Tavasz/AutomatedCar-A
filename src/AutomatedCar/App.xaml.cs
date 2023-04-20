@@ -228,11 +228,11 @@ namespace AutomatedCar
 
         private void AddControlledCarsToTest(World world)
         {
-            var controlledCar = this.CreateControlledCar(480, 1425, 0, "car_1_white.png");
-            var controlledCar2 = this.CreateControlledCar(4250, 1420, -90, "car_1_red.png");
+            var controlledCar = this.CreateControlledCar(1200, 422, 90, "car_1_white.png");
+            //var controlledCar2 = this.CreateControlledCar(4250, 1420, -90, "car_1_red.png");
 
             world.AddControlledCar(controlledCar);
-            world.AddControlledCar(controlledCar2);
+            //world.AddControlledCar(controlledCar2);
         }
 
         private void AddControlledCarsToOval(World world)
