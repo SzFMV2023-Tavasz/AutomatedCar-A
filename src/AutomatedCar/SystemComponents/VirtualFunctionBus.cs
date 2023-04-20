@@ -18,7 +18,6 @@ namespace AutomatedCar.SystemComponents
 
         public IDrivechain drivechainPacket { get; set; }
 
-
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);

@@ -68,6 +68,11 @@
                                 <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.GasPedalPacket.PedalPosition}"/>
                                 <TextBlock Grid.Row="7" Grid.Column="0">Brake pedal position:</TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.BrakePedalPacket.PedalPosition}"/>
+                                <TextBlock Grid.Row="8" Grid.Column="0">Speed:</TextBlock>
+                                <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.CharacteristicsPacket.Speed}"/>
+                                <TextBlock Grid.Row="9" Grid.Column="0">Distance Y:</TextBlock>
+                                <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.CharacteristicsPacket.RPM}"/>
+                              
                             </Grid>
                         </StackPanel>
                     </DataTemplate>

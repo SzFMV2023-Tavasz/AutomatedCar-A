@@ -23,7 +23,9 @@ namespace AutomatedCar.Models
         private int velo;
         private int revo;
 
-        public AutomatedCar(float x, float y, string filename)
+        public Characteristics characteristics;
+
+        public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
@@ -33,6 +35,7 @@ namespace AutomatedCar.Models
             this.GasPedal = new GasPedal(this.virtualFunctionBus);
             this.drivechain = new Drivechain(this.virtualFunctionBus);
             this.ZIndex = 10;
+            this.characteristics = new Characteristics(this.virtualFunctionBus);
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }

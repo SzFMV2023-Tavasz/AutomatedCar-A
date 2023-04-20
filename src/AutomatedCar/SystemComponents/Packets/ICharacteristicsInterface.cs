@@ -1,5 +1,4 @@
-﻿using System;
-namespace AutomatedCar.SystemComponents.Packets
+﻿namespace AutomatedCar.SystemComponents.Packets
 {
     public interface ICharacteristicsInterface
     {

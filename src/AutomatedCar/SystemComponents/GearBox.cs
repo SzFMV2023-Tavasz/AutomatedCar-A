@@ -27,16 +27,27 @@
             this.characteristicsPacket = World.Instance.ControlledCar.VirtualFunctionBus.CharacteristicsPacket;
             this.drivechainPacket = World.Instance.ControlledCar.VirtualFunctionBus.drivechainPacket;
 
-            //if (this.characteristicsPacket.RPM > 2500 && this.gearBoxPacket.InnerGear < 5)
-            //{
-            //    Shift(1);
-            //    this.gearBoxPacket.ShiftInProgress = false;
-            //}
-            //else if (this.characteristicsPacket.RPM < 1400 && this.gearBoxPacket.InnerGear > 1)
-            //{
-            //    Shift(-1);
-            //    this.gearBoxPacket.ShiftInProgress = false;
-            //}
+
+            if (this.characteristicsPacket.RPM > 1500 && this.gearBoxPacket.InnerGear < 3)
+            {
+                Shift(1);
+                this.gearBoxPacket.ShiftInProgress = false;
+            }
+            else if (this.characteristicsPacket.RPM > 1500 && this.gearBoxPacket.InnerGear == 3)
+            {
+                Shift(1);
+                this.gearBoxPacket.ShiftInProgress = false;
+            }
+            else if (this.characteristicsPacket.RPM > 1500 && this.gearBoxPacket.InnerGear == 4)
+            {
+                Shift(1);
+                this.gearBoxPacket.ShiftInProgress = false;
+            }
+            else if (this.characteristicsPacket.RPM <= 600 && this.gearBoxPacket.InnerGear > 1)
+            {
+                Shift(-1);
+                this.gearBoxPacket.ShiftInProgress = false;
+            }
         }
 
 
