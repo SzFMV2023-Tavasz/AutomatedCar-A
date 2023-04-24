@@ -19,7 +19,9 @@
             virtualFunctionBus.GearboxPacket = this.gearBoxPacket;
             this.gearBoxPacket.ShiftInProgress = false;
             this.gearBoxPacket.InnerGear = 1;
-            this.gearBoxPacket.ActualGear = OuterGear.p;
+            this.gearBoxPacket.ActualGear = OuterGear.P;
+            this.gearBoxPacket.PreviousGear = "";
+            this.gearBoxPacket.NextGear = OuterGear.R.ToString();
         }
 
         public override void Process()
@@ -73,17 +75,37 @@
 
         public void OuterGearShiftUp()
         {
-            if (this.gearBoxPacket.ActualGear != OuterGear.d && this.drivechainPacket.Speed == 0)
+            if (this.gearBoxPacket.ActualGear != OuterGear.D && this.drivechainPacket.Speed == 0)
             {
+                this.gearBoxPacket.PreviousGear = gearBoxPacket.ActualGear.ToString();
                 this.gearBoxPacket.ActualGear++;
+
+                if (this.gearBoxPacket.ActualGear is OuterGear.D)
+                {
+                    this.gearBoxPacket.NextGear = string.Empty;
+                }
+                else
+                {
+                    this.gearBoxPacket.NextGear = (this.gearBoxPacket.ActualGear+1).ToString();
+                }
             }
         }
 
         public void OuterGearShiftDown()
         {
-            if (this.gearBoxPacket.ActualGear != OuterGear.p && this.drivechainPacket.Speed == 0)
+            if (this.gearBoxPacket.ActualGear != OuterGear.P && this.drivechainPacket.Speed == 0)
             {
+                this.gearBoxPacket.NextGear=this.gearBoxPacket.ActualGear.ToString();
                 this.gearBoxPacket.ActualGear--;
+            }
+
+            if (this.gearBoxPacket.ActualGear is OuterGear.P)
+            {
+                this.gearBoxPacket.PreviousGear = string.Empty;
+            }
+            else
+            {
+                this.gearBoxPacket.PreviousGear = (this.gearBoxPacket.ActualGear-1).ToString();
             }
         }
     }
