@@ -9,6 +9,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using AutomatedCar.Helpers;
 
     public class CollisionSensor : SystemComponent
     {
@@ -38,45 +39,43 @@
 
             foreach (var point in car.Geometry.Points)
             {
-                CarPoints.Add(new Point(point.X+car.X-car.Geometry.Bounds.Center.X,point.Y+car.Y - car.Geometry.Bounds.Center.Y));
+                Point transformedPoint = GeometryUtils.TransformPoint(point, car);
+                CarPoints.Add(transformedPoint);
             }
             PolylineGeometry CarLines = new PolylineGeometry(CarPoints, false);
 
-            foreach (var worldObject in World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.car)))
+            var collidableWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.car));
+            foreach (var worldObject in collidableWorldObjects)
             {
-                if (worldObject.Geometries.Count > 0)
+                foreach (var geometry in worldObject.Geometries)
                 {
-                    foreach (var point in worldObject.Geometries[0].Points)
+                    foreach (var point in geometry.Points)
                     {
-                        // Every boundary boxes at the origo, so needs to be transformed at its position
-                        Point transformedPoint = new Point(point.X + worldObject.X, point.Y + worldObject.Y);
+                        Point transformedPoint = GeometryUtils.TransformPoint(point, worldObject);
+
                         bool detected = CarLines.FillContains(transformedPoint);
 
                         if (detected)
                         {
-                            var seged = new DetectedObjectInfo()
+                            var detectedObject = new DetectedObjectInfo()
                             {
                                 DetectedObject = worldObject,
                                 Distance = 0
                             };
-                            Packet.WorldObjectsDetected = new List<DetectedObjectInfo>() { seged };
+                            Packet.WorldObjectsDetected = new List<DetectedObjectInfo>() { detectedObject };
                             if (worldObject.WorldObjectType == WorldObjectType.Pedestrian)
                             {
-                                CollidedWNPCEvent?.Invoke(seged);
+                                CollidedWNPCEvent?.Invoke(detectedObject);
                             }
                             if (worldObject.WorldObjectType == WorldObjectType.Building)
                             {
-                                CollidedWBuildingsEvent?.Invoke(seged);
+                                CollidedWBuildingsEvent?.Invoke(detectedObject);
                             }
                             return;
                         }
-
                     }
                 }
             }
-            
-
-            
         }
     }
 }

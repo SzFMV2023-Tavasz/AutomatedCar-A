@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
+    using AutomatedCar.Helpers;
     using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
@@ -19,7 +20,7 @@
         /// Initializes a new instance of the <see cref="GenericSensor"/> class.
         /// </summary>
         /// <param name="sensorSettings">This contains all the information thats needed for sensor constructing.</param>
-        
+
         public GenericSensor(SensorSettings sensorSettings)
                         : base(sensorSettings.FunctionBus)
         {
@@ -74,22 +75,19 @@
         public List<Point> GenerateSensorTriangle()
         {
             const int pixelToMeter = 50;
-            double x0, y0, x1, y1, x2, y2;
-             
-            double outerPointDistance = ViewDistance / Math.Cos(this.DegToRad(this.FOV / 2));
-            
-            x0 = this.CarAnchorPoint.X + this.Car.X - this.Car.Geometry.Bounds.TopLeft.X;
-            y0 = this.CarAnchorPoint.Y + this.Car.Y - this.Car.Geometry.Bounds.TopLeft.Y;
-            x1 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
-            y1 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
-            x2 = (outerPointDistance * pixelToMeter * Math.Sin(this.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
-            y2 = (outerPointDistance * pixelToMeter * Math.Cos(this.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
+            double x1, y1, x2, y2;
 
+            double outerPointDistance = ViewDistance / Math.Cos(GeometryUtils.DegToRad(this.FOV / 2));
 
+            Point transformedAnchorPoint = GeometryUtils.TransformPoint(this.CarAnchorPoint, this.Car);
+            x1 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
+            y1 = (outerPointDistance * pixelToMeter * Math.Cos(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
+            x2 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
+            y2 = (outerPointDistance * pixelToMeter * Math.Cos(GeometryUtils.DegToRad((this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.Y;
 
             return new List<Point>()
             {
-                new Point(x0, y0),
+                transformedAnchorPoint,
                 new Point(x1, y1),
                 new Point(x2, y2),
             };
@@ -99,14 +97,15 @@
         {
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(triangle, false);
-            foreach (var worldObject in World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType)&&!obj.Equals(this.Car)))
+            var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.Car));
+            foreach (var worldObject in filteredWorldObjects)
             {
-                if (worldObject.Geometries.Count > 0)
+                foreach (var geometry in worldObject.Geometries)
                 {
-                    foreach (var point in worldObject.Geometries[0].Points)
+                    foreach (var point in geometry.Points)
                     {
                         // Every boundary boxes at the origo, so needs to be transformed at its position
-                        Point transformedPoint = new Point(point.X + worldObject.X, point.Y + worldObject.Y);
+                        Point transformedPoint = GeometryUtils.TransformPoint(point, worldObject);
                         bool detected = sensor.FillContains(transformedPoint);
 
                         if (detected)
@@ -116,7 +115,8 @@
                     }
                 }
             }
-            detectedObjects = detectedObjects?.OrderBy(x=>x.Distance).ToList();
+
+            detectedObjects = detectedObjects?.OrderBy(x => x.Distance).ToList();
             return detectedObjects.AsReadOnly();
         }
 
@@ -125,7 +125,7 @@
             DetectedObjectInfo newInfo = new DetectedObjectInfo()
             {
                 DetectedObject = worldObject,
-                Distance = this.CalculateDistance(transformedPoint, this.CarAnchorPoint + new Point(this.Car.X, this.Car.Y)),
+                Distance = (float)GeometryUtils.GetEuclidianDistance(transformedPoint, this.CarAnchorPoint + new Point(this.Car.X, this.Car.Y)),
             };
             if (!detectedObjects.Contains(newInfo))
             {
@@ -141,21 +141,7 @@
                 }
             }
         }
+
         // More debug needed
-        private float CalculateDistance(Point transformedPointInWorld, Point carAnchorPointInWorld)
-        {
-            var vector = new Vector2((float)(transformedPointInWorld.X - carAnchorPointInWorld.X), (float)(transformedPointInWorld.Y - carAnchorPointInWorld.Y));
-
-            var length = vector.Length();
-
-            return length;
-        }
-
-        private double DegToRad(double degrees)
-        {
-            double radians = (Math.PI / 180) * degrees;
-
-            return radians;
-        }
     }
 }
