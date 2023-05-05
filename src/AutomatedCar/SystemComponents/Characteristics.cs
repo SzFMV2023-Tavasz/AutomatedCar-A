@@ -59,17 +59,17 @@
             switch (currentInnerGear)
             {
                 case 1:
-                    return 3.79;
+                    return 1.0;
                 case 2:
-                    return 2;
+                    return 0.8;
                 case 3:
-                    return 1.6;
+                    return 0.6;
                 case 4:
-                    return 2;
+                    return 0.4;
                 case 5:
-                    return 1.2;
+                    return 0.2;
                 default:
-                    return 1;
+                    return 1.0;
             }
         }
 
