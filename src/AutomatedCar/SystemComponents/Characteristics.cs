@@ -97,7 +97,7 @@
 
 
             //Acceleration
-            if (this.characteristicsPacket.RPM <= 7000 && this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition >= 0)
+            if (this.characteristicsPacket.RPM <= 7000 && this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition > 0)
             {
                 this.doubleRPM += CalculateRPMDifference(this.gasPedalPacket.PedalPosition, this.brakePedalPacket.PedalPosition, currentGearRatio);
                 this.characteristicsPacket.RPM = (int)doubleRPM;
@@ -110,15 +110,15 @@
                 Debug.WriteLine("Speed: " + this.characteristicsPacket.Speed);
             }
             // Braking
-            else if (this.brakePedalPacket.PedalPosition >= 0 && this.characteristicsPacket.Speed - (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition) >= 0)
+            else if (this.brakePedalPacket.PedalPosition > 0 && this.characteristicsPacket.Speed - (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition) >= 0)
             {
                 this.characteristicsPacket.Speed -= (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition);
                 CalculateRPM_fromSpeed();
             }
             // Drag
-            else if (this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition == 0 && this.characteristicsPacket.Speed - (1 / 50) >= 0)
+            else if (this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition == 0 && this.characteristicsPacket.Speed - (0.2) >= 0)
             {
-                this.characteristicsPacket.Speed -= 1/50;
+                this.characteristicsPacket.Speed -= (float)0.2;
                 CalculateRPM_fromSpeed();
             }
 
