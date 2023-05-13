@@ -95,48 +95,100 @@
                 doubleRPM = 3999;
             }
 
+            // DRIVE
+            if (this.gearboxPacket.ActualGear == OuterGear.d)
+            {
+                //Acceleration
+                if (this.characteristicsPacket.RPM <= 7000 && this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition > 0)
+                {
+                    this.doubleRPM += CalculateRPMDifference(this.gasPedalPacket.PedalPosition, this.brakePedalPacket.PedalPosition, currentGearRatio);
+                    this.characteristicsPacket.RPM = (int)doubleRPM;
+                    World.Instance.ControlledCar.Revolution = this.characteristicsPacket.RPM;
+                    this.characteristicsPacket.Speed = ((this.gearboxPacket.InnerGear - 1) * 3400 + this.characteristicsPacket.RPM - 600) / 128;
 
-            //Acceleration
-            if (this.characteristicsPacket.RPM <= 7000 && this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition > 0)
-            {
-                this.doubleRPM += CalculateRPMDifference(this.gasPedalPacket.PedalPosition, this.brakePedalPacket.PedalPosition, currentGearRatio);
-                this.characteristicsPacket.RPM = (int)doubleRPM;
-                World.Instance.ControlledCar.Revolution = this.characteristicsPacket.RPM;
-                this.characteristicsPacket.Speed = ((this.gearboxPacket.InnerGear - 1) * 3400 + this.characteristicsPacket.RPM - 600)/128;
+                    // Debug
+                    Debug.WriteLine("Gear: " + this.virtualFunctionBus.GearboxPacket.InnerGear);
+                    Debug.WriteLine("RPM: " + this.characteristicsPacket.RPM);
+                    Debug.WriteLine("Speed: " + this.characteristicsPacket.Speed);
+                    Debug.WriteLine("fromSpeed: " + this.characteristicsPacket.RPM);
+                    Debug.WriteLine("------------------" + this.gearboxPacket.ActualGear + "------------------");
+                }
+                // Braking
+                else if (this.brakePedalPacket.PedalPosition > 0 && this.characteristicsPacket.Speed - (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition) >= 0)
+                {
+                    this.characteristicsPacket.Speed -= (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition);
+                    CalculateRPM_fromSpeed(1);
+                }
+                // Drag
+                else if (this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition == 0 && this.characteristicsPacket.Speed - (0.2) >= 0)
+                {
+                    this.characteristicsPacket.Speed -= (float)0.2;
+                    CalculateRPM_fromSpeed(1);
+                }
+            }
 
-                // Debug
-                Debug.WriteLine("Gear: " + this.virtualFunctionBus.GearboxPacket.InnerGear);
-                Debug.WriteLine("RPM: " + this.characteristicsPacket.RPM);
-                Debug.WriteLine("Speed: " + this.characteristicsPacket.Speed);
-            }
-            // Braking
-            else if (this.brakePedalPacket.PedalPosition > 0 && this.characteristicsPacket.Speed - (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition) >= 0)
+            // REVERSE
+            else if (this.gearboxPacket.ActualGear == OuterGear.r)
             {
-                this.characteristicsPacket.Speed -= (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition);
-                CalculateRPM_fromSpeed();
-            }
-            // Drag
-            else if (this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition == 0 && this.characteristicsPacket.Speed - (0.2) >= 0)
-            {
-                this.characteristicsPacket.Speed -= (float)0.2;
-                CalculateRPM_fromSpeed();
+                //Acceleration
+                if (this.characteristicsPacket.RPM <= 7000 && this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition > 0)
+                {
+                    this.doubleRPM += CalculateRPMDifference(this.gasPedalPacket.PedalPosition, this.brakePedalPacket.PedalPosition, currentGearRatio);
+                    this.characteristicsPacket.RPM = (int)doubleRPM;
+                    World.Instance.ControlledCar.Revolution = this.characteristicsPacket.RPM;
+                    this.characteristicsPacket.Speed = -((this.gearboxPacket.InnerGear - 1) * 3400 + this.characteristicsPacket.RPM - 600) / 128;
+
+                    // Debug
+                    Debug.WriteLine("Gear: " + this.virtualFunctionBus.GearboxPacket.InnerGear);
+                    Debug.WriteLine("RPM: " + this.characteristicsPacket.RPM);
+                    Debug.WriteLine("Speed: " + this.characteristicsPacket.Speed);
+                    Debug.WriteLine("fromSpeed: " + this.characteristicsPacket.RPM);
+                    Debug.WriteLine("------------------" + this.gearboxPacket.ActualGear + "------------------");
+                }
+                // Braking
+                else if (this.brakePedalPacket.PedalPosition > 0 && this.characteristicsPacket.Speed + (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition) <= 0)
+                {
+                    this.characteristicsPacket.Speed += (float)(0.324 / 60 * this.brakePedalPacket.PedalPosition);
+                    CalculateRPM_fromSpeed(-1);
+                }
+                // Drag
+                else if (this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition == 0 && this.characteristicsPacket.Speed + (0.2) <= 0)
+                {
+                    this.characteristicsPacket.Speed += (float)0.2;
+                    CalculateRPM_fromSpeed(-1);
+                }
             }
 
             this.lastInnerGear = this.gearboxPacket.InnerGear;
         }
 
 
-        private void CalculateRPM_fromSpeed()
+        private void CalculateRPM_fromSpeed(int direction)
         {
-            this.doubleRPM = (-(this.gearboxPacket.InnerGear - 1) * 3400 + 600 + 128 * this.characteristicsPacket.Speed);
-            this.characteristicsPacket.RPM = (int)(-(this.gearboxPacket.InnerGear - 1) * 3400 + 600 + 128 * this.characteristicsPacket.Speed);
-            World.Instance.ControlledCar.Revolution = this.characteristicsPacket.RPM;
-            // Debug
-            Debug.WriteLine("Gear: " + this.virtualFunctionBus.GearboxPacket.InnerGear);
-            Debug.WriteLine("RPM: " + this.characteristicsPacket.RPM);
-            Debug.WriteLine("Speed: " + this.characteristicsPacket.Speed);
-            Debug.WriteLine("fromSpeed: " + this.characteristicsPacket.RPM);
-            Debug.WriteLine("-------------------------------------");
+            if (direction == 1)
+            {
+                this.doubleRPM = (-(this.gearboxPacket.InnerGear - 1) * 3400 + 600 + 128 * this.characteristicsPacket.Speed);
+                this.characteristicsPacket.RPM = (int)doubleRPM;
+                World.Instance.ControlledCar.Revolution = this.characteristicsPacket.RPM;
+                // Debug
+                Debug.WriteLine("Gear: " + this.virtualFunctionBus.GearboxPacket.InnerGear);
+                Debug.WriteLine("RPM: " + this.characteristicsPacket.RPM);
+                Debug.WriteLine("Speed: " + this.characteristicsPacket.Speed);
+                Debug.WriteLine("fromSpeed: " + this.characteristicsPacket.RPM);
+                Debug.WriteLine("------------------" + this.gearboxPacket.ActualGear + "------------------");
+            }
+            else
+            {
+                this.doubleRPM = (-(this.gearboxPacket.InnerGear - 1) * 3400 + 600 + 128 * -this.characteristicsPacket.Speed);
+                this.characteristicsPacket.RPM = (int)doubleRPM;
+                World.Instance.ControlledCar.Revolution = this.characteristicsPacket.RPM;
+                // Debug
+                Debug.WriteLine("Gear: " + this.virtualFunctionBus.GearboxPacket.InnerGear);
+                Debug.WriteLine("RPM: " + this.characteristicsPacket.RPM);
+                Debug.WriteLine("Speed: " + this.characteristicsPacket.Speed);
+                Debug.WriteLine("fromSpeed: " + this.characteristicsPacket.RPM);
+                Debug.WriteLine("------------------" + this.gearboxPacket.ActualGear + "------------------");
+            }   
         }
     }
 }
