@@ -52,6 +52,7 @@ namespace AutomatedCar.ViewModels
         public void KeyDown()
         {
             World.Instance.ControlledCar.BrakePedal.PressGasPedal();
+            World.Instance.ControlledCar.CruiseControl.SetIsActiveFalse();
             //World.Instance.ControlledCar.Y += 5;
         }
 

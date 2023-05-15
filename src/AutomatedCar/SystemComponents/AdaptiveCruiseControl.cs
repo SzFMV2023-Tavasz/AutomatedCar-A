@@ -141,5 +141,11 @@
             selectedTargetDistanceIndex++;
             accPacket.SelectedTargetDistance = availableTargetDistances[selectedTargetDistanceIndex % availableTargetDistances.Length];
         }
+
+        public void SetIsActiveFalse()
+        { 
+            accPacket.IsActive = false;
+            ResetAcc();
+        }
     }
 }
