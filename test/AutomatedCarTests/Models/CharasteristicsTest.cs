@@ -1,7 +1,7 @@
 ﻿namespace Tests.Models
 {
     using AutomatedCar.SystemComponents;
-    using AutomatedCarTests.SystemComponents;
+    // using AutomatedCarTests.SystemComponents;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using System.Collections.Generic;
