@@ -118,5 +118,25 @@ namespace AutomatedCar.ViewModels
             var offsetY = World.Instance.ControlledCar.Y - (scrollViewer.Viewport.Height / 2);
             this.Offset = new Avalonia.Vector(offsetX, offsetY);
         }
+
+        internal void ToggleAdaptiveTempomat()
+        {
+            World.Instance.ControlledCar.CruiseControl.ToggleCruiseControl();
+        }
+
+        internal void DecreaseAccTargetSpeed()
+        {
+            World.Instance.ControlledCar.CruiseControl.DecreaseTargetSpeed();
+        }
+
+        internal void IncreaseAccTargetSpeed()
+        {
+            World.Instance.ControlledCar.CruiseControl.IncreaseTargetSpeed();
+        }
+
+        internal void ChangeAccTargetDistance()
+        {
+            World.Instance.ControlledCar.CruiseControl.ChangeTargetDistance();
+        }
     }
 }
