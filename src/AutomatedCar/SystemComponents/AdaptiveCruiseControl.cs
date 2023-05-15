@@ -36,16 +36,20 @@
 
         public override void Process()
         {
-            this.pedalPosition = CalculatePedalPosition(this.targetSpeed, this.currentSpeed);
-            if (this.pedalPosition < 0)
+            if (accPacket.IsActive)
             {
-                // TODO - Fékpedál értéke (byte)Math.Abs(pedalPosition)
-            }
-            else
-            {
-                // TODO - Gázpedál értéke (byte)pedalPosition
-            }
+                this.pedalPosition = CalculatePedalPosition(accPacket.SelectedSpeed, carCharacteristics.Speed);
+                if (this.pedalPosition < 0)
+                {
+                    virtualFunctionBus.BrakePedalPacket.PedalPosition = (byte)Math.Abs(pedalPosition);
 
+                }
+                else
+                {
+                    virtualFunctionBus.GasPedalPacket.PedalPosition = (byte)pedalPosition;
+                }
+
+            }
             carCharacteristics = virtualFunctionBus.CharacteristicsPacket;
             virtualFunctionBus.AccPacket = this.accPacket;
         }
