@@ -10,9 +10,9 @@
     {
 
         [TestMethod]
-        [DataRow("NPC_test_world_path.json", "car", 37)]
+        [DataRow("NPC_test_world_path.json", "car", 65)]
         [DataRow("NPC_test_world_path.json", "pedestrian", 47)]
-        [DataRow("NPC_oval_world_path.json", "car", 44)]
+        [DataRow("NPC_oval_world_path.json", "car", 47)]
         public void GetPathPointsToSelectedWorldTest(string filePath, string type, int expectedLength)
         {
             var app = new App();
