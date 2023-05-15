@@ -11,6 +11,7 @@ namespace AutomatedCar.ViewModels
         public DashboardViewModel(AutomatedCar controlledCar)
         {
             this.ControlledCar = new CarViewModel(controlledCar);
+            
         }
     }
 }

@@ -2,20 +2,36 @@
 {
     using AutomatedCar.SystemComponents.Packets;
     using Newtonsoft.Json.Linq;
+    using ReactiveUI;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
 
-    internal class AdaptiveCruiseControl : SystemComponent
+
+    public class AdaptiveCruiseControl : SystemComponent
     {
+        private const int SPEED_CHANGE_RATE = 10;
+
+        double[] availableTargetDistances = new double[4] { 0.8, 1.0, 1.2, 1.4 };
+
         private int pedalPosition;
         double targetSpeed;
         double currentSpeed;
 
+        private int selectedTargetDistanceIndex = 0;
+
+        private AccPacket accPacket;
+        private ICharacteristicsInterface carCharacteristics;
+
         public AdaptiveCruiseControl(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
+            accPacket = new AccPacket();
+            accPacket.IsActive = false;
+            virtualFunctionBus.AccPacket = accPacket;
+            carCharacteristics = virtualFunctionBus.CharacteristicsPacket;
         }
 
         public override void Process()
@@ -29,6 +45,9 @@
             {
                 // TODO - Gázpedál értéke (byte)pedalPosition
             }
+
+            carCharacteristics = virtualFunctionBus.CharacteristicsPacket;
+            virtualFunctionBus.AccPacket = this.accPacket;
         }
 
         public static int CalculatePedalPosition(double targetSpeed, double currentSpeed)
@@ -51,6 +70,72 @@
             int pedalPositionInt = (int)(pedalPosition * 100.0);
 
             return pedalPositionInt;
+        }
+
+        internal void ToggleCruiseControl()
+        {
+            accPacket.IsActive = !accPacket.IsActive;
+
+            var selectedSpeed = (int)carCharacteristics.Speed;
+
+            if (selectedSpeed < 30)
+            {
+                selectedSpeed = 30;
+            }
+            else if(selectedSpeed > 160)
+            {
+                selectedSpeed = 160;
+            }
+
+            if (!accPacket.IsActive)
+            {
+
+                ResetAcc();
+            }
+            else
+            {
+                accPacket.SelectedTargetDistance = availableTargetDistances[selectedTargetDistanceIndex];
+                accPacket.SelectedSpeed = selectedSpeed;
+            }
+
+            virtualFunctionBus.AccPacket = accPacket;
+        }
+
+        private void ResetAcc()
+        {
+            accPacket.SelectedTargetDistance = 0;
+            accPacket.SelectedSpeed = 0;
+            selectedTargetDistanceIndex = 0;
+
+        }
+
+        internal void DecreaseTargetSpeed()
+        {
+            if (accPacket.SelectedSpeed != 0) 
+            {
+                if (accPacket.SelectedSpeed == 30)
+                    return;
+
+                accPacket.SelectedSpeed = (int)(Math.Floor((double)accPacket.SelectedSpeed / 10) * 10) - SPEED_CHANGE_RATE;
+            }
+        }
+
+        internal void IncreaseTargetSpeed()
+        {
+            if (accPacket.SelectedSpeed != 0)
+            {
+
+                if (accPacket.SelectedSpeed == 160)
+                    return;
+
+                accPacket.SelectedSpeed = (int)(Math.Floor((double)accPacket.SelectedSpeed / 10) * 10) + SPEED_CHANGE_RATE;
+            }
+        }
+
+        internal void ChangeTargetDistance()
+        {
+            selectedTargetDistanceIndex++;
+            accPacket.SelectedTargetDistance = availableTargetDistances[selectedTargetDistanceIndex % availableTargetDistances.Length];
         }
     }
 }

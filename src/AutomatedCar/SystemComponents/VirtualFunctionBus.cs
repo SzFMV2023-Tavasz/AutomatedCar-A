@@ -19,7 +19,8 @@ namespace AutomatedCar.SystemComponents
         public ISteeringWheel SteeringWheelPacket { get; set; }
 
         public IDrivechain drivechainPacket { get; set; }
-        
+        public IAccInterface AccPacket { get; set; }
+
         public IReadOnlyPacket<DetectedObjectInfo> RadarPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> CameraPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> CollisionPacket { get; set; }

@@ -21,7 +21,7 @@ namespace AutomatedCar.Models
         public SteeringWheel steeringWheel;
 
         public BrakePedal BrakePedal;
-
+        public AdaptiveCruiseControl CruiseControl;
         private int velo;
         private int revo;
 
@@ -35,6 +35,9 @@ namespace AutomatedCar.Models
             this.steeringWheel = new SteeringWheel(this.virtualFunctionBus);
             this.BrakePedal = new BrakePedal(this.virtualFunctionBus);
             this.GasPedal = new GasPedal(this.virtualFunctionBus);
+
+            this.CruiseControl = new AdaptiveCruiseControl(this.virtualFunctionBus);
+
             this.characteristics = new Characteristics(this.virtualFunctionBus);
             this.drivechain = new Drivechain(this.virtualFunctionBus);
             this.ZIndex = 10;
