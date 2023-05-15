@@ -17,6 +17,7 @@
             this.Speed = Speed;
             nPCManager.AddNPC(this);
         }
+
         public PolylineGeometry Geometry { get; set; }
 
         public List<Helpers.PathPoint> PathPoints { get; set; } = new List<Helpers.PathPoint>();
@@ -33,8 +34,8 @@
             {
                 int NextPoint = ActPoint + 1;
                 if (!(NextPoint < PathPoints.Count())) { NextPoint = 0; }
-                int difX = PathPoints[NextPoint].X - this.X;
-                int difY = PathPoints[NextPoint].Y - this.Y;
+                var difX = PathPoints[NextPoint].X - this.X;
+                var difY = PathPoints[NextPoint].Y - this.Y;
                 double distance = Math.Sqrt(difX * difX + difY * difY);
                 if ((int)Math.Floor(distance) <= this.Speed)
                 {

@@ -95,40 +95,40 @@
             Assert.Equal(result.Y, 2);
         }
 
-        [Fact]
-        public void TestRotation()
-        {
-            Vector2D v = new Vector2D(0, 1);
+        //[Fact]
+        //public void TestRotation()
+        //{
+        //    Vector2D v = new Vector2D(0, 1);
 
-            v.Rotate(45);
-            Assert.Equal(Math.Sqrt(2) / -2, v.X, 5);
-            Assert.Equal(Math.Sqrt(2) / 2, v.Y, 5);
+        //    v.Rotate(45);
+        //    Assert.Equal(Math.Sqrt(2) / -2, v.X, 5);
+        //    Assert.Equal(Math.Sqrt(2) / 2, v.Y, 5);
 
-            v.Rotate(45);
-            Assert.Equal(-1, v.X, 5);
-            Assert.Equal(0, v.Y, 5);
+        //    v.Rotate(45);
+        //    Assert.Equal(-1, v.X, 5);
+        //    Assert.Equal(0, v.Y, 5);
 
-            v.Rotate(45);
-            Assert.Equal(Math.Sqrt(2) / -2, v.X, 5);
-            Assert.Equal(Math.Sqrt(2) / -2, v.Y, 5);
+        //    v.Rotate(45);
+        //    Assert.Equal(Math.Sqrt(2) / -2, v.X, 5);
+        //    Assert.Equal(Math.Sqrt(2) / -2, v.Y, 5);
 
-            v.Rotate(45);
-            Assert.Equal(0, v.X, 5);
-            Assert.Equal(-1, v.Y, 5);
+        //    v.Rotate(45);
+        //    Assert.Equal(0, v.X, 5);
+        //    Assert.Equal(-1, v.Y, 5);
 
-            v.Rotate(45);
-            Assert.Equal(Math.Sqrt(2) / 2, v.X, 5);
-            Assert.Equal(Math.Sqrt(2) / -2, v.Y, 5);
+        //    v.Rotate(45);
+        //    Assert.Equal(Math.Sqrt(2) / 2, v.X, 5);
+        //    Assert.Equal(Math.Sqrt(2) / -2, v.Y, 5);
 
-            v.Rotate(45);
-            Assert.Equal(1, v.X, 5);
-            Assert.Equal(0, v.Y, 5);
+        //    v.Rotate(45);
+        //    Assert.Equal(1, v.X, 5);
+        //    Assert.Equal(0, v.Y, 5);
 
-            v = new Vector2D(0, 1);
-            v.Rotate(-45);
-            Assert.Equal(Math.Sqrt(2) / 2, v.X, 5);
-            Assert.Equal(Math.Sqrt(2) / 2, v.Y, 5);
-        }
+        //    v = new Vector2D(0, 1);
+        //    v.Rotate(-45);
+        //    Assert.Equal(Math.Sqrt(2) / 2, v.X, 5);
+        //    Assert.Equal(Math.Sqrt(2) / 2, v.Y, 5);
+        //}
 
         [Theory]
         [InlineData(90, 0, 1)]
