@@ -11,5 +11,7 @@
         bool IsActive { get; }
         double SelectedTargetDistance { get; }
         int SelectedSpeed { get; }
+
+        double Distance { get; }
     }
 }
