@@ -25,6 +25,8 @@ namespace AutomatedCar.SystemComponents
         public IReadOnlyPacket<DetectedObjectInfo> CameraPacket { get; set; }
         public IReadOnlyPacket<DetectedObjectInfo> CollisionPacket { get; set; }
 
+        public IReadOnlyPacket<DetectedObjectInfo> OnWayToCollidePacket { get; set; }
+
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);
