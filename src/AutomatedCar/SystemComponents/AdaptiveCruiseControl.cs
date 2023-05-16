@@ -176,7 +176,7 @@
         {
             double detectedCarSpeed = this.CalculateDetectedCarSpeed(distanceToDetectedCar, controlledCarSpeed);
             double requiredDistance = this.CalculateRequiredDistance(detectedCarSpeed, followDistance);
-            if (requiredDistance >= distanceToDetectedCar && controlledCarSpeed > detectedCarSpeed)
+            if (requiredDistance > distanceToDetectedCar && controlledCarSpeed > detectedCarSpeed)
             {
                 double requiredSpeed = this.CalculateRequiredSpeed(this.deceleration, controlledCarSpeed, followDistance);
                 return (int)requiredSpeed;
