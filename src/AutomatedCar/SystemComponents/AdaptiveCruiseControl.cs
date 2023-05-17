@@ -239,6 +239,7 @@
         // Because the rotation works very strangely for the controlledCar, like bruh, values go from 180 to -190 only by rotating one directon
         internal bool DetectedCarGoingSameDirection(double detectedRotation, double controlledRotation)
         {
+            int threshold = 70;
             if (controlledRotation >= -180 && controlledRotation <= -1)
             {
                 controlledRotation += 360;
@@ -246,12 +247,12 @@
 
             double absoluteDifference = Math.Abs(detectedRotation - controlledRotation);
 
-            if (absoluteDifference <= 45)
+            if (absoluteDifference <= threshold)
             {
                 return true;
             }
 
-            if (360 - absoluteDifference <= 45)
+            if (360 - absoluteDifference <= threshold)
             {
                 return true;
             }
