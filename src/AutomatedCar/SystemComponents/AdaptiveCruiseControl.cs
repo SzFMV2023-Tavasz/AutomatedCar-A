@@ -11,6 +11,7 @@
     using System.Linq;
     using System.Net.Http.Headers;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -30,6 +31,7 @@
 
         private double deceleration = 0.1;
         private double prevDistToDetectedCar = 0.0;
+        private int currentSignSpeed = 0;
 
         public AdaptiveCruiseControl(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
@@ -44,6 +46,11 @@
             if (accPacket.IsActive)
             {
                 int speed = this.SpeedIfCarInDistance();
+                currentSignSpeed = DetectRoadSign();
+                if(carCharacteristics.Speed > currentSignSpeed && currentSignSpeed != 0)
+                {
+                    speed = currentSignSpeed;
+                }
                 this.pedalPosition = CalculatePedalPosition(speed < this.accPacket.SelectedSpeed ? speed : accPacket.SelectedSpeed, carCharacteristics.Speed);
                 if (this.pedalPosition < 0)
                 {
@@ -57,6 +64,7 @@
                     virtualFunctionBus.BrakePedalPacket.PedalPosition = 0;
                 }
                 accPacket.Distance = CalcualteFollowDistance();
+                
             }
             carCharacteristics = virtualFunctionBus.CharacteristicsPacket;
             virtualFunctionBus.AccPacket = this.accPacket;
@@ -179,7 +187,7 @@
 
         internal DetectedObjectInfo SelectCar()
         {
-            return this.virtualFunctionBus.RadarPacket.WorldObjectsDetected.Where(x => (x.DetectedObject.WorldObjectType == WorldObjectType.Other || x.DetectedObject.WorldObjectType == WorldObjectType.Car) && DetectedCarGoingSameDirection(x.DetectedObject.Rotation, World.Instance.ControlledCar.Rotation)).FirstOrDefault();
+            return this.virtualFunctionBus.RadarPacket.WorldObjectsDetected.Where(x => (x.DetectedObject.WorldObjectType == WorldObjectType.Other || x.DetectedObject.WorldObjectType == WorldObjectType.Car) && DetectedFacingSameDirection(x.DetectedObject.Rotation, World.Instance.ControlledCar.Rotation)).FirstOrDefault();
         }
 
         internal int RequiredSpeed(double distanceToDetectedCar, double controlledCarSpeed, float followDistance)
@@ -236,8 +244,8 @@
             return Math.Round((obj.Distance / 50) / (carCharacteristics.Speed / 3.6), 1);
         }
 
-        // Because the rotation works very strangely for the controlledCar, like bruh, values go from 180 to -190 only by rotating one directon
-        internal bool DetectedCarGoingSameDirection(double detectedRotation, double controlledRotation)
+        // Because the rotation works very strangely for the controlledCar, like bruh, values go from 180 to -190 only by rotating in one directon
+        internal bool DetectedFacingSameDirection(double detectedRotation, double controlledRotation)
         {
             int threshold = 70;
             if (controlledRotation >= -180 && controlledRotation <= -1)
@@ -258,6 +266,30 @@
             }
 
             return false;
+        }
+        internal int DetectRoadSign()
+        {
+            int distaceFromSign = 750;
+            var signList = this.virtualFunctionBus.CameraPacket.WorldObjectsDetected.ToArray();
+            Array.Sort(signList, (sign1, sign2) => sign1.Distance.CompareTo(sign2.Distance));
+            var sign = signList.Where(x => x.DetectedObject.WorldObjectType == WorldObjectType.RoadSign && DetectedFacingSameDirection(x.DetectedObject.Rotation, World.Instance.ControlledCar.Rotation) && x.Distance < distaceFromSign).FirstOrDefault();
+            if (sign == null)
+            {
+                return currentSignSpeed;
+            }
+            int res = ExtractNumberFromSign(sign.DetectedObject.Filename);
+            return res;
+        }
+        internal int ExtractNumberFromSign(string input)
+        {
+            string numberString = Regex.Match(input, @"\d+").Value;
+            if (numberString.Length == 0)
+            {
+                return currentSignSpeed;
+            }
+            int number = int.Parse(numberString);
+
+            return number;
         }
     }
 }
