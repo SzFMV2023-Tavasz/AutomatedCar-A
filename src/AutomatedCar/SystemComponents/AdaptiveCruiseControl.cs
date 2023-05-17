@@ -3,6 +3,7 @@
     using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Packets;
     using Avalonia.FreeDesktop.DBusIme;
+    using Avalonia.Layout;
     using Newtonsoft.Json.Linq;
     using ReactiveUI;
     using System;
@@ -158,7 +159,16 @@
         internal int SpeedIfCarInDistance()
         {
             var obj = this.SelectCar();
-            if (obj != null && obj.DetectedObject.Filename == "car_3_black.png" && obj.Distance / 50 < 100)
+
+            // If the detected object is Other type but not the npc car
+            if (obj != null && obj.DetectedObject.WorldObjectType == WorldObjectType.Other && obj.DetectedObject.Filename != "car_3_black.png")
+            {
+                this.prevDistToDetectedCar = 0.0;
+                return accPacket.SelectedSpeed;
+            }
+
+            // Detected object is in a reasonable range
+            if (obj != null && obj.Distance / 50 < 100)
             {
                 return RequiredSpeed(obj.Distance / 50, carCharacteristics.Speed, (float)this.availableTargetDistances[selectedTargetDistanceIndex % availableTargetDistances.Length]);
             }
@@ -169,7 +179,7 @@
 
         internal DetectedObjectInfo SelectCar()
         {
-            return this.virtualFunctionBus.RadarPacket.WorldObjectsDetected.Where(x => x.DetectedObject.WorldObjectType == WorldObjectType.Other).FirstOrDefault();
+            return this.virtualFunctionBus.RadarPacket.WorldObjectsDetected.Where(x => (x.DetectedObject.WorldObjectType == WorldObjectType.Other || x.DetectedObject.WorldObjectType == WorldObjectType.Car) && DetectedCarGoingSameDirection(x.DetectedObject.Rotation, World.Instance.ControlledCar.Rotation)).FirstOrDefault();
         }
 
         internal int RequiredSpeed(double distanceToDetectedCar, double controlledCarSpeed, float followDistance)
@@ -224,6 +234,30 @@
             if (obj == null)
                 return 0.0;
             return Math.Round((obj.Distance / 50) / (carCharacteristics.Speed / 3.6), 1);
+        }
+
+        // Because the rotation works very strangely for the controlledCar, like bruh, values go from 180 to -190 only by rotating one directon
+        internal bool DetectedCarGoingSameDirection(double detectedRotation, double controlledRotation)
+        {
+            int threshold = 70;
+            if (controlledRotation >= -180 && controlledRotation <= -1)
+            {
+                controlledRotation += 360;
+            }
+
+            double absoluteDifference = Math.Abs(detectedRotation - controlledRotation);
+
+            if (absoluteDifference <= threshold)
+            {
+                return true;
+            }
+
+            if (360 - absoluteDifference <= threshold)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
