@@ -156,12 +156,17 @@
             else if (this.gearboxPacket.ActualGear == OuterGear.r)
             {
                 //Acceleration
-                if (this.characteristicsPacket.RPM <= 7000 && this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition > 0)
+                if (this.characteristicsPacket.RPM <= 3900 && this.brakePedalPacket.PedalPosition == 0 && this.gasPedalPacket.PedalPosition > 0)
                 {
                     this.doubleRPM += CalculateRPMDifference(this.gasPedalPacket.PedalPosition, this.brakePedalPacket.PedalPosition, currentGearRatio);
                     this.characteristicsPacket.RPM = (int)doubleRPM;
                     World.Instance.ControlledCar.Revolution = this.characteristicsPacket.RPM;
-                    this.characteristicsPacket.Speed = -((this.gearboxPacket.InnerGear - 1) * 3400 + this.characteristicsPacket.RPM - 600) / 128;
+
+                    if (this.characteristicsPacket.Speed > -30)
+                    {
+                        this.characteristicsPacket.Speed = -((this.gearboxPacket.InnerGear - 1) * 3400 + this.characteristicsPacket.RPM - 600) / 128;
+                    }
+
 
                     // Debug
                     Debug.WriteLine("Gear: " + this.virtualFunctionBus.GearboxPacket.InnerGear);
