@@ -62,7 +62,7 @@
 
         public void OuterGearShiftUp()
         {
-            if (this.gearBoxPacket.ActualGear != OuterGear.d && this.drivechainPacket.Speed == 0)
+            if (this.gearBoxPacket.ActualGear != OuterGear.d && World.Instance.ControlledCar.Velocity == 0)
             {
                 this.gearBoxPacket.ActualGear++;
             }
@@ -70,7 +70,7 @@
 
         public void OuterGearShiftDown()
         {
-            if (this.gearBoxPacket.ActualGear != OuterGear.p && this.drivechainPacket.Speed == 0)
+            if (this.gearBoxPacket.ActualGear != OuterGear.p && World.Instance.ControlledCar.Velocity == 0)
             {
                 this.gearBoxPacket.ActualGear--;
             }
