@@ -32,7 +32,6 @@
             this.characteristicsPacket.Speed = 0;
             this.characteristicsPacket.RPM = 600;
             virtualFunctionBus.CharacteristicsPacket = this.characteristicsPacket;
-            
             this.gearboxPacket = virtualFunctionBus.GearboxPacket;
             this.gasPedalPacket = virtualFunctionBus.GasPedalPacket;
             this.brakePedalPacket = virtualFunctionBus.BrakePedalPacket;
@@ -48,7 +47,21 @@
             double currentSpeed = this.characteristicsPacket.Speed;
             byte gasPedalState = virtualFunctionBus.GasPedalPacket.PedalPosition;
             byte brakePedalState = virtualFunctionBus.BrakePedalPacket.PedalPosition;
+            CalculateRPM(currentGearRatio);
+            virtualFunctionBus.CharacteristicsPacket = this.characteristicsPacket;
 
+        }
+
+        public void Process_with_gaspedal_to_5()
+        {
+            double currentGearRatio = this.GetGearRatio();
+            double currentSpeed = this.characteristicsPacket.Speed;
+            byte gasPedalState = virtualFunctionBus.GasPedalPacket.PedalPosition;
+            byte brakePedalState = virtualFunctionBus.BrakePedalPacket.PedalPosition;
+            if (this.gasPedalPacket.PedalPosition < 5)
+            {
+                this.gasPedalPacket.PedalPosition = 5;
+            }
             CalculateRPM(currentGearRatio);
             virtualFunctionBus.CharacteristicsPacket = this.characteristicsPacket;
 
@@ -78,6 +91,18 @@
         {
             //double dif = (double)Math.Sqrt(gasPedalState * currentGearRatio) * 1.85;
             double dif = (double)((double)gasPedalState * currentGearRatio) * 0.7;
+            return dif;
+        }
+
+        public double CalculateRPMDifference_with_auto_decrease(int gasPedalState, int breakPedalState, double currentGearRatio)
+        {
+            //double dif = (double)Math.Sqrt(gasPedalState * currentGearRatio) * 1.85;
+            double dif;
+            if (this.characteristicsPacket.RPM >= 606)
+            {
+                dif = (double)((double)gasPedalState * currentGearRatio) * 0.7 - 5;
+            }
+            else dif = (double)((double)gasPedalState * currentGearRatio) * 0.7;
             return dif;
         }
 
