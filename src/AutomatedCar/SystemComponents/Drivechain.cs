@@ -83,8 +83,8 @@
             }
 
             // update car position and rotation
-            World.Instance.ControlledCar.X = (int)newPosition.X;
-            World.Instance.ControlledCar.Y = (int)newPosition.Y;
+            World.Instance.ControlledCar.X = newPosition.X;
+            World.Instance.ControlledCar.Y = newPosition.Y;
             World.Instance.ControlledCar.Rotation = newRotation;
             World.Instance.ControlledCar.Velocity = (int)speedKMH;
         }
