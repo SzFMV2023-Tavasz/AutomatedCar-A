@@ -8,10 +8,6 @@
 
     public interface ILaneKeepingPacket
     {
-        
-        bool isEnabled { get; set; }
-        bool canBeEnabled { get; set; }
-
         public double recommendedTurnAngle { get; set; }
     }
 }

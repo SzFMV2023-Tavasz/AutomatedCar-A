@@ -7,16 +7,24 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal class LaneKeepingAssistance : SystemComponent
+    public class LaneKeepingAssistance : SystemComponent
     {
         private LKAPacket packet;
+
+        public bool isEnabled { get; set; }
+        public bool canBeEnabled()
+        {
+            // egyelore csak
+            // hogy buildeljen
+            return true;
+
+        }
 
         public LaneKeepingAssistance(VirtualFunctionBus virtualFunctionBus):base(virtualFunctionBus)
         {
 
             this.packet= new LKAPacket();
-            packet.canBeEnabled=true;
-            packet.isEnabled=false;
+
             packet.recommendedTurnAngle=0;
             virtualFunctionBus.LaneKeepingPacket= packet;
         }

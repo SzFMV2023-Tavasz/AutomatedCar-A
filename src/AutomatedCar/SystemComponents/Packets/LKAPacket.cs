@@ -7,10 +7,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal class LKAPacket : ReactiveObject, ILaneKeepingPacket
+    public class LKAPacket : ILaneKeepingPacket
     {
-        public bool isEnabled { get; set ; }
-        public bool canBeEnabled { get; set; }
         public double recommendedTurnAngle { get; set; }
     }
 }
