@@ -27,6 +27,8 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyPacket<DetectedObjectInfo> OnWayToCollidePacket { get; set; }
 
+        public ILaneKeepingPacket LaneKeepingPacket { get; set; }
+
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);
