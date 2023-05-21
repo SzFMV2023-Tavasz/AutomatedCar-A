@@ -34,6 +34,16 @@ namespace AutomatedCar.Views
                 viewModel.CourseDisplay.KeyLeft();
             }
 
+            if (Keyboard.IsKeyDown(Key.Q))
+            {
+                viewModel.CourseDisplay.ShiftUp();
+            }
+
+            if (Keyboard.IsKeyDown(Key.A))
+            {
+                viewModel.CourseDisplay.ShiftDown();
+            }
+
             if (Keyboard.IsKeyDown(Key.Right))
             {
                 viewModel.CourseDisplay.KeyRight();
