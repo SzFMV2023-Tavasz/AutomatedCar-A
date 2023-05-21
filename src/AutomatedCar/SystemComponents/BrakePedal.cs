@@ -28,7 +28,7 @@
             isPedalPressed = false;
         }
 
-        public void PressGasPedal()
+        public void PressBrakePedal()
         {
             isPedalPressed = true;
             if (this.brakePedalPacket.PedalPosition < 99)

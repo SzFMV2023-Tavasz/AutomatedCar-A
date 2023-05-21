@@ -33,7 +33,7 @@ namespace AutomatedCar.SystemComponents
         {
             isPedalPressed = true;
 
-            if (this.gasPedalPacket.PedalPosition < 98)
+            if (this.gasPedalPacket.PedalPosition < 100)
             {
                 this.gasPedalPacket.PedalPosition += 2;
             }
