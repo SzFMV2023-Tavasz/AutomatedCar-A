@@ -142,6 +142,37 @@
             }
         }
 
+        public Point GetLaneCenterPoint(List<Point> triangle)
+        {
+            List <DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
+            PolylineGeometry sensor = new PolylineGeometry(triangle, false);
+            var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => obj.WorldObjectType == WorldObjectType.Road && !obj.Equals(this.Car));
+            foreach (var worldObject in filteredWorldObjects)
+            {
+                foreach (var geometry in worldObject.Geometries)
+                {
+                    foreach (var point in geometry.Points)
+                    {
+                        // Every boundary boxes at the origo, so needs to be transformed at its position
+                        Point transformedPoint = GeometryUtils.TransformPoint(point, worldObject);
+                        bool detected = sensor.FillContains(transformedPoint);
+
+                        if (detected)
+                        {
+                            this.ProcessInformation(worldObject, transformedPoint, detectedObjects);
+                        }
+                    }
+                }
+            }
+            detectedObjects = detectedObjects?.OrderBy(x => x.Distance).Take(2).ToList();
+            double x1, y1, x2, y2;
+            x1 = detectedObjects[0].DetectedObject.X;
+            y1 = detectedObjects[0].DetectedObject.Y;
+            x2 = detectedObjects[1].DetectedObject.X;
+            y2 = detectedObjects[1].DetectedObject.Y;
+            return new Point((x1 + x2) / 2, (y1 + y2) / 2);
+        }
+
         // More debug needed
     }
 }
