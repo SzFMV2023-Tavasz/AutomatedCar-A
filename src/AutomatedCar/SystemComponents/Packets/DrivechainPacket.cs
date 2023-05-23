@@ -7,7 +7,7 @@
     {
         private int speed;
         private Vector2 motionVector;
-
+        private float VectorDifferentialLength;
         public int Speed
         {
             get => this.speed;
@@ -18,6 +18,12 @@
         {
             get => this.motionVector;
             set => this.RaiseAndSetIfChanged(ref this.motionVector, value);
+        }
+
+        public float vectorDifferentialLength
+        {
+            get => this.VectorDifferentialLength;
+            set => this.RaiseAndSetIfChanged(ref this.VectorDifferentialLength, value);
         }
     }
 }
