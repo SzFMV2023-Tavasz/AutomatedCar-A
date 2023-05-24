@@ -38,6 +38,8 @@
 
         public static double DegToRad(double degree) => (Math.PI / 180) * degree;
 
+        public static double RadToDeg(double radian) => (180 / Math.PI) * radian;
+
         public static double GetAngle(Point point, Point rotationPoint) => Math.Atan2(rotationPoint.Y - point.Y, point.X - rotationPoint.X);
     }
 }
