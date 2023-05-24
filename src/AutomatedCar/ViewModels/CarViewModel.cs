@@ -13,6 +13,7 @@
         public DetectedObjectInfo Camera { get => Car.VirtualFunctionBus.CameraPacket.WorldObjectsDetected?.OrderBy(x=>x.Distance).FirstOrDefault(); }
         public DetectedObjectInfo Radar { get => Car.VirtualFunctionBus.RadarPacket.WorldObjectsDetected?.Aggregate((min, next) => next.Distance < min.Distance ? next : min); }
 
+        public string LKAinfo { get => Car.VirtualFunctionBus.LKAStatusPacket.Status; }
         public CarViewModel(AutomatedCar car) : base(car)
         {
             this.Car = car;

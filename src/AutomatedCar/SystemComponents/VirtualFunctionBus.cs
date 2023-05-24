@@ -32,6 +32,7 @@ namespace AutomatedCar.SystemComponents
         public ILaneKeepingPacket LaneKeepingPacket { get; set; }
 
         public ILKANotifierPacket LKANotifierPacket { get; set; }
+        public ILKAInfoPacket LKAStatusPacket { get; set; }
 
         public void RegisterComponent(SystemComponent component)
         {
