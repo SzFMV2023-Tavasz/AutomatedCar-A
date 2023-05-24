@@ -93,6 +93,7 @@
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(this.GenerateSensorTriangle(), false);
             var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.Car));
+
             DetectObjects(detectedObjects, sensor, filteredWorldObjects);
 
             detectedObjects = detectedObjects?.OrderBy(x => x.Distance).ToList();
@@ -140,35 +141,6 @@
                     detectedObjects.Add(newInfo);
                 }
             }
-        }
-
-        public Point GetLaneCenterPoint()
-        {
-            List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
-            PolylineGeometry sensor = new PolylineGeometry(this.GenerateSensorTriangle(), false);
-            var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => obj.WorldObjectType == WorldObjectType.Road && !obj.Equals(this.Car));
-            DetectObjects(detectedObjects, sensor, filteredWorldObjects);
-
-            detectedObjects = detectedObjects?.OrderBy(x => x.Distance).Take(2).ToList();
-            double x1, y1, x2, y2;
-            x1 = detectedObjects[0].DetectedObject.X;
-            y1 = detectedObjects[0].DetectedObject.Y;
-            x2 = detectedObjects[1].DetectedObject.X;
-            y2 = detectedObjects[1].DetectedObject.Y;
-            return new Point((x1 + x2) / 2, (y1 + y2) / 2);
-        }
-
-        // More debug needed
-        public double GetRecommendedTurnAngle()
-        {
-            Point targetPoint = this.GetLaneCenterPoint();
-
-            double targetRotation = GeometryUtils.GetRotation(
-                GeometryUtils.RadToDeg(
-                    GeometryUtils.GetAngle(targetPoint, new Point(this.Car.X, this.Car.Y))));
-
-            double recommendedTurnAngle = targetRotation - this.Car.Rotation;
-            return (Math.Abs(recommendedTurnAngle) <= 45) ? recommendedTurnAngle : double.NaN;
         }
     }
 }
