@@ -119,10 +119,11 @@
 
         private void ProcessInformation(WorldObject worldObject, Point transformedPoint, List<DetectedObjectInfo> detectedObjects)
         {
+            Point anchorPoint = GeometryUtils.TransformPoint(this.CarAnchorPoint, this.Car);
             DetectedObjectInfo newInfo = new DetectedObjectInfo()
             {
                 DetectedObject = worldObject,
-                Distance = (float)GeometryUtils.GetEuclidianDistance(transformedPoint, this.CarAnchorPoint + new Point(this.Car.X, this.Car.Y)),
+                Distance = (float)GeometryUtils.GetEuclidianDistance(transformedPoint, anchorPoint),
             };
             if (!detectedObjects.Contains(newInfo))
             {
