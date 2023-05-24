@@ -35,7 +35,10 @@
             this.car = car;
 
             this.packet = new LKAPacket();
-            this.packet.recommendedTurnAngle = 0;
+            this.notifierPacket = new LKANotifierPacket();
+
+            virtualFunctionBus.LKANotifierPacket = this.notifierPacket;
+            this.packet.recommendedTurnAngle = double.NaN;
             this.virtualFunctionBus.LaneKeepingPacket = this.packet;
         }
 
@@ -71,10 +74,6 @@
             && !INVALID_ROADTYPES.Contains(obj.Filename)
             && !obj.Equals(this.car));
 
-            this.packet= new LKAPacket();
-            notifierPacket= new LKANotifierPacket();
-
-            virtualFunctionBus.LKANotifierPacket = this.notifierPacket;
             this.cameraSensor.DetectObjects(detectedObjects, sensor, filteredWorldObjects);
 
             return detectedObjects;
