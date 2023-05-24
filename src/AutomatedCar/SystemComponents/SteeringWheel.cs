@@ -155,6 +155,7 @@
             return false;
         }
 
+
         private void SteeringWheelServo()
         {
             if(this.steeringWheelRotation == 0)
@@ -174,6 +175,7 @@
         {
             return this.virtualFunctionBus.CharacteristicsPacket != null && this.virtualFunctionBus.CharacteristicsPacket.Speed != 0;
         }
+
         private void TurnOffLKA()
         {
             this.virtualFunctionBus.LKANotifierPacket.Intervention = true;
