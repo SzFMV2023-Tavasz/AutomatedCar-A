@@ -37,17 +37,20 @@
         {
             accPacket = new AccPacket();
             accPacket.IsActive = false;
+            accPacket.IsAccelerating = false;
             virtualFunctionBus.AccPacket = accPacket;
             carCharacteristics = virtualFunctionBus.CharacteristicsPacket;
         }
 
         public override void Process()
         {
-            if (accPacket.IsActive)
+            if (virtualFunctionBus.AEBPacket.AEBIsActive) this.SetIsActiveFalse();
+            accPacket.IsAccelerating = World.Instance.ControlledCar.GasPedal.isPedalPressed;
+            if (accPacket.IsActive && !accPacket.IsAccelerating)
             {
                 int speed = this.SpeedIfCarInDistance();
                 currentSignSpeed = DetectRoadSign();
-                if(carCharacteristics.Speed > currentSignSpeed && currentSignSpeed != 0)
+                if (carCharacteristics.Speed > currentSignSpeed && currentSignSpeed != 0)
                 {
                     speed = currentSignSpeed;
                 }
@@ -56,7 +59,6 @@
                 {
                     virtualFunctionBus.BrakePedalPacket.PedalPosition = (byte)Math.Abs(pedalPosition);
                     virtualFunctionBus.GasPedalPacket.PedalPosition = 0;
-
                 }
                 else
                 {
@@ -64,7 +66,6 @@
                     virtualFunctionBus.BrakePedalPacket.PedalPosition = 0;
                 }
                 accPacket.Distance = CalcualteFollowDistance();
-                
             }
             carCharacteristics = virtualFunctionBus.CharacteristicsPacket;
             virtualFunctionBus.AccPacket = this.accPacket;
@@ -102,7 +103,7 @@
             {
                 selectedSpeed = 30;
             }
-            else if(selectedSpeed > 160)
+            else if (selectedSpeed > 160)
             {
                 selectedSpeed = 160;
             }
@@ -114,7 +115,7 @@
             }
             else
             {
-                accPacket.SelectedTargetDistance = availableTargetDistances[selectedTargetDistanceIndex];
+                accPacket.SelectedTargetDistance = availableTargetDistances[selectedTargetDistanceIndex % availableTargetDistances.Length];
                 accPacket.SelectedSpeed = selectedSpeed;
             }
 
@@ -131,7 +132,7 @@
 
         internal void DecreaseTargetSpeed()
         {
-            if (accPacket.SelectedSpeed != 0) 
+            if (accPacket.SelectedSpeed != 0)
             {
                 if (accPacket.SelectedSpeed == 30)
                     return;
@@ -159,7 +160,7 @@
         }
 
         public void SetIsActiveFalse()
-        { 
+        {
             accPacket.IsActive = false;
             ResetAcc();
         }
