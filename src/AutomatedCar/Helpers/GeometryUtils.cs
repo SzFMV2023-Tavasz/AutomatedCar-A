@@ -36,6 +36,8 @@
             return length;
         }*/
 
+        public static double GetRotation(double degree) => (-degree) + 90;
+
         public static double DegToRad(double degree) => (Math.PI / 180) * degree;
 
         public static double RadToDeg(double radian) => (180 / Math.PI) * radian;
