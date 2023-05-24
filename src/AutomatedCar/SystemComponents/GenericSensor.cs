@@ -95,6 +95,14 @@
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(triangle, false);
             var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.Car));
+            DetectObjects(detectedObjects, sensor, filteredWorldObjects);
+
+            detectedObjects = detectedObjects?.OrderBy(x => x.Distance).ToList();
+            return detectedObjects.AsReadOnly();
+        }
+
+        public void DetectObjects(List<DetectedObjectInfo> detectedObjects, PolylineGeometry sensor, IEnumerable<WorldObject> filteredWorldObjects)
+        {
             foreach (var worldObject in filteredWorldObjects)
             {
                 foreach (var geometry in worldObject.Geometries)
@@ -112,9 +120,6 @@
                     }
                 }
             }
-
-            detectedObjects = detectedObjects?.OrderBy(x => x.Distance).ToList();
-            return detectedObjects.AsReadOnly();
         }
 
         private void ProcessInformation(WorldObject worldObject, Point transformedPoint, List<DetectedObjectInfo> detectedObjects)
@@ -144,23 +149,7 @@
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(triangle, false);
             var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => obj.WorldObjectType == WorldObjectType.Road && !obj.Equals(this.Car));
-            foreach (var worldObject in filteredWorldObjects)
-            {
-                foreach (var geometry in worldObject.Geometries)
-                {
-                    foreach (var point in geometry.Points)
-                    {
-                        // Every boundary boxes at the origo, so needs to be transformed at its position
-                        Point transformedPoint = GeometryUtils.TransformPoint(point, worldObject);
-                        bool detected = sensor.FillContains(transformedPoint);
-
-                        if (detected)
-                        {
-                            this.ProcessInformation(worldObject, transformedPoint, detectedObjects);
-                        }
-                    }
-                }
-            }
+            DetectObjects(detectedObjects, sensor, filteredWorldObjects);
 
             detectedObjects = detectedObjects?.OrderBy(x => x.Distance).Take(2).ToList();
             double x1, y1, x2, y2;
