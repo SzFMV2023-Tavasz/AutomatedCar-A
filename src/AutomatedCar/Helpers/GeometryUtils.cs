@@ -36,6 +36,8 @@
             return length;
         }*/
 
+        // Converts the normal trigonometric angles (0° faces to the RIGHT, positive direction going COUNTER-CLOCKWISE)
+        // to the locally used rotation references seen in worldobjects (0° faces UPWARDS, positive direction going CLOCKWISE).
         public static double GetRotation(double degree) => (-degree) + 90;
 
         public static double DegToRad(double degree) => (Math.PI / 180) * degree;
