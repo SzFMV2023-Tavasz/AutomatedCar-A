@@ -13,6 +13,14 @@
 
     public class LaneKeepingAssistance : SystemComponent
     {
+        private static readonly string[] INVALID_ROADTYPES = {
+            "road_2lane_rotary.png",
+            "road_2lane_tjunctionleft.png",
+            "road_2lane_tjunctionright.png",
+            "road_2lane_crossroad_1.png",
+            "road_2lane_crossroad_2.png",
+        };
+
         private LKAPacket packet;
         private CameraSensor cameraSensor;
         private AutomatedCar car;
@@ -42,27 +50,41 @@
             this.packet.recommendedTurnAngle = this.GetRecommendedTurnAngle();
         }
 
-        public Point GetLaneCenterPoint()
+        public Point GetLaneCenterPoint(List<DetectedObjectInfo> lanes)
+        {
+            lanes = lanes?.OrderBy(x => x.Distance).Take(2).ToList();
+            double x1, y1, x2, y2;
+            x1 = lanes[0].DetectedObject.X;
+            y1 = lanes[0].DetectedObject.Y;
+            x2 = lanes[1].DetectedObject.X;
+            y2 = lanes[1].DetectedObject.Y;
+
+            return new Point((x1 + x2) / 2, (y1 + y2) / 2);
+        }
+
+        public List<DetectedObjectInfo> GetLanes()
         {
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(this.cameraSensor.GenerateSensorTriangle(), false);
-            var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => obj.WorldObjectType == WorldObjectType.Road && !obj.Equals(this.car));
+            var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => obj.WorldObjectType == WorldObjectType.Road
+            && !INVALID_ROADTYPES.Contains(obj.Filename)
+            && !obj.Equals(this.car));
 
             this.cameraSensor.DetectObjects(detectedObjects, sensor, filteredWorldObjects);
 
-            detectedObjects = detectedObjects?.OrderBy(x => x.Distance).Take(2).ToList();
-            double x1, y1, x2, y2;
-            x1 = detectedObjects[0].DetectedObject.X;
-            y1 = detectedObjects[0].DetectedObject.Y;
-            x2 = detectedObjects[1].DetectedObject.X;
-            y2 = detectedObjects[1].DetectedObject.Y;
-            return new Point((x1 + x2) / 2, (y1 + y2) / 2);
+            return detectedObjects;
         }
 
         // More debug needed
         public double GetRecommendedTurnAngle()
         {
-            Point targetPoint = this.GetLaneCenterPoint();
+            var lanes = this.GetLanes();
+            if (lanes.Count < 2)
+            {
+                return double.NaN;
+            }
+
+            Point targetPoint = this.GetLaneCenterPoint(lanes);
 
             double targetRotation = GeometryUtils.GetRotation(
                 GeometryUtils.RadToDeg(
