@@ -22,6 +22,7 @@ namespace AutomatedCar.Models
 
         public BrakePedal BrakePedal;
         public AdaptiveCruiseControl CruiseControl;
+        public AEB aeb;
         private int velo;
         private int revo;
 
@@ -37,7 +38,6 @@ namespace AutomatedCar.Models
             this.GasPedal = new GasPedal(this.virtualFunctionBus);
 
             this.CruiseControl = new AdaptiveCruiseControl(this.virtualFunctionBus);
-
             this.characteristics = new Characteristics(this.virtualFunctionBus);
             this.drivechain = new Drivechain(this.virtualFunctionBus);
             this.ZIndex = 10;
@@ -73,8 +73,12 @@ namespace AutomatedCar.Models
             };
             this.RadarSensor = new RadarSensor(radarSettings);
             this.CameraSensor = new CameraSensor(cameraSettings);
+
             this.CollSensor = new CollisionSensor(this.virtualFunctionBus, this);
             this.LKA = new LaneKeepingAssistance(this, this.CameraSensor, this.virtualFunctionBus);
+
+            this.aeb = new AEB(this.VirtualFunctionBus);
+
         }
 
         public RadarSensor RadarSensor { get;  }

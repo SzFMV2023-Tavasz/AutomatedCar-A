@@ -7,10 +7,10 @@
     using System.Threading.Tasks;
     public enum OuterGear
     {
-        p = 0,
-        r = 1,
-        n = 2,
-        d = 3
+        P = 0,
+        R = 1,
+        N = 2,
+        D = 3
     }
     public interface IGearboxInterface
     {
@@ -20,6 +20,7 @@
         /// enum: P, R, N, D
         /// </summary>
         OuterGear ActualGear { get; }
-
+        string PreviousGear { get; }
+        string NextGear { get; }
     }
 }

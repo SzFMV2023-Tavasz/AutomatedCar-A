@@ -9,5 +9,11 @@
     public interface IAEBInterface
     {
         public bool AEBIsActive { get; }
+
+        public double BreakWarning { get; }
+
+        public double YellowWarning { get; }
+
+        public double RedWarning { get; }
     }
 }
