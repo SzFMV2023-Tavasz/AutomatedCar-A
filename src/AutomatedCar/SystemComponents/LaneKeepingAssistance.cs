@@ -23,37 +23,35 @@
         };
 
         private LKAPacket packet;
+        private LKAInfoPacket lKAInfoPacket;
         private CameraSensor cameraSensor;
         private AutomatedCar car;
         private LKANotifierPacket notifierPacket;
 
         public bool IsEnabled { get; set; }
 
-        public string Status
+       private void SetLKAInfo()
         {
-            get
+            if (!this.IsEnabled)
             {
-                if (!this.IsEnabled)
+                if (this.CanBeEnabled())
                 {
-                    if (this.CanBeEnabled())
-                    {
-                        return "Available";
-                    }
-                    else
-                    {
-                        return "Not Available";
-                    }
+                    lKAInfoPacket.Status  ="Available";
                 }
                 else
                 {
-                    if (this.WillBeTurnOff())
-                    {
-                        return "Will turn off";
-                    }
-                    else
-                    {
-                        return "On";
-                    }
+                    lKAInfoPacket.Status = "Not Available";
+                }
+            }
+            else
+            {
+                if (this.WillBeTurnOff())
+                {
+                    lKAInfoPacket.Status = "Will turn off";
+                }
+                else
+                {
+                    lKAInfoPacket.Status = "On";
                 }
             }
         }
@@ -72,13 +70,15 @@
             virtualFunctionBus.LKANotifierPacket = this.notifierPacket;
             this.packet.recommendedTurnAngle = double.NaN;
             this.virtualFunctionBus.LaneKeepingPacket = this.packet;
+            this.lKAInfoPacket = new LKAInfoPacket();
+            this.virtualFunctionBus.LKAStatusPacket = this.lKAInfoPacket;
         }
 
         public override void Process()
         {
             this.TurnOnMechanism();
             this.TurnOffMechanism();
-
+            this.SetLKAInfo();
             
             if (!this.IsEnabled)
             {
