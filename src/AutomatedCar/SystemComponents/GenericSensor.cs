@@ -182,7 +182,7 @@
                     GeometryUtils.GetAngle(targetPoint, new Point(this.Car.X, this.Car.Y))));
 
             double recommendedTurnAngle = targetRotation - this.Car.Rotation;
-            return (Math.Abs(recommendedTurnAngle) <= 40) ? recommendedTurnAngle : double.NaN;
+            return (Math.Abs(recommendedTurnAngle) <= 45) ? recommendedTurnAngle : double.NaN;
         }
     }
 }
