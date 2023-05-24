@@ -24,6 +24,10 @@
         private int ownDefaultTickCounter = 1;
         private int ownCurrentTick = 0;
 
+        private float steeringWheelRotation = 0;
+        private float steeringWheelTurnAngle = 10f;
+        private float steeringWheelMaxRotation = 900f;
+
         public SteeringWheel(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
             virtualFunctionBus.SteeringWheelPacket = this.steeringWheelPacket;
@@ -54,19 +58,36 @@
             }
             else if(steeringWheelDirection == SteeringWheelDirectionEnum.Hold)
             {
+                SteeringWheelServo();
                 //this.SetServoDirection();
             }
-            
+
             if(this.steeringWheelDirection == SteeringWheelDirectionEnum.TurnLeft)
             {
-                this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle);
+                if(this.HasSpeed())
+                {
+                    this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle);
+                }
+
+                if(steeringWheelRotation < this.steeringWheelMaxRotation)
+                {
+                    this.steeringWheelRotation += this.steeringWheelTurnAngle;
+                }
             }
 
             if(this.steeringWheelDirection == SteeringWheelDirectionEnum.TurnRight)
             {
-                this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle * -1);
+                if(this.HasSpeed())
+                {
+                    this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle * -1);
+                }
+                if (steeringWheelRotation > -this.steeringWheelMaxRotation)
+                {
+                    this.steeringWheelRotation -= this.steeringWheelTurnAngle;
+                }
             }
 
+            this.SetRotatePosition();
             this.ResetSettings();
         }
 
@@ -117,6 +138,27 @@
             }
 
             return false;
+        }
+
+
+        private void SteeringWheelServo()
+        {
+            if(this.steeringWheelRotation == 0)
+            {
+                this.steeringWheelDirection = SteeringWheelDirectionEnum.Hold;
+                return;
+            }
+
+            this.steeringWheelRotation += this.steeringWheelRotation < 0 ? this.steeringWheelTurnAngle : (this.steeringWheelTurnAngle * -1);
+        }
+        private void SetRotatePosition()
+        {
+            this.steeringWheelPacket.RotatePosition = (float)this.steeringWheelRotation;
+        }
+
+        private bool HasSpeed()
+        {
+            return this.virtualFunctionBus.CharacteristicsPacket != null && this.virtualFunctionBus.CharacteristicsPacket.Speed != 0;
         }
     }
 }
