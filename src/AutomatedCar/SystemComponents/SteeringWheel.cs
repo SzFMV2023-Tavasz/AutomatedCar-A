@@ -33,8 +33,12 @@
             this.ownCurrentTick = this.ownDefaultTickCounter;
         }
 
-        public void TurnWheel(SteeringWheelDirectionEnum direction)
+        public void TurnWheel(SteeringWheelDirectionEnum direction, bool driverSteering = false)
         {
+            if(driverSteering)
+            {
+                this.TurnOffLKA();
+            }
             this.steeringWheelDirection = direction;
         }
 
@@ -117,6 +121,11 @@
             }
 
             return false;
+        }
+
+        private void TurnOffLKA()
+        {
+            this.virtualFunctionBus.LKANotifierPacket.Intervention = true;
         }
     }
 }
