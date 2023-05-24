@@ -94,7 +94,7 @@
             PolylineGeometry sensor = new PolylineGeometry(this.GenerateSensorTriangle(), false);
             var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.Car));
 
-            DetectObjects(detectedObjects, sensor, filteredWorldObjects);
+            this.DetectObjects(detectedObjects, sensor, filteredWorldObjects);
 
             detectedObjects = detectedObjects?.OrderBy(x => x.Distance).ToList();
             return detectedObjects.AsReadOnly();

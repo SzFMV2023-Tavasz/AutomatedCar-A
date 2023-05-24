@@ -1,15 +1,15 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
-    using AutomatedCar.Helpers;
-    using AutomatedCar.Models;
-    using AutomatedCar.SystemComponents.Packets;
-    using Avalonia;
-    using Avalonia.Media;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using AutomatedCar.Helpers;
+    using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.Packets;
+    using Avalonia;
+    using Avalonia.Media;
 
     public class LaneKeepingAssistance : SystemComponent
     {
@@ -18,13 +18,6 @@
         private AutomatedCar car;
 
         public bool isEnabled { get; set; }
-
-        public bool canBeEnabled()
-        {
-            // egyelore csak
-            // hogy buildeljen
-            return true;
-        }
 
         public LaneKeepingAssistance(SensorSettings sensorSettings)
             : base(sensorSettings.FunctionBus)
@@ -35,6 +28,13 @@
             this.packet = new LKAPacket();
             this.packet.recommendedTurnAngle = 0;
             this.virtualFunctionBus.LaneKeepingPacket = this.packet;
+        }
+
+        public bool canBeEnabled()
+        {
+            // egyelore csak
+            // hogy buildeljen
+            return true;
         }
 
         public override void Process()
