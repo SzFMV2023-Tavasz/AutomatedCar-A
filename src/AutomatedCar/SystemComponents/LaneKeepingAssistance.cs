@@ -10,7 +10,7 @@
     public class LaneKeepingAssistance : SystemComponent
     {
         private LKAPacket packet;
-
+        private LKANotifierPacket notifierPacket;
         public bool isEnabled { get; set; }
         public bool canBeEnabled()
         {
@@ -20,10 +20,13 @@
 
         }
 
-        public LaneKeepingAssistance(VirtualFunctionBus virtualFunctionBus):base(virtualFunctionBus)
+        public LaneKeepingAssistance(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
 
             this.packet= new LKAPacket();
+            notifierPacket= new LKANotifierPacket();
+
+            virtualFunctionBus.LKANotifierPacket = this.notifierPacket;
 
             packet.recommendedTurnAngle=0;
             virtualFunctionBus.LaneKeepingPacket= packet;
