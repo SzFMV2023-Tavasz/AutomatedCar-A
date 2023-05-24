@@ -82,7 +82,7 @@
 								<TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.RadarPacket.WorldObjectsDetected[0]}"/>
 
 								<TextBlock Grid.Row="10" Grid.Column="0">LKA:</TextBlock>
-								<TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding LKAinfo}"/>
+								<TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.LKAStatusPacket.Status}"/>
 
 								<TextBlock Grid.Row="11" Grid.Column="0">Detected Objects - Radar:</TextBlock>
 								<ListBox Grid.Row="12" Grid.Column="0" Items="{Binding Car.VirtualFunctionBus.RadarPacket.WorldObjectsDetected}">
