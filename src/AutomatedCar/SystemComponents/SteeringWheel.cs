@@ -25,8 +25,8 @@
         private int ownCurrentTick = 0;
 
         private float steeringWheelRotation = 0;
-        private float steeringWheelTurnAngle = 10f;
-        private float steeringWheelMaxRotation = 900f;
+        private float steeringWheelTurnAngle = 5f;
+        private float steeringWheelMaxRotation = 60f;
 
         public SteeringWheel(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
@@ -53,6 +53,7 @@
                 return;
             }
 
+            this.ProcessLKA();
             Vector2D currentVector = this.steeringWheelPacket.DirectionVector;
 
             double vectorMagnitudeDiff = Math.Round((currentVector - baseVector).Magnitude, 10);
@@ -68,31 +69,41 @@
 
             if(this.steeringWheelDirection == SteeringWheelDirectionEnum.TurnLeft)
             {
-                if(this.HasSpeed())
-                {
-                    this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle);
-                }
-
-                if(steeringWheelRotation < this.steeringWheelMaxRotation)
-                {
-                    this.steeringWheelRotation += this.steeringWheelTurnAngle;
-                }
+                this.TurnLeft(currentVector);
             }
 
             if(this.steeringWheelDirection == SteeringWheelDirectionEnum.TurnRight)
             {
-                if(this.HasSpeed())
-                {
-                    this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle * -1);
-                }
-                if (steeringWheelRotation > -this.steeringWheelMaxRotation)
-                {
-                    this.steeringWheelRotation -= this.steeringWheelTurnAngle;
-                }
+                this.TurnRight(currentVector);
             }
 
             this.SetRotatePosition();
             this.ResetSettings();
+        }
+
+        private void TurnLeft(Vector2D currentVector)
+        {
+            if (this.HasSpeed())
+            {
+                this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle);
+            }
+
+            if (steeringWheelRotation < this.steeringWheelMaxRotation)
+            {
+                this.steeringWheelRotation += this.steeringWheelTurnAngle;
+            }
+        }
+
+        private void TurnRight(Vector2D currentVector)
+        {
+            if (this.HasSpeed())
+            {
+                this.steeringWheelPacket.DirectionVector = this.Rotate(currentVector, this.turnAngle * -1);
+            }
+            if (steeringWheelRotation > -this.steeringWheelMaxRotation)
+            {
+                this.steeringWheelRotation -= this.steeringWheelTurnAngle;
+            }
         }
 
         private Vector2D Rotate(Vector2D vector, float angle)
@@ -144,11 +155,6 @@
             return false;
         }
 
-        private void TurnOffLKA()
-        {
-            this.virtualFunctionBus.LKANotifierPacket.Intervention = true;
-        }
-
         private void SteeringWheelServo()
         {
             if(this.steeringWheelRotation == 0)
@@ -167,6 +173,25 @@
         private bool HasSpeed()
         {
             return this.virtualFunctionBus.CharacteristicsPacket != null && this.virtualFunctionBus.CharacteristicsPacket.Speed != 0;
+        }
+        private void TurnOffLKA()
+        {
+            this.virtualFunctionBus.LKANotifierPacket.Intervention = true;
+        }
+        private void ProcessLKA()
+        {
+            if (!Double.IsNaN(this.virtualFunctionBus.LaneKeepingPacket.recommendedTurnAngle))
+            {
+                float required = (float)this.virtualFunctionBus.LaneKeepingPacket.recommendedTurnAngle;
+                if(Math.Round(this.steeringWheelPacket.RotatePosition) == Math.Round(required))
+                {
+                    return;
+                }
+
+                this.steeringWheelDirection = this.steeringWheelPacket.RotatePosition > required
+                    ? SteeringWheelDirectionEnum.TurnRight
+                    : SteeringWheelDirectionEnum.TurnLeft;
+            }
         }
     }
 }
