@@ -164,6 +164,7 @@
                     }
                 }
             }
+
             detectedObjects = detectedObjects?.OrderBy(x => x.Distance).Take(2).ToList();
             double x1, y1, x2, y2;
             x1 = detectedObjects[0].DetectedObject.X;
@@ -171,6 +172,18 @@
             x2 = detectedObjects[1].DetectedObject.X;
             y2 = detectedObjects[1].DetectedObject.Y;
             return new Point((x1 + x2) / 2, (y1 + y2) / 2);
+        }
+
+        public double GetRecommendedTurnAngle()
+        {
+            var triangle = this.GenerateSensorTriangle();
+            Point targetPoint = this.GetLaneCenterPoint(triangle);
+
+            double targetRotation = GeometryUtils.GetRotation(
+                GeometryUtils.RadToDeg(
+                    GeometryUtils.GetAngle(targetPoint, new Point(this.Car.X, this.Car.Y))));
+
+            return targetRotation - this.Car.Rotation;
         }
 
         // More debug needed
