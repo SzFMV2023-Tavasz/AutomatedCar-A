@@ -33,6 +33,11 @@
             float speedKMH = this.characteristicsPacket.Speed; // given speed in km/h
             float speedMS = (float)(speedKMH / 3.6); // convert speed to m/s
 
+            if (speedKMH == 0)
+            {
+                return;
+            }
+
             Vector2 direction = new Vector2(this.SteeringWheelPacket.DirectionVector.X, this.SteeringWheelPacket.DirectionVector.Y); // given direction vector
 
             float turningRadius = float.MaxValue; // set the turning radius to a large number initially
@@ -68,6 +73,11 @@
             }
 
             float newRotation = (float)(angle - angleChange) * 180.0f / (float)Math.PI;
+
+            Vector2 diff = new Vector2(World.Instance.ControlledCar.X - newPosition.X, World.Instance.ControlledCar.Y - newPosition.Y);
+            float differentialLength = diff.Length();
+            this.drivechainPacket.vectorDifferentialLength = differentialLength;
+            //Debug.WriteLine(differentialLength);
 
             // update car position and rotation
             World.Instance.ControlledCar.X = newPosition.X;

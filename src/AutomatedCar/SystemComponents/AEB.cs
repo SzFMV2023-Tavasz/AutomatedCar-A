@@ -45,7 +45,7 @@
         public override void Process()
         {
             // 9ms2 dec. = 32.4 km/h/s = 0.54 km/process
-            // 70 kmh = 4.861 (129.63 * 0.54) pixel differential
+            // 70 kmh = 9,722146 (129.63 * 0.54) pixel differential
 
             //14.52380952 * meters = pixels
             //+85px to get car front -- 390 (305 + 85) with 70kmh
