@@ -183,7 +183,8 @@
                 GeometryUtils.RadToDeg(
                     GeometryUtils.GetAngle(targetPoint, new Point(this.Car.X, this.Car.Y))));
 
-            return targetRotation - this.Car.Rotation;
+            double recommendedTurnAngle = targetRotation - this.Car.Rotation;
+            return (Math.Abs(recommendedTurnAngle) <= 40) ? recommendedTurnAngle : double.NaN;
         }
 
         // More debug needed
