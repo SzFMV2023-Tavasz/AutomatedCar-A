@@ -29,13 +29,36 @@
 
         public bool IsEnabled { get; set; }
 
-        public bool IsAvailable
+        public string Status
         {
             get
             {
-                return this.CanBeEnabled();
+                if (!this.IsEnabled)
+                {
+                    if (this.CanBeEnabled())
+                    {
+                        return "Available";
+                    }
+                    else
+                    {
+                        return "Not Available";
+                    }
+                }
+                else
+                {
+                    if (this.WillBeTurnOff())
+                    {
+                        return "Will turn off";
+                    }
+                    else
+                    {
+                        return "On";
+                    }
+                }
             }
         }
+
+         
 
         public LaneKeepingAssistance(AutomatedCar car, CameraSensor cameraSensor, VirtualFunctionBus virtualFunctionBus)
             : base(virtualFunctionBus)
@@ -54,18 +77,33 @@
         public override void Process()
         {
             this.TurnOnMechanism();
+            this.TurnOffMechanism();
 
+            
             if (!this.IsEnabled)
             {
                 this.NullPacketIfNecessary();
                 return;
             }
-
+            this.WillBeTurnOff();
             this.packet.recommendedTurnAngle = this.GetRecommendedTurnAngle();
             if (this.packet.recommendedTurnAngle == double.NaN)
             {
                 this.IsEnabled = false;
             }
+        }
+
+        private bool WillBeTurnOff()
+        {
+            const int meter = 20;
+
+            const int pixelToMeter = 50;
+
+            const int distance = meter * pixelToMeter;
+
+            var problematicObjectsInDistance = this.virtualFunctionBus.CameraPacket.WorldObjectsDetected.Where(x => INVALID_ROADTYPES.Contains(x.DetectedObject.Filename)).Any(y => y.Distance < distance);
+
+            return problematicObjectsInDistance;
         }
 
         private void NullPacketIfNecessary()
@@ -86,6 +124,23 @@
             {
                 this.IsEnabled = false;
             }
+        }
+
+        private void TurnOffMechanism()
+        {
+            const int meter = 10;
+
+            const int pixelToMeter = 50;
+
+            const int distance = meter * pixelToMeter;
+
+            var problematicObjectsInDistance = this.virtualFunctionBus.CameraPacket.WorldObjectsDetected.Where(x => INVALID_ROADTYPES.Contains(x.DetectedObject.Filename)).Any(y => y.Distance < distance);
+
+            if (problematicObjectsInDistance)
+            {
+                IsEnabled = false;
+            }
+
         }
 
         private bool CanBeEnabled()
