@@ -136,8 +136,8 @@
             {
                 if (accPacket.SelectedSpeed == 30)
                     return;
-
-                accPacket.SelectedSpeed = (int)(Math.Floor((double)accPacket.SelectedSpeed / 10) * 10) - SPEED_CHANGE_RATE;
+                int mod = accPacket.SelectedSpeed % 10 != 0 ? 1 : 0;
+                accPacket.SelectedSpeed = (int)((Math.Floor((double)accPacket.SelectedSpeed / 10) + mod) * 10) - SPEED_CHANGE_RATE;
             }
         }
 
