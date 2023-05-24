@@ -59,13 +59,13 @@ namespace AutomatedCar.ViewModels
         public void KeyLeft()
         {
             //World.Instance.ControlledCar.X -= 5;
-            World.Instance.ControlledCar.steeringWheel.TurnWheel(Helpers.SteeringWheelDirectionEnum.TurnRight);
+            World.Instance.ControlledCar.steeringWheel.TurnWheel(Helpers.SteeringWheelDirectionEnum.TurnRight, true);
         }
 
         public void KeyRight()
         {
             //World.Instance.ControlledCar.X += 5;
-            World.Instance.ControlledCar.steeringWheel.TurnWheel(Helpers.SteeringWheelDirectionEnum.TurnLeft);
+            World.Instance.ControlledCar.steeringWheel.TurnWheel(Helpers.SteeringWheelDirectionEnum.TurnLeft, true);
         }
 
         public void PageUp()
