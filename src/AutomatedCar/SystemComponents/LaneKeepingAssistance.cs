@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -24,9 +25,17 @@
         private LKAPacket packet;
         private CameraSensor cameraSensor;
         private AutomatedCar car;
-
         private LKANotifierPacket notifierPacket;
-        public bool isEnabled { get; set; }
+
+        public bool IsEnabled { get; set; }
+
+        public bool IsAvailable
+        {
+            get
+            {
+                return this.CanBeEnabled();
+            }
+        }
 
         public LaneKeepingAssistance(AutomatedCar car, CameraSensor cameraSensor, VirtualFunctionBus virtualFunctionBus)
             : base(virtualFunctionBus)
@@ -42,19 +51,50 @@
             this.virtualFunctionBus.LaneKeepingPacket = this.packet;
         }
 
-        public bool canBeEnabled()
-        {
-            // egyelore csak
-            // hogy buildeljen
-            return true;
-        }
-
         public override void Process()
         {
+            this.TurnOnMechanism();
+
+            if (!this.IsEnabled)
+            {
+                this.NullPacketIfNecessary();
+                return;
+            }
+
             this.packet.recommendedTurnAngle = this.GetRecommendedTurnAngle();
+            if (this.packet.recommendedTurnAngle == double.NaN)
+            {
+                this.IsEnabled = false;
+            }
         }
 
-        public Point GetLaneCenterPoint(List<DetectedObjectInfo> lanes)
+        private void NullPacketIfNecessary()
+        {
+            if (this.packet.recommendedTurnAngle != double.NaN)
+            {
+                this.packet.recommendedTurnAngle = double.NaN;
+            }
+        }
+
+        private void TurnOnMechanism()
+        {
+            if (this.CanBeEnabled() && Keyboard.IsKeyDown(Avalonia.Input.Key.L))
+            {
+                this.IsEnabled = !this.IsEnabled;
+            }
+            if (this.notifierPacket.Intervention)
+            {
+                this.IsEnabled = false;
+            }
+        }
+
+        private bool CanBeEnabled()
+        {
+            return this.GetRecommendedTurnAngle() != double.NaN;
+        }
+
+
+        private Point GetLaneCenterPoint(List<DetectedObjectInfo> lanes)
         {
             lanes = lanes?.OrderBy(x => x.Distance).Take(2).ToList();
             double x1, y1, x2, y2;
@@ -66,7 +106,7 @@
             return new Point((x1 + x2) / 2, (y1 + y2) / 2);
         }
 
-        public List<DetectedObjectInfo> GetLanes()
+        private List<DetectedObjectInfo> GetLanes()
         {
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(this.cameraSensor.GenerateSensorTriangle(), false);
@@ -79,8 +119,7 @@
             return detectedObjects;
         }
 
-        // More debug needed
-        public double GetRecommendedTurnAngle()
+        private double GetRecommendedTurnAngle()
         {
             var lanes = this.GetLanes();
             if (lanes.Count < 2)
