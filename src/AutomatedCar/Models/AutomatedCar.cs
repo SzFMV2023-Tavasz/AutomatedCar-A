@@ -74,7 +74,7 @@ namespace AutomatedCar.Models
             this.RadarSensor = new RadarSensor(radarSettings);
             this.CameraSensor = new CameraSensor(cameraSettings);
             this.CollSensor = new CollisionSensor(this.virtualFunctionBus, this);
-            this.LKA = new LaneKeepingAssistance(cameraSettings);
+            this.LKA = new LaneKeepingAssistance(this, this.CameraSensor, this.virtualFunctionBus);
         }
 
         public RadarSensor RadarSensor { get;  }

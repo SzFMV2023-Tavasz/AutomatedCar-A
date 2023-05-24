@@ -19,11 +19,11 @@
 
         public bool isEnabled { get; set; }
 
-        public LaneKeepingAssistance(SensorSettings sensorSettings)
-            : base(sensorSettings.FunctionBus)
+        public LaneKeepingAssistance(AutomatedCar car, CameraSensor cameraSensor, VirtualFunctionBus virtualFunctionBus)
+            : base(virtualFunctionBus)
         {
-            this.cameraSensor = new CameraSensor(sensorSettings);
-            this.car = sensorSettings.Car;
+            this.cameraSensor = cameraSensor;
+            this.car = car;
 
             this.packet = new LKAPacket();
             this.packet.recommendedTurnAngle = 0;
