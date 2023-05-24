@@ -62,9 +62,7 @@
 
         public override void Process()
         {
-            List<Point> triangle = this.GenerateSensorTriangle();
-
-            var detectedObjList = this.DetectInSensorZone(triangle);
+            var detectedObjList = this.DetectInSensorZone();
 
             this.Packet.WorldObjectsDetected = detectedObjList;
         }
@@ -90,10 +88,10 @@
             };
         }
 
-        private IReadOnlyCollection<DetectedObjectInfo> DetectInSensorZone(List<Point> triangle)
+        private IReadOnlyCollection<DetectedObjectInfo> DetectInSensorZone()
         {
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
-            PolylineGeometry sensor = new PolylineGeometry(triangle, false);
+            PolylineGeometry sensor = new PolylineGeometry(this.GenerateSensorTriangle(), false);
             var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => this.WorldObjectTypesFilter.Contains(obj.WorldObjectType) && !obj.Equals(this.Car));
             DetectObjects(detectedObjects, sensor, filteredWorldObjects);
 
@@ -144,10 +142,10 @@
             }
         }
 
-        public Point GetLaneCenterPoint(List<Point> triangle)
+        public Point GetLaneCenterPoint()
         {
             List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
-            PolylineGeometry sensor = new PolylineGeometry(triangle, false);
+            PolylineGeometry sensor = new PolylineGeometry(this.GenerateSensorTriangle(), false);
             var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => obj.WorldObjectType == WorldObjectType.Road && !obj.Equals(this.Car));
             DetectObjects(detectedObjects, sensor, filteredWorldObjects);
 
@@ -163,8 +161,7 @@
         // More debug needed
         public double GetRecommendedTurnAngle()
         {
-            var triangle = this.GenerateSensorTriangle();
-            Point targetPoint = this.GetLaneCenterPoint(triangle);
+            Point targetPoint = this.GetLaneCenterPoint();
 
             double targetRotation = GeometryUtils.GetRotation(
                 GeometryUtils.RadToDeg(
