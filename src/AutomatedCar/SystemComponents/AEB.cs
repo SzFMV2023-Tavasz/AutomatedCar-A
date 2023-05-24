@@ -26,6 +26,7 @@
         private AEBPacket aebPacket;
         private IReadOnlyPacket<DetectedObjectInfo> radarPacket;
         private IReadOnlyPacket<DetectedObjectInfo> onWayToCollidePacket;
+        private IDrivechain drivechainPacket;
         private double sensorOffset = 85.0;
 
         public AEB(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
@@ -34,6 +35,7 @@
             virtualFunctionBus.AEBPacket = this.aebPacket;
             this.radarPacket = (IReadOnlyPacket<DetectedObjectInfo>)virtualFunctionBus.RadarPacket;
             this.onWayToCollidePacket = (IReadOnlyPacket<DetectedObjectInfo>)virtualFunctionBus.OnWayToCollidePacket;
+            this.drivechainPacket = (IDrivechain)virtualFunctionBus.drivechainPacket;
 
             //switch (World.Instance.ControlledCar.Filename)
             //{
@@ -50,7 +52,7 @@
             //14.52380952 * meters = pixels
             //+85px to get car front -- 390 (305 + 85) with 70kmh
 
-            this.DetectStaticObjectCollision();
+            this.DetectObjectCollision();
 
             if (World.Instance.ControlledCar.Velocity > 70)
             {
@@ -66,21 +68,34 @@
             }
         }
 
-        private void DetectStaticObjectCollision()
+        private void DetectObjectCollision()
         {
             double speedMs = World.Instance.ControlledCar.Velocity * (1000.0 / 3600.0);
 
             double distance = (Math.Pow(speedMs, 2) / (2.0 * 9.0)) * 14.52380952;
             double activationalDistance = (double)(distance + this.sensorOffset);
-
             //Debug.WriteLine("ACT: " + activationalDistance);
 
+            var act = activationalDistance;
+
             bool insideActivationalDistance = this.radarPacket.WorldObjectsDetected.Any(x => x.Distance < activationalDistance * 1.4) ||
+
                                               this.onWayToCollidePacket.WorldObjectsDetected.Any(x => x.Distance < activationalDistance * 1.4);
+
+            bool otherLane_falsePositive = this.radarPacket.WorldObjectsDetected.Any(x => x.Distance - (x.Distance - this.drivechainPacket.vectorDifferentialLength) > this.drivechainPacket.vectorDifferentialLength);
+
+            //Debug.WriteLine("Other lane: " + otherLane_falsePositive);
+
+            if (this.radarPacket.WorldObjectsDetected.Any(x => x.DetectedObject.Filename == "man.png" && x.Distance - (x.Distance - this.drivechainPacket.vectorDifferentialLength) > this.drivechainPacket.vectorDifferentialLength))
+            {
+                IEnumerable<float> a = this.radarPacket.WorldObjectsDetected.Where(x => x.DetectedObject.Filename == "man.png").Select(x => x.Distance - (x.Distance - this.drivechainPacket.vectorDifferentialLength));
+
+                activationalDistance += a.First() * 14.52380952;
+            }
 
             if (insideActivationalDistance && speedMs > 0)
             {
-                if (this.aebPacket.RedWarning != 1)
+                if (this.aebPacket.RedWarning != 1 && otherLane_falsePositive)
                 {
                     if (timer2 == null)
                     {
@@ -88,7 +103,7 @@
                     }
                 }
 
-                if (this.radarPacket.WorldObjectsDetected.Any(x => x.Distance < activationalDistance) || this.onWayToCollidePacket.WorldObjectsDetected.Any(x => x.Distance < activationalDistance))
+                if (otherLane_falsePositive && (this.radarPacket.WorldObjectsDetected.Any(x => x.Distance < activationalDistance) || this.onWayToCollidePacket.WorldObjectsDetected.Any(x => x.Distance < activationalDistance)))
                 {
                     this.RemoveFlashEffectBreak();
                     this.aebPacket.RedWarning = 1;

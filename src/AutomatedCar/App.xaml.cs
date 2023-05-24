@@ -230,6 +230,7 @@ namespace AutomatedCar
         {
             //x 1500 y422 rot 90
             var controlledCar = this.CreateControlledCar(1088, 2775, 90, "car_1_white.png");
+            //var controlledCar = this.CreateControlledCar(1500, 422, 90, "car_1_white.png");
             //var controlledCar2 = this.CreateControlledCar(4250, 1420, -90, "car_1_red.png");
 
             world.AddControlledCar(controlledCar);
