@@ -73,13 +73,17 @@ namespace AutomatedCar.Models
             };
             this.RadarSensor = new RadarSensor(radarSettings);
             this.CameraSensor = new CameraSensor(cameraSettings);
-            this.CollSensor = new CollisionSensor(virtualFunctionBus,this);
+            this.CollSensor = new CollisionSensor(this.virtualFunctionBus, this);
+            this.LKA = new LaneKeepingAssistance(this, this.CameraSensor, this.virtualFunctionBus);
         }
 
         public RadarSensor RadarSensor { get;  }
 
         public CameraSensor CameraSensor { get; }
+
         public CollisionSensor CollSensor { get; }
+
+        public LaneKeepingAssistance LKA { get; }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => this.PropertyChanged?.Invoke(this, new(propertyName));
