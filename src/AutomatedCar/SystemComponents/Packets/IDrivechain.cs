@@ -12,5 +12,7 @@
         public int Speed { get; }
 
         public Vector2 MotionVector { get; }
+
+        public float vectorDifferentialLength { get; }
     }
 }

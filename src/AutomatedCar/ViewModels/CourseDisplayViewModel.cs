@@ -45,13 +45,13 @@ namespace AutomatedCar.ViewModels
 
         public void KeyUp()
         {
-            World.Instance.ControlledCar.GasPedal.PressGasPedal();
+            World.Instance.ControlledCar.GasPedal.isPedalPressed = true;
             //World.Instance.ControlledCar.Y -= 5;
         }
 
         public void KeyDown()
         {
-            World.Instance.ControlledCar.BrakePedal.PressBrakePedal();
+            World.Instance.ControlledCar.BrakePedal.isPedalPressed = true;
             World.Instance.ControlledCar.CruiseControl.SetIsActiveFalse();
             //World.Instance.ControlledCar.Y += 5;
         }

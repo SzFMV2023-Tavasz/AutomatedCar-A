@@ -4,38 +4,63 @@ namespace AutomatedCar.SystemComponents
     using AutomatedCar.SystemComponents.Packets;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
     public class GasPedal: SystemComponent
     {
-        private bool isPedalPressed;
+        public bool isPedalPressed;
         private GasPedalPacket gasPedalPacket;
+        private IAEBInterface aeb; 
 
         public GasPedal(VirtualFunctionBus virtualFunctionBus): base(virtualFunctionBus)
         {
             this.gasPedalPacket = new GasPedalPacket();
             virtualFunctionBus.GasPedalPacket = this.gasPedalPacket;
+            this.aeb = virtualFunctionBus.AEBPacket;
         }
 
         public override void Process()
         {
-            if (this.gasPedalPacket.PedalPosition > 0 && isPedalPressed == false)
+            this.aeb = this.virtualFunctionBus.AEBPacket;
+
+            if (this.aeb.AEBIsActive)
             {
-                this.gasPedalPacket.PedalPosition -= 2;
+                this.isPedalPressed = false;
+                this.gasPedalPacket.PedalPosition = 0;
             }
 
-            isPedalPressed = false;
+            if (this.isPedalPressed)
+            {
+                PressGasPedal();
+            }
+
+            else
+            {
+                if (this.isPedalPressed == false && this.gasPedalPacket.PedalPosition != 0)
+                {
+                    this.gasPedalPacket.PedalPosition -= 2;
+                }
+            }
+
+            if (!Keyboard.Keys.Contains(Avalonia.Input.Key.Up))
+            {
+                this.isPedalPressed = false;
+            }
         }
 
         public void PressGasPedal()
         {
-            isPedalPressed = true;
-
-            if (this.gasPedalPacket.PedalPosition < 100)
+            if (!this.aeb.AEBIsActive)
             {
-                this.gasPedalPacket.PedalPosition += 2;
+                this.isPedalPressed = true;
+
+                if (this.gasPedalPacket.PedalPosition < 100)
+                {
+                    this.gasPedalPacket.PedalPosition += 2;
+                }
             }
         }
     }
