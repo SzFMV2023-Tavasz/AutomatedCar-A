@@ -123,6 +123,7 @@
             if (this.notifierPacket.Intervention)
             {
                 this.IsEnabled = false;
+                this.notifierPacket.Intervention = false;
             }
         }
 
