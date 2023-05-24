@@ -1,26 +1,24 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
-    using AutomatedCar.Helpers;
-    using AutomatedCar.Models;
-    using AutomatedCar.SystemComponents.Packets;
-    using Avalonia;
-    using Avalonia.Media;
-    using JetBrains.Annotations;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Net.Sockets;
     using System.Numerics;
+    using AutomatedCar.Helpers;
+    using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.Packets;
+    using Avalonia;
+    using Avalonia.Media;
+    using JetBrains.Annotations;
 
     public abstract class GenericSensor : SystemComponent
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericSensor"/> class.
         /// </summary>
         /// <param name="sensorSettings">This contains all the information thats needed for sensor constructing.</param>
-
         public GenericSensor(SensorSettings sensorSettings)
                         : base(sensorSettings.FunctionBus)
         {
@@ -53,7 +51,7 @@
         public IEnumerable<WorldObjectType> WorldObjectTypesFilter { get; set; }
 
         /// <summary>
-        /// Gets or sets This is where it write the detected objects
+        /// Gets or sets This is where it write the detected objects.
         /// </summary>
         protected IReadOnlyPacket<DetectedObjectInfo> Packet { get; set; }
 
@@ -61,7 +59,6 @@
         /// Gets the reference which car owns this sensor.
         /// </summary>
         protected AutomatedCar Car { get; }
-
 
         public override void Process()
         {
@@ -77,7 +74,7 @@
             const int pixelToMeter = 50;
             double x1, y1, x2, y2;
 
-            double outerPointDistance = ViewDistance / Math.Cos(GeometryUtils.DegToRad(this.FOV / 2));
+            double outerPointDistance = this.ViewDistance / Math.Cos(GeometryUtils.DegToRad(this.FOV / 2));
 
             Point transformedAnchorPoint = GeometryUtils.TransformPoint(this.CarAnchorPoint, this.Car);
             x1 = (outerPointDistance * pixelToMeter * Math.Sin(GeometryUtils.DegToRad((-this.FOV / 2) - this.Car.Rotation + 180))) + this.Car.X;
@@ -144,7 +141,7 @@
 
         public Point GetLaneCenterPoint(List<Point> triangle)
         {
-            List <DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
+            List<DetectedObjectInfo> detectedObjects = new List<DetectedObjectInfo>();
             PolylineGeometry sensor = new PolylineGeometry(triangle, false);
             var filteredWorldObjects = World.Instance.WorldObjects.Where(obj => obj.WorldObjectType == WorldObjectType.Road && !obj.Equals(this.Car));
             foreach (var worldObject in filteredWorldObjects)
@@ -174,6 +171,7 @@
             return new Point((x1 + x2) / 2, (y1 + y2) / 2);
         }
 
+        // More debug needed
         public double GetRecommendedTurnAngle()
         {
             var triangle = this.GenerateSensorTriangle();
@@ -186,7 +184,5 @@
             double recommendedTurnAngle = targetRotation - this.Car.Rotation;
             return (Math.Abs(recommendedTurnAngle) <= 40) ? recommendedTurnAngle : double.NaN;
         }
-
-        // More debug needed
     }
 }
