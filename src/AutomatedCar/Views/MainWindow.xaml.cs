@@ -34,6 +34,16 @@ namespace AutomatedCar.Views
                 viewModel.CourseDisplay.KeyLeft();
             }
 
+            if (Keyboard.IsKeyDown(Key.Q))
+            {
+                viewModel.CourseDisplay.ShiftUp();
+            }
+
+            if (Keyboard.IsKeyDown(Key.A))
+            {
+                viewModel.CourseDisplay.ShiftDown();
+            }
+
             if (Keyboard.IsKeyDown(Key.Right))
             {
                 viewModel.CourseDisplay.KeyRight();
@@ -91,6 +101,28 @@ namespace AutomatedCar.Views
                 viewModel.PrevControlledCar();
                 Keyboard.Keys.Remove(Key.F5);
             }
+
+            if (Keyboard.IsKeyDown(Key.C))
+            {
+                viewModel.CourseDisplay.ToggleAdaptiveTempomat();
+            }
+
+            if (Keyboard.IsKeyDown(Key.Subtract))
+            {
+                viewModel.CourseDisplay.DecreaseAccTargetSpeed();
+            }
+
+            if (Keyboard.IsKeyDown(Key.Add))
+            {
+                viewModel.CourseDisplay.IncreaseAccTargetSpeed();
+            }
+
+            if (Keyboard.IsKeyDown(Key.T))
+            {
+                viewModel.CourseDisplay.ChangeAccTargetDistance();
+            }
+
+
 
             var scrollViewer = this.Get<CourseDisplayView>("courseDisplay").Get<ScrollViewer>("scrollViewer");
             viewModel.CourseDisplay.FocusCar(scrollViewer);

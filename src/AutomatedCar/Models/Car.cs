@@ -2,7 +2,7 @@ namespace AutomatedCar.Models
 {
     public class Car : WorldObject
     {
-        public Car(int x, int y, string filename)
+        public Car(float x, float y, string filename)
             : base(x, y, filename)
         {
         }

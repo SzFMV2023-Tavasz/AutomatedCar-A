@@ -19,12 +19,12 @@ namespace AutomatedCar.Models
     {
         public event EventHandler<PropertyChangedEventArgs> PropertyChangedEvent;
 
-        private int x;
-        private int y;
+        private float x;
+        private float y;
 
         private double rotation;
 
-        public WorldObject(int x, int y, string filename, int zindex = 1, bool collideable = false, WorldObjectType worldObjectType = WorldObjectType.Other)
+        public WorldObject(float x, float y, string filename, int zindex = 1, bool collideable = false, WorldObjectType worldObjectType = WorldObjectType.Other)
         {
             this.X = x;
             this.Y = y;
@@ -46,7 +46,7 @@ namespace AutomatedCar.Models
             }
         }
 
-        public int X
+        public float X
         {
             get => this.x;
             set
@@ -56,7 +56,7 @@ namespace AutomatedCar.Models
             }
         }
 
-        public int Y
+        public float Y
         {
             get => this.y;
             set
