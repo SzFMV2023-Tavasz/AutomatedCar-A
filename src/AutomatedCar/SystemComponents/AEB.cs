@@ -74,7 +74,7 @@
 
             double distance = (Math.Pow(speedMs, 2) / (2.0 * 9.0)) * 14.52380952;
             double activationalDistance = (double)(distance + this.sensorOffset);
-            //Debug.WriteLine("ACT: " + activationalDistance);
+            //Debug.WriteLine("ACT: " + activationalDistance); 
 
             var act = activationalDistance;
 
@@ -84,7 +84,7 @@
 
             bool otherLane_falsePositive = this.radarPacket.WorldObjectsDetected.Any(x => x.Distance - (x.Distance - this.drivechainPacket.vectorDifferentialLength) > this.drivechainPacket.vectorDifferentialLength);
 
-            //Debug.WriteLine("Other lane: " + otherLane_falsePositive);
+            //Debug.WriteLine("Other lane: " + otherLane_falsePositive); 
 
             if (this.radarPacket.WorldObjectsDetected.Any(x => x.DetectedObject.Filename == "man.png" && x.Distance - (x.Distance - this.drivechainPacket.vectorDifferentialLength) > this.drivechainPacket.vectorDifferentialLength))
             {
