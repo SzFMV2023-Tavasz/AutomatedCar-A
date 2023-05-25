@@ -239,7 +239,7 @@ namespace AutomatedCar
 
         private void AddControlledCarsToOval(World world)
         {
-            var controlledCar = this.CreateControlledCar(550, 5465, 0, "car_1_white.png");
+            var controlledCar = this.CreateControlledCar(4256, 922, 90, "car_1_white.png");
 
             world.AddControlledCar(controlledCar);
 
